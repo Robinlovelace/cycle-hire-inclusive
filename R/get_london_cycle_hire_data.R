@@ -9,9 +9,16 @@
 # sqf = file.path(data_dir, "london_bike_hire_2020-02.sqlite")
 # list.files(data_dir)
 # bikedata::dl_bikedata(city = "london", data_dir = data_dir)
+# EDIT : some 2015 data is missing.
+# Quick fix -- manually edit file names and re-run store_bikedata()
+# let's remove ".", "_" and " " to make file nemes clean.
+# Use Perl's rename function.
+# system('brew install rename')
+# system('cd ./data/london rename "s/[- ]//g" *.csv')
 # ntrips = bikedata::store_bikedata(bikedb = sqf, data_dir = "data/london")
-# file.size(sqf) # 6.5 GB
-# 
+# ntrips : 77694197
+# file.size(sqf) # 5.9 GB
+
 # bikes_data = DBI::dbConnect(RSQLite::SQLite(), sqf)
 # DBI::dbListTables(bikes_data)
 # trips = tbl(bikes_data, "trips")
@@ -62,18 +69,25 @@
 # 503.784   3.107 435.412 
 
 
+
 # Explore trips/month to find missing/duplicate data ----------------------
 
 # trips_df_1pct = trips_df %>% sample_frac(size = 0.01)
 
 # stations = readRDS("stations-clean.Rds")
-# 
+# stations <- read_csv("./data/bikelocations_london.csv")
 # trips_with_origin_station_ids = trips_df$start_station_id %in% stations$check_id # 
 # sum(trips_with_origin_station_ids) / nrow(trips_df) # no matching ids!
 # str_remove(trips_df$start_station_id[1:9], "lo")
 # trips_df$start_station_id = str_remove(trips_df$start_station_id, "lo")
 # trips_df$end_station_id = str_remove(trips_df$end_station_id, "lo")
-# 
+
+# EDIT : let's write current dataset out before editing on cleaning.
+# ntrips : 77694197 -- with 2015 data properly uploaded
+# fst::write_fst(trips_df, "./data/trips-2020-02.fst")
+# EDIT : Struggling to upload.
+# piggyback::pb_upload(file="./data/trips-2020-02.fst", name="trips-2020-02.fst", repo="Robinlovelace/cycle-hire-inclusive")
+
 # trips_with_origin_station_ids = trips_df$start_station_id %in% stations$ucl_id
 # trips_with_destination_station_ids = trips_df$end_station_id %in% stations$operator_intid
 # sum(trips_with_origin_station_ids) / nrow(trips_df) # 99.2% have origin id
@@ -179,4 +193,6 @@ piggyback::pb_upload("trips_df.fst", repo = "itsleeds/tds")
 # })
 # user  system elapsed 
 # 0.054   0.001   0.056
+
+
 
