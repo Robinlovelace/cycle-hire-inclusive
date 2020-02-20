@@ -69,17 +69,11 @@
 # 503.784   3.107 435.412 
 
 
-<<<<<<< HEAD
 # Cleaning stage II find missing/duplicate data ----------------------
 
-trips_df = vroom::vroom("london_bike_hire_from_bikedata-2020-02-clean-1.csv.gz")
-=======
-
+# trips_df = vroom::vroom("london_bike_hire_from_bikedata-2020-02-clean-1.csv.gz")
 # Explore trips/month to find missing/duplicate data ----------------------
->>>>>>> 8a955d29a8b31462ea267566b153da87e2098514
-
 # trips_df_1pct = trips_df %>% sample_frac(size = 0.01)
-
 # stations = readRDS("stations-clean.Rds")
 # stations <- read_csv("./data/bikelocations_london.csv")
 # trips_with_origin_station_ids = trips_df$start_station_id %in% stations$check_id # 
