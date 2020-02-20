@@ -22,7 +22,6 @@ lapply(pkgs, library, character.only = TRUE)
 
 
 
-
 # Create plan -------------------------------------------------------------
 
 plan = drake_plan(
