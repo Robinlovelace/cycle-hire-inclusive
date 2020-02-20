@@ -24,6 +24,13 @@ trips_df <- read_fst("data/trips-2020-02.fst")
 trips_df$start_time<-fastPOSIXct(trips_df$start_time) # fast str to POSIXct
 trips_df$stop_time<-fastPOSIXct(trips_df$stop_time) # fast str to POSIXct
 
+
+# Remove duplicates records and records without time info.
+trips_df <- trips_df %>% 
+  distinct(start_time, stop_time, start_station_id, end_station_id) %>%
+  filter(!(is.na(start_time)|is.na(stop_time))) 
+trips_df$id=c(1:nrow(trips_df)) # adding a trip id column, it will be used for modifying start and end stations later
+
 # Identify how many stations (same ID) have multiple locations (different lat/lon)
 station_locations_check<-stations %>% distinct(ucl_id,lat,lon) %>%
   group_by(ucl_id) %>% summarise(num_loc=n())
@@ -526,7 +533,7 @@ plot_monthly_trips
 # Further Investigation suggested that the wrong record(ucl_id 131) duplicates ucl_id 378, it needs to be removed
 station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==131)&(operator_name=="Natural History Museum, South Kensington")))
 
-rm(station_138_start_trips)
+rm(station_131_start_trips)
 #----Completed---end of ucl_id 138
 
 
@@ -1137,7 +1144,13 @@ trips_df$end_station_id[station_407_end_trips_id$id]="406"
 
 
 #-------------------------------------------------------------------------------------------------
+
+
+
 # The data cleaning process is completed
 # Now save/output the cleaned data.
+
 save(station_locations_clean,file = "data/station_clean.Rdata")
-save(trips_df,file = "data/trip_clean.Rdata")
+#save(trips_df,file = "data/trip_clean.Rdata")
+write.fst(trips_df, path = "data/trip_clean.fst")
+
