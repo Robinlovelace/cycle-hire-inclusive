@@ -4,6 +4,7 @@ library(rvest)
 library(tidyverse)
 
 h = read_html("https://en.wikipedia.org/wiki/List_of_bicycle-sharing_systems")
+# h = read_html("https://oobrien.com/2019/07/then-there-were-eight/")
 (h_tables = h %>% html_nodes("table")) 
 (bikeshare_tables = h_tables %>% html_table(fill = TRUE))
 length(bikeshare_tables)
