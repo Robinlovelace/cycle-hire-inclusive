@@ -51,4 +51,5 @@ make(plan)
 # file.size("data_raw.fst") # 2.3 GB = too big!
 # data_raw = fst::read.fst("data_raw.fst")
 # piggyback::pb_upload("data_raw_5pc.fst")
+# piggyback::pb_upload("data_raw.fst")
 # piggyback::pb_download_url("data_raw_5pc.fst")
