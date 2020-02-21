@@ -1,0 +1,20 @@
+variable_type,variable_name,casual_prop,member_prop,pop_prop
+Sex,Male,71,76,49
+Sex,Female,29,22,51
+Age,16-24,32,6,15
+Age,25-34,41,34,24
+Age,35-44,15,27,20
+Age,45-54,10,23,15
+Age,55-64,2,8,11
+Age,>65,0,1,16
+Ethnicity,White,60,86,60
+Ethnicity,BAME,22,9,40
+Ethnicity,Not stated,0,5,0
+Occupation,Full-time,73,86,
+Occupation,Part-time,4,5,
+Occupation,Student,20,3,
+Occupation,Other,3,6,
+Income,<£20k,22,6,
+Income,£20k-£40k,36,20,
+Income,£40k-£75k,22,28,
+Income,>£75k,23,44,
