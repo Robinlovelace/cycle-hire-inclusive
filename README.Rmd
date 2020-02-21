@@ -11,8 +11,6 @@ bibliography:
   - cycle-hire.bib
 ---
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
 ```{r, include=FALSE}
 # Packages we'll attach for the analysis
 # library(leaflet)
@@ -44,6 +42,50 @@ f = "sdf.geojson"
 # stations = read_sf("stations_imd_pop.geojson")
 # oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
 ```
+
+## Reproducing the results
+
+To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
+You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
+
+```{r}
+# for released version
+# u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
+# download.file(u, "data_raw_5pc.fst")
+# for piggyback version
+piggyback::pb_download("data_raw_5pc.fst")
+pkgs = c(
+  "fasttime",
+  "leaflet",
+  "lubridate",
+  "patchwork",
+  "sf",
+  "stplanr",
+  "tidyverse",
+  "tmap",
+  "vroom"
+)
+lapply(pkgs, library, character.only = TRUE)
+
+source("R/get_london_cycle_hire_data.R")
+source("R/plan.R")
+plan
+drake::make(plan)
+drake::vis_drake_graph(plan)
+data_filtered_clean = drake::readd(data_filtered_clean)
+head(data_filtered_clean)
+summary(data_filtered_clean)
+```
+
+You can reproduce many of the results in the main paper using this sample of the data.
+The following, for example, produces a graph showing the number of hires per year:
+
+```{r}
+g = lchs_check_dates(data_filtered_clean)
+g
+```
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, eval=FALSE, echo=FALSE}
 file.rename("README.pdf", "bike-hire-inequalities.pdf")

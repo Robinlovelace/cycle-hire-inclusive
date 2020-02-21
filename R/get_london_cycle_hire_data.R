@@ -67,7 +67,6 @@ lchs_clean = function(data_filtered) {
   data_filtered$start_station_id = str_remove(data_filtered$start_station_id, "lo")
   data_filtered$end_station_id = str_remove(data_filtered$end_station_id, "lo")
   data_filtered %>% filter(!(is.na(start_time) | is.na(stop_time)))
-  data_filtered
 }
 
 lchs_check_dates = function(data_filtered_clean) {
@@ -79,6 +78,7 @@ lchs_check_dates = function(data_filtered_clean) {
     )
   g = ggplot(trips_per_year) +
     geom_line(aes(year_month, total), col = "grey")
+  g
 }
 
 # test filtered dates, 0.2%, 160k records, empty!

@@ -2,6 +2,17 @@ Is the London Cycle Hire Scheme becoming more inclusive? An evaluation
 of the shifting spatial distribution of uptake based on 70 million trips
 ================
 
+## Reproducing the results
+
+To reproduce the analysis presented in this paper, a good starting point
+is loading a sample of the datasets used. You can do this starting with
+a 5% sample of the raw cycle hire trip records as follows:
+
+You can reproduce many of the results in the main paper using this
+sample of the data. The following, for example, produces a graph showing
+the number of hires per
+year:
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- # Title 1 : Cycle hire and accessibility: an environmental justice perspective on the first 70 million trips -->
