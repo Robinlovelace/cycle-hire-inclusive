@@ -7,6 +7,7 @@ output:
 # title: "Can cycle hire schemes support transport equality? An evaluation of almost a decade of trips"
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
+  # - references.bib
   - cycle-hire.bib
 ---
 
@@ -24,6 +25,7 @@ bibliography:
 # knitr::write_bib('MASS', 'references-Eugeni')
 
 knitr::opts_chunk$set(
+  eval = FALSE,
   echo = FALSE,
   collapse = TRUE,
   comment = "#>",
@@ -42,6 +44,51 @@ f = "sdf.geojson"
 # stations = read_sf("stations_imd_pop.geojson")
 # oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
 ```
+
+## Reproducing the results
+
+To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
+You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
+
+```{r, eval=TRUE, echo=TRUE}
+# for released version
+# u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
+# download.file(u, "data_raw_5pc.fst")
+# for piggyback version
+piggyback::pb_download("data_raw_5pc.fst")
+pkgs = c(
+  "fasttime",
+  "leaflet",
+  "lubridate",
+  "patchwork",
+  "sf",
+  "stplanr",
+  "tidyverse",
+  "tmap",
+  "vroom"
+)
+pkgs_loaded = lapply(pkgs, library, character.only = TRUE, quietly = TRUE)
+pkgs_loaded[[length(pkgs_loaded)]]
+
+source("R/get_london_cycle_hire_data.R")
+source("R/plan.R")
+plan
+drake::make(plan)
+drake::vis_drake_graph(plan)
+data_filtered_clean = drake::readd(data_filtered_clean)
+head(data_filtered_clean)
+summary(data_filtered_clean)
+```
+
+You can reproduce many of the results in the main paper using this sample of the data.
+The following, for example, produces a graph showing the number of hires per year:
+
+```{r, eval=TRUE, echo=TRUE}
+g = lchs_check_dates(data_filtered_clean)
+g
+```
+
+To reproduce all the results, clone or download the repo, uncomment the relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command demonstrated above.
 
 ```{r, eval=FALSE, echo=FALSE}
 file.rename("README.pdf", "bike-hire-inequalities.pdf")
