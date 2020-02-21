@@ -53,26 +53,45 @@ lchs_read_raw = function(
 lchs_filter_select = function(data_raw) {
   data_raw %>% 
     select(-city, -user_type, -birth_year, -gender) %>% 
-    distinct(start_time, stop_time, start_station_id, end_station_id) 
+    distinct(start_time, stop_time, start_station_id, end_station_id) %>% 
+    # remove crazy dates:
+    filter(!str_detect(string = start_time, pattern = "1900|1901")) %>% 
+    filter(!str_detect(string = stop_time, pattern = "1900|1901")) %>%
+    filter(!(is.na(start_time) | is.na(stop_time))) 
 }
 
 lchs_clean = function(data_filtered) {
-  # data_filtered$start_time = lubridate::ymd_hm(data_filtered$start_time) 
-  # data_filtered$stop_time = lubridate::ymd_hm(data_filtered$stop_time) # fast str to POSIXct
+  data_filtered$start_time = lubridate::ymd_hms(data_filtered$start_time)
+  data_filtered$stop_time = lubridate::ymd_hms(data_filtered$stop_time) 
   data_filtered$year_month = lubridate::floor_date(data_filtered$start_time, unit = "month")
   data_filtered$start_station_id = str_remove(data_filtered$start_station_id, "lo")
   data_filtered$end_station_id = str_remove(data_filtered$end_station_id, "lo")
+  data_filtered %>% filter(!(is.na(start_time) | is.na(stop_time)))
   data_filtered
 }
 
-lchs_check_dates = function(data_filtered_clean_dates) {
-  # # time analysis
-  # trips_per_year = trips_df %>%
-  #   group_by(year_month) %>%
-  #   summarise(
-  #     total = n()
-  #   )
+lchs_check_dates = function(data_filtered_clean) {
+  # time analysis
+  trips_per_year = data_filtered_clean %>%
+    group_by(year_month) %>%
+    summarise(
+      total = n()
+    )
+  g = ggplot(trips_per_year) +
+    geom_line(aes(year_month, total), col = "grey")
 }
+
+# test filtered dates, 0.2%, 160k records, empty!
+# test1 = lubridate::ymd_hms(data_filtered$start_time)
+# test2 = as.POSIXct(data_filtered$start_time, format="%Y-%m-%d %H:%M:%S")
+# summary(test1)
+# summary(test2)
+# 
+# failing_sample = sample(data_filtered$start_time[is.na(test1)], size = 3)
+# lubridate::ymd_hms(failing_sample)
+# as.POSIXct(failing_sample, format="%Y-%m-%d %H:%M:%S")
+# 
+# plot(test2)
 
 # ntrips : 77694197 (2020-02-20)
 # ntrips : 96592362 (2020-02-21)
@@ -165,6 +184,7 @@ lchs_check_dates = function(data_filtered_clean_dates) {
 # trips_with_ids = trips_with_origin_station_ids & trips_with_destination_station_ids
 # # trips_df$with_ids = trips_with_ids
 # sum(trips_with_ids) / nrow(trips_df) # 97% have id
+# table(lubridate::year(trips_df$start_time))
 # yrs_without_ids = lubridate::year(trips_df$start_time[!trips_with_ids])
 # table(yrs_without_ids)
 # # original:
@@ -212,7 +232,7 @@ lchs_check_dates = function(data_filtered_clean_dates) {
 #     total = n()
 #   )
 # g = ggplot(trips_per_year) +
-#   geom_line(aes(year_month, total), col = "grey") 
+#   geom_line(aes(year_month, total), col = "grey")
 # g
 # 
 # trips_df$date = as.Date(trips_df$start_time)
