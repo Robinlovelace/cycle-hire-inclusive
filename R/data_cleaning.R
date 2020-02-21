@@ -16,13 +16,12 @@ library(fst)
 library(sf)
 library(tmap)
 library(lubridate)
-library(fasttime) # fast str to POSIXct
 
 stations <- read_csv("./data/bikelocations_london.csv")
 trips_df <- read_fst("data/trips-2020-02.fst")
 
-trips_df$start_time<-fastPOSIXct(trips_df$start_time) # fast str to POSIXct
-trips_df$stop_time<-fastPOSIXct(trips_df$stop_time) # fast str to POSIXct
+trips_df$start_time<-lubridate::ymd_hms(trips_df$start_time)
+trips_df$stop_time<-lubridate::ymd_hms(trips_df$stop_time) 
 
 
 # Remove duplicates records and records without time info.
