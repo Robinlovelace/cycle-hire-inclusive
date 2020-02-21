@@ -7,9 +7,10 @@ output:
 # title: "Can cycle hire schemes support transport equality? An evaluation of almost a decade of trips"
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
-  # - references.bib
   - cycle-hire.bib
 ---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, include=FALSE}
 # Packages we'll attach for the analysis
@@ -23,7 +24,6 @@ bibliography:
 # knitr::write_bib('MASS', 'references-Eugeni')
 
 knitr::opts_chunk$set(
-  eval = FALSE,
   echo = FALSE,
   collapse = TRUE,
   comment = "#>",
@@ -42,50 +42,6 @@ f = "sdf.geojson"
 # stations = read_sf("stations_imd_pop.geojson")
 # oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
 ```
-
-## Reproducing the results
-
-To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
-You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
-
-```{r, eval=TRUE}
-# for released version
-# u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
-# download.file(u, "data_raw_5pc.fst")
-# for piggyback version
-piggyback::pb_download("data_raw_5pc.fst")
-pkgs = c(
-  "fasttime",
-  "leaflet",
-  "lubridate",
-  "patchwork",
-  "sf",
-  "stplanr",
-  "tidyverse",
-  "tmap",
-  "vroom"
-)
-lapply(pkgs, library, character.only = TRUE)
-
-source("R/get_london_cycle_hire_data.R")
-source("R/plan.R")
-plan
-drake::make(plan)
-drake::vis_drake_graph(plan)
-data_filtered_clean = drake::readd(data_filtered_clean)
-head(data_filtered_clean)
-summary(data_filtered_clean)
-```
-
-You can reproduce many of the results in the main paper using this sample of the data.
-The following, for example, produces a graph showing the number of hires per year:
-
-```{r, eval=TRUE}
-g = lchs_check_dates(data_filtered_clean)
-g
-```
-
-<!-- README.md is generated from README.Rmd. Please edit that file -->
 
 ```{r, eval=FALSE, echo=FALSE}
 file.rename("README.pdf", "bike-hire-inequalities.pdf")
@@ -202,18 +158,21 @@ knitr::include_graphics("figures/bikehshare-global-stations-bicycles.png")
 
 Much research has been devoted to the question of who uses BSS.
 In general, reflecting cycle usage overall, BSS users appear to be younger adults, have higher incomes than average, male and are more likely to own a bicycle  [@ogilvie_inequalities_2012; @fishman_bike_2013; @zhao_effect_2019; @soltani_exploring_2019; @heinen_public_2018].
-These socio-economic characteristics are similar to those that are generally linked to cycling [see e.g. @heinen_commuting_2010].
-A survey by shared mobility organisation CoMoUK found that 21% of BSS users in the UK were on an income of less than £20,000, 9% on an income of less than £10,000, and less than 1% were unemployed.^[
-See https://como.org.uk/wp-content/uploads/2019/10/CoMoUK-Bike-Share-Survey-2019-web-2.pdf
-]
-Whilst this hides variation depending on each scheme, it however highlights that low income users constitute a substantial share of overall BSS use.
-Members of BSS have been found to be more likely to own and use private bicycles [@fishman_bike_2013].
+These socio-economic characteristics may seem <!--are--> similar to those that are generally linked to cycling [see e.g. @heinen_commuting_2010].
+<!-- A survey by shared mobility organisation CoMoUK found that 21% of BSS users in the UK were on an income of less than £20,000, 9% on an income of less than £10,000, and less than 1% were unemployed.^[ -->
+<!-- See https://como.org.uk/wp-content/uploads/2019/10/CoMoUK-Bike-Share-Survey-2019-web-2.pdf -->
+<!-- ] -->
+<!-- Whilst this hides variation depending on each scheme, it however highlights that low income users constitute a substantial share of overall BSS use. -->
+<!-- Members of BSS have been found to be more likely to own and use private bicycles [@fishman_bike_2013]. -->
 
-While the characteristics of BSS users and other cyclists may seem similar, some research reveals differences between cyclists using BSS and 'normal' cyclists that imply BSS can open up cycling to a wider range of users.
+<!-- While the characteristics of BSS users and other cyclists may seem similar -->
+
+However, some research reveals certain differences between cyclists using BSS and 'normal' cyclists that imply BSS can open up cycling to a wider range of users.
 <!-- @buck_are_2013, for example, report that in Washington, D.C., BSS users are more likely to be female, younger, from lower (household) income backgrounds, and own fewer cars and bicycles than other cyclists. -->
 Buck et al. [-@buck_are_2013, p.112] found in the Washington, D.C., region that, compared with regular cyclists, bike-share users "are more likely female, younger, have lower household incomes, own fewer cars and fewer bicycles, and are more likely to cycle for utilitarian trip purposes".
 <!-- I don't think this next bit is that relevant -->
 <!-- By contrast,  and Goodman (2012) showed that among members women made fewer trips and men.  -->
+
 
 ### Where are hired cycles used?
 
@@ -263,12 +222,12 @@ Accessibility to and awareness of BSS is also not equally spread across the popu
 Areas with no docking stations have been found to have lower levels of awareness of shared mobility as a transport option [@bernatchez_knowing_2015].
 BSSs tend to be more easily accessible to higher socio-economic groups [e.g. @ricci_bike_2015] and one reason offered for this is that stations may not be placed in less economically advantaged areas.
 @ogilvie_inequalities_2012 reported that registered users of the London scheme were more likely to live in socioeconomically advantaged areas and areas with high cycling levels.
-It is important to note that (other) bicycle infrastructure is often first placed in more affluent areas.
-Demand for bicycle sharing is higher in areas with more bicycle infrastructure [@el-assi_effects_2017].
-Common sense suggests that proximity to docking stations increases usage, something that has been found in several studies [@fishman_factors_2015; @bernatchez_knowing_2015; @fuller_use_2011].
-However, a recent cohort study revealed that residential proximity does not significantly predict the likelihood of using a BSS, suggesting that placement of docking stations may not be a primary cause of inequalities in BSS usage [@heinen_public_2018].
+<!-- It is important to note that (other) bicycle infrastructure is often first placed in more affluent areas. -->
+<!-- Demand for bicycle sharing is higher in areas with more bicycle infrastructure [@el-assi_effects_2017]. -->
+<!-- Common sense suggests that proximity to docking stations increases usage, something that has been found in several studies [@fishman_factors_2015; @bernatchez_knowing_2015; @fuller_use_2011]. -->
+<!-- However, a recent cohort study revealed that residential proximity does not significantly predict the likelihood of using a BSS, suggesting that placement of docking stations may not be a primary cause of inequalities in BSS usage [@heinen_public_2018]. -->
 
-Overall, there is little evidence of the overall transport equity outcomes from cycle hire schemes.
+Overall, there is little evidence of the <!--overall--> transport equity outcomes from cycle hire schemes.
 One recent paper on the role of cycle hire schemes in transport equity, stated that "most BSS typically benefit the privileged" [@de_chardon_contradictions_2019, p.401].
 In the same direction, Noland [-@noland_bikesharing_2018, p.151] found in Philadelphia that "bikeshare docking stations in lower income areas are not generating as many trips as in other areas".
 @hosford_who_2018 noted the importance of confounding geographic factors: economically advantaged areas have better access in some cities, whereas in other cities disadvantaged areas are better served.
@@ -349,7 +308,7 @@ corresponding with a step change in the annual average number of hires after 201
 source("R/cycle-hires-excel.R")
 ```
 
-```{r cycle-hire-chart-daily, out.width="70%", fig.cap="Top: Number of cycles hired per day across the London Cycle Hire Scheme. Translucent dots represent daily counts; the black line is a monthly (30 day) rolling average; the blue line is the yearly rolling average number of hires per day. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map).", fig.show='hold'}
+```{r cycle-hire-chart-daily, eval=TRUE, out.width="70%", fig.cap="Top: Number of cycles hired per day across the London Cycle Hire Scheme. Translucent dots represent daily counts; the black line is a monthly (30 day) rolling average; the blue line is the yearly rolling average number of hires per day. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map).", fig.show='hold'}
 knitr::include_graphics(c("figures/cycle-hire-chart-daily.png", "clean-figures/overview-2019.png"))
 ```
 
@@ -369,6 +328,42 @@ quietways
 and 'mini Holland' residential interventions.
 Despite cycle hire schemes being perceived as disproportionately benefiting  privileged groups, there is some evidence to suggest that the LCHS has indeed helped to normalise cycling.
 @goodman_role_2014 found that the scheme has a higher proportion of women than cycling in London overall (32% vs. 23%), and mentions data from the London Travel Demand Survey (LTDS) showing that low income groups tend make more journeys by foot and bus than underground, implying huge potential for bikeshare in low income areas.
+
+The Santander Cycles customer survey [@tns_santander_2017], which is the 6th wave conducted since 2012, reveals that in 2017 the LCHS was primarily used by those who were male, young, white, and full-time workers. Regarding income, there were significant differences between casual users (which in 2017 represented 41% of all users) and member users. While casual users were from all income levels in similar proportions (except for a small greater proportion of those between £20k-£40k), members were mostly the wealthiest populations (see figure 4).
+
+
+```{r profile-users-lchs, eval=TRUE, out.width="70%", fig.cap="Profile of the casual users and members of the LCHS", fig.show='hold'}
+# library(tidyverse)
+# # Load the data
+#   temp_plot_data <- read.csv("LBHS_demo_profile.csv", header = TRUE)
+# 
+#   # Order variables
+#   temp_plot_data$variable_type <- factor(temp_plot_data$variable_type, levels = c("Sex", "Age", "Ethnicity", "Occupation", "Income"))
+#   temp_plot_data$variable_name <- factor(temp_plot_data$variable_name, levels = c("Female", "Male", ">65", "55-64", "45-54", "35-44", "25-34", "16-24", "Not stated", "BAME",  "White", "Other", "Student", "Part-time","Full-time",  ">£75k" , "£40k-£75k", "£20k-£40k", "<£20k"))
+# 
+#   fill_colours <- c("#ffffff", "#cccccc")
+#   # Plot the graph
+#   p <- temp_plot_data %>%
+#     gather(key=stat_type, value=stat_value, -c(variable_type, variable_name)) %>%
+#     mutate(stat_type=factor(stat_type, levels=c("casual_prop","member_prop","pop_prop"),
+#                             labels = c("casual users (%)", "member users (%)", "London population (%)")),
+#       stat_sign=stat_value>0
+#     ) %>%
+#     filter(!is.na(variable_name)) %>%
+#     ggplot(aes(x=variable_name, y=stat_value))+
+#     # stat_sign is a boolean identifying whether stat_value is pos or neg.
+#     geom_col(aes(fill=stat_sign), colour="#636363", size=0.3)+
+#     scale_fill_manual(values=fill_colours, guide=FALSE)+
+#     facet_grid(variable_type~stat_type, scales="free_y", space="free_y")+
+#     coord_flip()+
+#     theme(axis.title=element_blank(),
+#           strip.text.y = element_text(angle=0))
+# 
+#   p + labs(caption = "Source: TNS, 2017. Base: casual users 604, members 2642. London population 2011 census")
+# ggsave("figures/profile_users_lchs.png")
+
+knitr::include_graphics(c("figures/profile_users_lchs.png"))
+```
 
 A question that has not yet been addressed, however, is has the LCHS *become more equal* over time?
 Of course, this is a broad and to some extent subjective question because there are many ways to define 'equal'.
