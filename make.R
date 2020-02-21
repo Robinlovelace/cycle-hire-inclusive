@@ -45,11 +45,15 @@ make(plan)
 # upload results ----------------------------------------------------------
 
 # data_raw = readd(data_raw) 
-# data_filtered = readd(data_filtered, verbose = T)
-# data_filtered_clean = readd(data_filtered_clean, verbose = T)
 # fst::write_fst(data_raw, "data_raw.fst", compress = 80)
 # file.size("data_raw.fst") # 2.3 GB = too big!
 # data_raw = fst::read.fst("data_raw.fst")
 # piggyback::pb_upload("data_raw_5pc.fst")
 # piggyback::pb_upload("data_raw.fst")
 # piggyback::pb_download_url("data_raw_5pc.fst")
+
+# data_filtered = readd(data_filtered, verbose = T)
+# data_filtered_clean = readd(data_filtered_clean, verbose = T)
+# fst::write_fst(data_filtered_clean, "data_filtered_clean.fst", compress = 80)
+# piggyback::pb_upload("data_filtered_clean.fst")
+# piggyback::pb_download_url("data_filtered_clean.fst")

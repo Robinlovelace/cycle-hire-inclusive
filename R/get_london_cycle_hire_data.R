@@ -81,6 +81,11 @@ lchs_check_dates = function(data_filtered_clean) {
   g
 }
 
+# note: this function will recode the stations data for each year and return a data.frame with recoded ids
+lchs_recode_data = function(data_filtered_clean) {
+  
+}
+
 # test filtered dates, 0.2%, 160k records, empty!
 # test1 = lubridate::ymd_hms(data_filtered$start_time)
 # test2 = as.POSIXct(data_filtered$start_time, format="%Y-%m-%d %H:%M:%S")
