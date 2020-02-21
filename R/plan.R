@@ -1,4 +1,4 @@
-plan = drake_plan(
+plan = drake::drake_plan(
   # download_data = lchs_download(data_dir, sqf),
   # rename_data = lchs_rename(data_dir, sqf, files_to_rename = "2020"),
   # data_raw = target(lchs_read_raw(data_dir, sqf), format = "fst"),

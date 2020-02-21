@@ -48,7 +48,7 @@ f = "sdf.geojson"
 To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
 You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
 
-```{r}
+```{r, eval=TRUE}
 # for released version
 # u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
 # download.file(u, "data_raw_5pc.fst")
@@ -80,7 +80,7 @@ summary(data_filtered_clean)
 You can reproduce many of the results in the main paper using this sample of the data.
 The following, for example, produces a graph showing the number of hires per year:
 
-```{r}
+```{r, eval=TRUE}
 g = lchs_check_dates(data_filtered_clean)
 g
 ```
