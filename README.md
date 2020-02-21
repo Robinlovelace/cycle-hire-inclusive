@@ -2,123 +2,125 @@ Is the London Cycle Hire Scheme becoming more inclusive? An evaluation
 of the shifting spatial distribution of uptake based on 70 million trips
 ================
 
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 ## Reproducing the results
 
 To reproduce the analysis presented in this paper, a good starting point
 is loading a sample of the datasets used. You can do this starting with
-a 5% sample of the raw cycle hire trip records as
-    follows:
+a 5% sample of the raw cycle hire trip records as follows:
 
-    #> ✔ Setting active project to '/mnt/57982e2a-2874-4246-a6fe-115c199bc6bd/atfutures/repos/cycle-hire-inclusive'
-    #> All files up-to-date already
-    #> 
-    #> Attaching package: 'lubridate'
-    #> The following object is masked from 'package:base':
-    #> 
-    #>     date
-    #> Linking to GEOS 3.8.0, GDAL 3.0.2, PROJ 6.2.1
-    #> ── Attaching packages ────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
-    #> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-    #> ✔ tibble  2.1.3     ✔ dplyr   0.8.4
-    #> ✔ tidyr   1.0.2     ✔ stringr 1.4.0
-    #> ✔ readr   1.3.1     ✔ forcats 0.4.0
-    #> ── Conflicts ───────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-    #> ✖ lubridate::as.difftime() masks base::as.difftime()
-    #> ✖ lubridate::date()        masks base::date()
-    #> ✖ dplyr::filter()          masks stats::filter()
-    #> ✖ lubridate::intersect()   masks base::intersect()
-    #> ✖ dplyr::lag()             masks stats::lag()
-    #> ✖ lubridate::setdiff()     masks base::setdiff()
-    #> ✖ lubridate::union()       masks base::union()
-    #> [[1]]
-    #> [1] "fasttime"  "stats"     "graphics"  "grDevices" "utils"     "datasets" 
-    #> [7] "methods"   "base"     
-    #> 
-    #> [[2]]
-    #> [1] "leaflet"   "fasttime"  "stats"     "graphics"  "grDevices" "utils"    
-    #> [7] "datasets"  "methods"   "base"     
-    #> 
-    #> [[3]]
-    #>  [1] "lubridate" "leaflet"   "fasttime"  "stats"     "graphics"  "grDevices"
-    #>  [7] "utils"     "datasets"  "methods"   "base"     
-    #> 
-    #> [[4]]
-    #>  [1] "patchwork" "lubridate" "leaflet"   "fasttime"  "stats"     "graphics" 
-    #>  [7] "grDevices" "utils"     "datasets"  "methods"   "base"     
-    #> 
-    #> [[5]]
-    #>  [1] "sf"        "patchwork" "lubridate" "leaflet"   "fasttime"  "stats"    
-    #>  [7] "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"     
-    #> 
-    #> [[6]]
-    #>  [1] "stplanr"   "sf"        "patchwork" "lubridate" "leaflet"   "fasttime" 
-    #>  [7] "stats"     "graphics"  "grDevices" "utils"     "datasets"  "methods"  
-    #> [13] "base"     
-    #> 
-    #> [[7]]
-    #>  [1] "forcats"   "stringr"   "dplyr"     "purrr"     "readr"     "tidyr"    
-    #>  [7] "tibble"    "ggplot2"   "tidyverse" "stplanr"   "sf"        "patchwork"
-    #> [13] "lubridate" "leaflet"   "fasttime"  "stats"     "graphics"  "grDevices"
-    #> [19] "utils"     "datasets"  "methods"   "base"     
-    #> 
-    #> [[8]]
-    #>  [1] "tmap"      "forcats"   "stringr"   "dplyr"     "purrr"     "readr"    
-    #>  [7] "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stplanr"   "sf"       
-    #> [13] "patchwork" "lubridate" "leaflet"   "fasttime"  "stats"     "graphics" 
-    #> [19] "grDevices" "utils"     "datasets"  "methods"   "base"     
-    #> 
-    #> [[9]]
-    #>  [1] "vroom"     "tmap"      "forcats"   "stringr"   "dplyr"     "purrr"    
-    #>  [7] "readr"     "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stplanr"  
-    #> [13] "sf"        "patchwork" "lubridate" "leaflet"   "fasttime"  "stats"    
-    #> [19] "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"
-    #> # A tibble: 3 x 3
-    #>   target              command                           format
-    #>   <chr>               <expr_lst>                        <chr> 
-    #> 1 data_raw            fst::read.fst("data_raw_5pc.fst") fst   
-    #> 2 data_filtered       lchs_filter_select(data_raw)      fst   
-    #> 3 data_filtered_clean lchs_clean(data_filtered)         <NA>
-    #> ✔ All targets are already up to date.
+``` r
+# for released version
+# u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
+# download.file(u, "data_raw_5pc.fst")
+# for piggyback version
+piggyback::pb_download("data_raw_5pc.fst")
+#> ✔ Setting active project to '/mnt/57982e2a-2874-4246-a6fe-115c199bc6bd/atfutures/repos/cycle-hire-inclusive'
+#> All files up-to-date already
+pkgs = c(
+  "fasttime",
+  "leaflet",
+  "lubridate",
+  "patchwork",
+  "sf",
+  "stplanr",
+  "tidyverse",
+  "tmap",
+  "vroom"
+)
+pkgs_loaded = lapply(pkgs, library, character.only = TRUE, quietly = TRUE)
+#> 
+#> Attaching package: 'lubridate'
+#> The following object is masked from 'package:base':
+#> 
+#>     date
+#> Linking to GEOS 3.8.0, GDAL 3.0.2, PROJ 6.2.1
+#> ── Attaching packages ────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+#> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
+#> ✔ tibble  2.1.3     ✔ dplyr   0.8.4
+#> ✔ tidyr   1.0.2     ✔ stringr 1.4.0
+#> ✔ readr   1.3.1     ✔ forcats 0.4.0
+#> ── Conflicts ───────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ lubridate::as.difftime() masks base::as.difftime()
+#> ✖ lubridate::date()        masks base::date()
+#> ✖ dplyr::filter()          masks stats::filter()
+#> ✖ lubridate::intersect()   masks base::intersect()
+#> ✖ dplyr::lag()             masks stats::lag()
+#> ✖ lubridate::setdiff()     masks base::setdiff()
+#> ✖ lubridate::union()       masks base::union()
+pkgs_loaded[[length(pkgs_loaded)]]
+#>  [1] "vroom"     "tmap"      "forcats"   "stringr"   "dplyr"     "purrr"    
+#>  [7] "readr"     "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stplanr"  
+#> [13] "sf"        "patchwork" "lubridate" "leaflet"   "fasttime"  "stats"    
+#> [19] "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"
+
+source("R/get_london_cycle_hire_data.R")
+source("R/plan.R")
+plan
+#> # A tibble: 3 x 3
+#>   target              command                           format
+#>   <chr>               <expr_lst>                        <chr> 
+#> 1 data_raw            fst::read.fst("data_raw_5pc.fst") fst   
+#> 2 data_filtered       lchs_filter_select(data_raw)      fst   
+#> 3 data_filtered_clean lchs_clean(data_filtered)         <NA>
+drake::make(plan)
+#> ✔ All targets are already up to date.
+drake::vis_drake_graph(plan)
+```
 
 <img src="README_files/figure-gfm/unnamed-chunk-2-1.png" width="90%" style="display: block; margin: auto;" />
 
-    #>            start_time           stop_time start_station_id end_station_id
-    #> 1 2016-04-14 09:36:00 2016-04-14 09:51:00               30            202
-    #> 2 2013-06-15 11:56:00 2013-06-15 12:20:00              230            108
-    #> 3 2019-09-20 06:23:00 2019-09-20 06:31:00              282            104
-    #> 4 2012-07-31 05:58:22 2012-07-31 06:20:14              195            268
-    #> 5 2018-06-24 21:18:00 2018-06-24 21:28:00              723            782
-    #> 6 2016-10-15 01:40:00 2016-10-15 02:23:00              780            738
-    #>   year_month
-    #> 1 2016-04-01
-    #> 2 2013-06-01
-    #> 3 2019-09-01
-    #> 4 2012-07-01
-    #> 5 2018-06-01
-    #> 6 2016-10-01
-    #>    start_time                    stop_time                   start_station_id  
-    #>  Min.   :2012-01-04 00:06:00   Min.   :1970-01-01 00:00:00   Length:4209093    
-    #>  1st Qu.:2013-08-09 15:25:00   1st Qu.:2013-08-08 17:25:00   Class :character  
-    #>  Median :2015-10-22 19:43:00   Median :2015-10-22 19:59:00   Mode  :character  
-    #>  Mean   :2015-11-06 07:46:57   Mean   :2015-08-26 08:53:49                     
-    #>  3rd Qu.:2017-11-29 18:46:00   3rd Qu.:2017-11-29 18:59:00                     
-    #>  Max.   :2019-12-31 23:46:00   Max.   :2019-12-31 23:55:00                     
-    #>  end_station_id       year_month                 
-    #>  Length:4209093     Min.   :2012-01-01 00:00:00  
-    #>  Class :character   1st Qu.:2013-08-01 00:00:00  
-    #>  Mode  :character   Median :2015-10-01 00:00:00  
-    #>                     Mean   :2015-10-21 23:29:44  
-    #>                     3rd Qu.:2017-11-01 00:00:00  
-    #>                     Max.   :2019-12-01 00:00:00
+``` r
+data_filtered_clean = drake::readd(data_filtered_clean)
+head(data_filtered_clean)
+#>            start_time           stop_time start_station_id end_station_id
+#> 1 2016-04-14 09:36:00 2016-04-14 09:51:00               30            202
+#> 2 2013-06-15 11:56:00 2013-06-15 12:20:00              230            108
+#> 3 2019-09-20 06:23:00 2019-09-20 06:31:00              282            104
+#> 4 2012-07-31 05:58:22 2012-07-31 06:20:14              195            268
+#> 5 2018-06-24 21:18:00 2018-06-24 21:28:00              723            782
+#> 6 2016-10-15 01:40:00 2016-10-15 02:23:00              780            738
+#>   year_month
+#> 1 2016-04-01
+#> 2 2013-06-01
+#> 3 2019-09-01
+#> 4 2012-07-01
+#> 5 2018-06-01
+#> 6 2016-10-01
+summary(data_filtered_clean)
+#>    start_time                    stop_time                   start_station_id  
+#>  Min.   :2012-01-04 00:06:00   Min.   :1970-01-01 00:00:00   Length:4209093    
+#>  1st Qu.:2013-08-09 15:25:00   1st Qu.:2013-08-08 17:25:00   Class :character  
+#>  Median :2015-10-22 19:43:00   Median :2015-10-22 19:59:00   Mode  :character  
+#>  Mean   :2015-11-06 07:46:57   Mean   :2015-08-26 08:53:49                     
+#>  3rd Qu.:2017-11-29 18:46:00   3rd Qu.:2017-11-29 18:59:00                     
+#>  Max.   :2019-12-31 23:46:00   Max.   :2019-12-31 23:55:00                     
+#>  end_station_id       year_month                 
+#>  Length:4209093     Min.   :2012-01-01 00:00:00  
+#>  Class :character   1st Qu.:2013-08-01 00:00:00  
+#>  Mode  :character   Median :2015-10-01 00:00:00  
+#>                     Mean   :2015-10-21 23:29:44  
+#>                     3rd Qu.:2017-11-01 00:00:00  
+#>                     Max.   :2019-12-01 00:00:00
+```
 
 You can reproduce many of the results in the main paper using this
 sample of the data. The following, for example, produces a graph showing
 the number of hires per
 year:
 
+``` r
+g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
+g
+```
+
 <img src="README_files/figure-gfm/unnamed-chunk-3-1.png" width="90%" style="display: block; margin: auto;" />
 
-<!-- README.md is generated from README.Rmd. Please edit that file -->
+To reproduce all the results, clone or download the repo, uncomment the
+relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command
+demonstrated
+above.
 
 <!-- # Title 1 : Cycle hire and accessibility: an environmental justice perspective on the first 70 million trips -->
 
@@ -272,21 +274,20 @@ general, reflecting cycle usage overall, BSS users appear to be younger
 adults, have higher incomes than average, male and are more likely to
 own a bicycle (Ogilvie and Goodman 2012; Fishman, Washington, and
 Haworth 2013; Zhao et al. 2019; Soltani et al. 2019; Heinen,
-Kamruzzaman, and Turrell 2018). These socio-economic characteristics are
-similar to those that are generally linked to cycling (see e.g. Heinen,
-Wee, and Maat 2010). A survey by shared mobility organisation CoMoUK
-found that 21% of BSS users in the UK were on an income of less than
-£20,000, 9% on an income of less than £10,000, and less than 1% were
-unemployed.\[1\] Whilst this hides variation depending on each scheme,
-it however highlights that low income users constitute a substantial
-share of overall BSS use. Members of BSS have been found to be more
-likely to own and use private bicycles (Fishman, Washington, and Haworth
-2013).
+Kamruzzaman, and Turrell 2018). These socio-economic characteristics may
+seem <!--are--> similar to those that are generally linked to cycling
+(see e.g. Heinen, Wee, and Maat 2010).
+<!-- A survey by shared mobility organisation CoMoUK found that 21% of BSS users in the UK were on an income of less than £20,000, 9% on an income of less than £10,000, and less than 1% were unemployed.^[ -->
+<!-- See https://como.org.uk/wp-content/uploads/2019/10/CoMoUK-Bike-Share-Survey-2019-web-2.pdf -->
+<!-- ] -->
+<!-- Whilst this hides variation depending on each scheme, it however highlights that low income users constitute a substantial share of overall BSS use. -->
+<!-- Members of BSS have been found to be more likely to own and use private bicycles [@fishman_bike_2013]. -->
 
-While the characteristics of BSS users and other cyclists may seem
-similar, some research reveals differences between cyclists using BSS
-and ‘normal’ cyclists that imply BSS can open up cycling to a wider
-range of users.
+<!-- While the characteristics of BSS users and other cyclists may seem similar -->
+
+However, some research reveals certain differences between cyclists
+using BSS and ‘normal’ cyclists that imply BSS can open up cycling to a
+wider range of users.
 <!-- @buck_are_2013, for example, report that in Washington, D.C., BSS users are more likely to be female, younger, from lower (household) income backgrounds, and own fewer cars and bicycles than other cyclists. -->
 Buck et al. (2013, 112) found in the Washington, D.C., region that,
 compared with regular cyclists, bike-share users “are more likely
@@ -334,7 +335,7 @@ access to cycling for daily transport as it offers an affordable form of
 transport. The LCHS costs £2 for making a potentially unlimited number
 of rides of less than 30 minutes over a 24 hour period of use, for
 example which is less than half the price of a typical single use metro
-(tube) ticket.\[2\] However, the lowest rates, such as the £90 for an
+(tube) ticket.\[1\] However, the lowest rates, such as the £90 for an
 annual ticket bought online, excludes many in low income areas. Another
 benefit of accessing a bike through a BSS is that maintenance and
 storage are paid for by the operator. Bike theft represents another
@@ -342,15 +343,14 @@ potential problem that can be mitigated by cycle hire schemes. All these
 may be of greater importance in low income areas, where the barriers to
 buying, storing, repairing, and bike theft will likely be greater. A
 study on barriers to bikeshare on traditionally under-served
-neighbourhood in the US
-(<span class="citeproc-not-found" data-reference-id="portland_state_university_breaking_2017">**???**</span>)
-found that some of the most common barriers to bicycling cited by
-lower-income people of color were issues that bike share could address,
-such as: not having a bike or related gear (47%); not having a safe
-place to leave a bike where they need to go (36%); the expense of buying
-a bike or related gear (41%); and not having a safe place to store a
-bike at home (32%). Inequalities related to BSS are directly linked to
-use and access, and consequent benefits in accessibility, health.
+neighbourhood in the US (Portland State University et al. 2017, 1) found
+that some of the most common barriers to bicycling cited by lower-income
+people of color were issues that bike share could address, such as: not
+having a bike or related gear (47%); not having a safe place to leave a
+bike where they need to go (36%); the expense of buying a bike or
+related gear (41%); and not having a safe place to store a bike at home
+(32%). Inequalities related to BSS are directly linked to use and
+access, and consequent benefits in accessibility, health.
 <!-- Not sure where this direct quotation ends? -->
 
 As discussed in the preceding paragraphs, BSS tends to be associated
@@ -379,7 +379,7 @@ tenure and employment lines. The results from follow-up research into
 the scheme’s impact shows that providing additional support, in addition
 to simply putting shared bikes in low income areas, can ensure high
 uptake among a wide range of disadvantaged groups (Yates and Whyte
-2019).\[3\]
+2019).\[2\]
 
 <!-- Next line repeats previous content. -->
 
@@ -399,19 +399,13 @@ higher socio-economic groups (e.g. Ricci 2015) and one reason offered
 for this is that stations may not be placed in less economically
 advantaged areas. Ogilvie and Goodman (2012) reported that registered
 users of the London scheme were more likely to live in socioeconomically
-advantaged areas and areas with high cycling levels. It is important to
-note that (other) bicycle infrastructure is often first placed in more
-affluent areas. Demand for bicycle sharing is higher in areas with more
-bicycle infrastructure (El-Assi, Mahmoud, and Habib 2017). Common sense
-suggests that proximity to docking stations increases usage, something
-that has been found in several studies (Fishman et al. 2015; Bernatchez
-et al. 2015; Fuller et al. 2011). However, a recent cohort study
-revealed that residential proximity does not significantly predict the
-likelihood of using a BSS, suggesting that placement of docking stations
-may not be a primary cause of inequalities in BSS usage (Heinen,
-Kamruzzaman, and Turrell 2018).
+advantaged areas and areas with high cycling levels.
+<!-- It is important to note that (other) bicycle infrastructure is often first placed in more affluent areas. -->
+<!-- Demand for bicycle sharing is higher in areas with more bicycle infrastructure [@el-assi_effects_2017]. -->
+<!-- Common sense suggests that proximity to docking stations increases usage, something that has been found in several studies [@fishman_factors_2015; @bernatchez_knowing_2015; @fuller_use_2011]. -->
+<!-- However, a recent cohort study revealed that residential proximity does not significantly predict the likelihood of using a BSS, suggesting that placement of docking stations may not be a primary cause of inequalities in BSS usage [@heinen_public_2018]. -->
 
-Overall, there is little evidence of the overall transport equity
+Overall, there is little evidence of the <!--overall--> transport equity
 outcomes from cycle hire schemes. One recent paper on the role of cycle
 hire schemes in transport equity, stated that “most BSS typically
 benefit the privileged” (Chardon 2019, 401). In the same direction,
@@ -470,7 +464,7 @@ substantial overseas links (Shrubsole 2019).
 In addition to economic and cultural influence associated with the
 super-rich (a driver of high living costs and economic inequalities),
 London’s status as an international financial hub and cosmopolitan study
-and tourist destination boosts the city’s ‘soft power’ (Bell 2016).\[4\]
+and tourist destination boosts the city’s ‘soft power’ (Bell 2016).\[3\]
 On seeing and trying accessible cycling, some of London’s diverse and
 generally wealthy visitors may go on to try cycling elsewhere.
 
@@ -481,12 +475,12 @@ with public transport, walking and cycling accounting for 35%, 24% and
 35% of trips, according to London’s
 [10](https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=5&ved=2ahUKEwjj6b6pldXlAhV5ShUIHRQZBYQQFjAEegQIAhAC&url=https%3A%2F%2Ftfl.gov.uk%2Fcdn%2Fstatic%2Fcms%2Fdocuments%2Ftravel-in-london-report-10-data.xlsx&usg=AOvVaw3wFwZPyKmV86i71fCoa0Bo)s
 Travel report ). Cycling is the fastest growing mode of transport in
-London, with trip numbers more than doubling since 2000.\[5\]
+London, with trip numbers more than doubling since 2000.\[4\]
 
 LCHS has a direct impact on many London residents who have used the
 scheme since its 2010 launch (making London an early adopter). It is
 large, boasting the second largest number of bikes of any system
-worldwide in 2014 (Fishman 2016).\[6\] The stated aim was to provide “a
+worldwide in 2014 (Fishman 2016).\[5\] The stated aim was to provide “a
 major new form of public transport in London, delivering an additional
 40,000 cycle trips per day” (Transport for London 2010) (currently the
 scheme averages 30,000 hires per day over the year, around double the
@@ -495,7 +489,7 @@ days). Although the scheme currently delivers only around 0.1% of trips
 in Greater London overall, it serves a much higher percentage of trips
 in the congested central areas during the vital rush hours. By providing
 a new form of transport targeting commuters, another important aim was
-to relieve peak capacity constraints on the tube and bus network.\[7\]
+to relieve peak capacity constraints on the tube and bus network.\[6\]
 
 There has been continued growth in usage of the scheme, as illustrated
 in Figure @ref(fig:cycle-hire-chart-daily). The main features of the
@@ -537,6 +531,28 @@ proportion of women than cycling in London overall (32% vs. 23%), and
 mentions data from the London Travel Demand Survey (LTDS) showing that
 low income groups tend make more journeys by foot and bus than
 underground, implying huge potential for bikeshare in low income areas.
+
+The Santander Cycles customer survey (TNS 2017), which is the 6th wave
+conducted since 2012, reveals that in 2017 the LCHS was primarily used
+by those who were male, young, white, and full-time workers. Regarding
+income, there were significant differences between casual users (which
+in 2017 represented 41% of all users) and member users. While casual
+users were from all income levels in similar proportions (except for a
+small greater proportion of those between £20k-£40k), members were
+mostly the wealthiest populations (see figure
+4).
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/profile_users_lchs.png" alt="Profile of the casual users and members of the LCHS" width="70%" />
+
+<p class="caption">
+
+Profile of the casual users and members of the LCHS
+
+</p>
+
+</div>
 
 A question that has not yet been addressed, however, is has the LCHS
 *become more equal* over time? Of course, this is a broad and to some
@@ -631,7 +647,7 @@ associated docking station (see Figure
 
 Official population data from the 2011 Census were collected at Output
 Area and 2015 estimates of the Index of Multiple Deprivation and income
-deciles at the LSOA level.\[8\]
+deciles at the LSOA level.\[7\]
 <!-- After attaching LSOA-level IMD decile scores to the OA data, docking stations were allocated to OAs using a straight-line distance measure.  -->
 <!-- Here we used a slightly more conservative threshold of 300m distance between the docking station and OA population-weighted centroid. -->
 <!-- The stations were found to have a wide distribution of scores, as illustrated in Figure \@ref(fig:imd-scores-stations). -->
@@ -679,7 +695,7 @@ interesting to note that these demographically diverse geographic
 outliers were selected instead of more geographically central areas such
 as Bermondsey (on the South bank of the River Thames to the East),
 leading to the ‘why the gap’ campaign for the scheme to be expanded into
-this part of the city.\[9\]
+this part of the city.\[8\]
 
 Figure @ref(fig:facet-map) (bottom) shows the percentage of docking
 stations associated with each income decile each of the four years
@@ -889,10 +905,10 @@ To return to the question in the title of the paper: yes, it seems that
 the London Cycle Hire Scheme is becoming more inclusive over time, at
 least in terms of the income distribution of provision and usage based
 on spatial analysis at high spatial and temporal resolution. Given the
-stigma around cycling for some low income groups
-(<span class="citeproc-not-found" data-reference-id="portland_state_university_breaking_2017">**???**</span>)
-this should be seen as a major achievement. The findings support the
-expansion of bikeshare into more low income and diverse communities.
+stigma around cycling for some low income groups (Portland State
+University et al. 2017) this should be seen as a major achievement. The
+findings support the expansion of bikeshare into more low income and
+diverse communities.
 
 However, the research presented in this paper also opens up wider
 questions. Is usage of cycle hire becoming more equally distributed
@@ -1155,15 +1171,6 @@ Sá. 2018. “Bicycle-Sharing System Socio-Spatial Inequalities in Brazil.”
 
 </div>
 
-<div id="ref-el-assi_effects_2017">
-
-El-Assi, Wafic, Mohamed Salah Mahmoud, and Khandker Nurul Habib. 2017.
-“Effects of Built Environment and Weather on Bike Sharing Demand: A
-Station Level Analysis of Commercial Bike Sharing in Toronto.”
-*Transportation* 44 (3): 589–613.
-
-</div>
-
 <div id="ref-fishman_bikeshare:_2016">
 
 Fishman, Elliot. 2016. “Bikeshare: A Review of Recent Literature.”
@@ -1194,15 +1201,6 @@ Share: A Synthesis of the Literature.” *Transport Reviews* 33 (2):
 States, Great Britain, and Australia.” *Transportation Research Part D:
 Transport and Environment* 31 (August): 13–20.
 <https://doi.org/10.1016/j.trd.2014.05.013>.
-
-</div>
-
-<div id="ref-fishman_factors_2015">
-
-Fishman, Elliot, Simon Washington, Narelle Haworth, and Angela Watson.
-2015. “Factors Influencing Bike Share Membership: An Analysis of
-Melbourne and Brisbane.” *Transportation Research Part A: Policy and
-Practice* 71: 17–30.
 
 </div>
 
@@ -1345,6 +1343,16 @@ Aggregate Data from Public Hire Bicycle Systems*.
 
 </div>
 
+<div id="ref-portland_state_university_breaking_2017">
+
+Portland State University, Nathan McNeil, Jennifer Dill, John MacArthur,
+Joseph Broach, and Steven Howland. 2017. “Breaking Barriers to Bike
+Share: Insights from Residents of Traditionally Underserved
+Neighborhoods.” Portland State University.
+<https://doi.org/10.15760/trec.176>.
+
+</div>
+
 <div id="ref-ricci_bike_2015">
 
 Ricci, Miriam. 2015. “Bike Sharing: A Review of Evidence on Impacts and
@@ -1401,6 +1409,14 @@ Transport for London.
 
 </div>
 
+<div id="ref-tns_santander_2017">
+
+TNS. 2017. “Santander Cycles Customer Satisfaction and Usage Survey
+Casual Users Only: Quarter 2 2017/18.”
+<http://content.tfl.gov.uk/santander-cycles-casuals-css-q2-2017-18.pdf>.
+
+</div>
+
 <div id="ref-transport_for_london_cycling_2010">
 
 Transport for London. 2010. “Cycling Revolution London.” Transport for
@@ -1454,27 +1470,24 @@ Nanjing, China.” *Transportation Research Part A: Policy and Practice*
 </div>
 
 1.   See
-    <https://como.org.uk/wp-content/uploads/2019/10/CoMoUK-Bike-Share-Survey-2019-web-2.pdf>
-
-2.   See
     <https://tfl.gov.uk/modes/cycling/santander-cycles/what-you-pay> and
     <https://tfl.gov.uk/fares/find-fares/tube-and-rail-fares> for cycle
     hire and tube prices respectively.
 
-3.   The scheme attracted a diversity of demographics, 49% identified as
+2.   The scheme attracted a diversity of demographics, 49% identified as
     Black or Minority Ethnicity (BME), 26% were seeking asylum, 28% were
     unemployed, 42% were women and 9% were homeless.
 
-4.   Although Bell (2016) is focussed on the British influence, many of
+3.   Although Bell (2016) is focussed on the British influence, many of
     the paper’s main points are particularly relevant to London. In
     terms of tourism, London attracts ~30 million visitors each year
     according [London’s Economic
     Plan](http://www.uncsbrp.org/tourism.htm).
 
-5.   See
+4.   See
     <https://www.london.gov.uk/sites/default/files/londons_cycling_infrastructure.pdf>
 
-6.   There were nearly 10,000 bikes in the scheme at the time and there
+5.   There were nearly 10,000 bikes in the scheme at the time and there
     are around 11,500 now, although fewer are in circulation, docked or
     being used on the streets. According to data from
     [bikesharemap.com](https://bikesharemap.com/london/#/12.384657071672539/-0.1195/51.5021/)
@@ -1482,15 +1495,15 @@ Nanjing, China.” *Transportation Research Part A: Policy and Practice*
     <https://madeby.tfl.gov.uk/2019/08/09/cycle-hire-trivia-and-facts/>
     for more cycle hire facts and figures.
 
-7.   ‘We want thousands of commuters to switch to bikes for the last
+6.   ‘We want thousands of commuters to switch to bikes for the last
     stage of their journeys to work, significantly relieving pressure on
     the Tube and bus networks in central London.’
     <https://www.london.gov.uk/sites/default/files/cycling_vision_gla_template_final.pdf>
 
-8.   See
+7.   See
     <https://data.cdrc.ac.uk/dataset/4d3a8738-38af-401c-8070-6be5d85b2f5e>
 
-9.   See [whythegap.london](http://whythegap.london) for the campaign
+8.   See [whythegap.london](http://whythegap.london) for the campaign
     for “Cycle Hire Scheme for Rotherhithe and Bermondsey”, which
     contains quotes from many people on the importance of expanding the
     scheme, including London Mayor Sadiq Kahn who is quoted as saying:
