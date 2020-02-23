@@ -8,8 +8,9 @@ plan = drake::drake_plan(
   data_filtered = target(
     lchs_filter_select(data_raw)
     , format = "fst"),
-  data_filtered_clean = lchs_clean(data_filtered)
+  data_filtered_clean = lchs_clean(data_filtered),
   # check_raw_data = 
+  trips_df = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_sations())
   # data = raw_data %>%
   #   mutate(Species = forcats::fct_inorder(Species)),
   # hist = create_plot(data),

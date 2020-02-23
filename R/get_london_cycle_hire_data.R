@@ -91,7 +91,7 @@ lchs_get_sations = function(){
 }
 
 # note: this function will recode the stations data for each year and return a data.frame with recoded ids
-lchs_recode_data = function(trips_df, stations) {
+lchs_recode = function(trips_df, stations) {
 
   trips_df$id = c(1:nrow(trips_df)) # adding a trip id column, it will be used for modifying start and end stations later
   
@@ -126,8 +126,6 @@ lchs_recode_data = function(trips_df, stations) {
   tmap_mode("plot")
   
   #Firstly, delete stations that locate outside of London, they have wrong coordinates information
-  
-  
   station_multi_locations_sf<-station_multi_locations %>% 
     filter(lon<=0.002342,lon>=-0.216573,lat<=51.549369,lat>=51.450531) %>% # remove wrong records outside of London
     st_as_sf(coords = c("lon","lat")) %>% st_set_crs(4326) %>% 
@@ -1203,6 +1201,10 @@ lchs_recode_data = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector()
   
   trips_df$end_station_id[station_407_end_trips_id$id]="406"
+  
+  message("Station and trip ids recoded and cleaned, returning a list with both")
+  
+  list(stations = stations, trips = trips_df)
   
 }
 
