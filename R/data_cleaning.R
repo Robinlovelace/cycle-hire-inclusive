@@ -51,8 +51,8 @@ station_single_location_sf<-st_as_sf(station_single_location,coords=c("lon","lat
 
 station_multi_locations_sf<-st_as_sf(station_multi_locations,coords = c("lon","lat")) %>% st_set_crs(4326)
 
-# create a new column - "ident_id", it will be used for identifying and removing redundant records
-station_multi_locations_sf$ident_id<-c(1:nrow(station_multi_locations_sf))
+
+
 
 # plot multi-location stations
 tmap_mode("view")
@@ -61,17 +61,20 @@ tm_shape(station_multi_locations_sf)+tm_dots()
 tmap_mode("plot")
 
 #Firstly, delete stations that locate outside of London, they have wrong coordinates information
-station_multi_locations_sf<-station_multi_locations_sf %>% 
-  filter(!ident_id %in% c(163,162,75,159,233,115,42,79,178,7,
-                          129,121,91,90,2,214,215,213,8,198,105,
-                          41,21,9,92,88,108))  %>%   # remove wrong records outside of London
+
+
+station_multi_locations_sf<-station_multi_locations %>% 
+  filter(lon<=0.002342,lon>=-0.216573,lat<=51.549369,lat>=51.450531) %>% # remove wrong records outside of London
+  st_as_sf(coords = c("lon","lat")) %>% st_set_crs(4326) %>% 
   filter(!operator_name %in% c("Pop Up Dock 1",
-                               "Pop Up Dock 2")) # Remove Pop Up Docks
+                               "Pop Up Dock 2")) %>% # Remove Pop Up Docks
+  dplyr::arrange(ucl_id,created_dt)
+  
 
 # Check the station data - as shown in the map, wrong records (outside of London) has been removed
 tmap_mode("view")
 tm_shape(station_multi_locations_sf)+tm_dots()+
-  tm_shape(station_single_location_sf)+tm_dots()
+  tm_shape(station_single_location_sf)+tm_dots(col="red")
 # Some stations records are found to be located outside of London, they are wrong  and will be removed
 tmap_mode("plot")
 
@@ -79,75 +82,135 @@ tmap_mode("plot")
 # In this case they can be regarded as "no significant changes had happened spatially", and we will keep only one of them and remove other redundant records.
 # The examination and decision on which to delete was done manually, by checking the walking ditance using google maps.
 # Here we start to remove the redundant records:
+
+
 station_multi_locations_sf <- station_multi_locations_sf %>% 
-  filter(!ident_id %in% c(
-                          53, #for ucl_id 20
-                          35, # for ucl_id 33
-                          236, # for ucl_id 41
-                          110, # for ucl_id 45
-                          258, #for ucl_id 134
-                          19, # for ucl_id 153
-                          260,261,# for ucl_id 173
-                          231, # for ucl_id 174
-                          265,266,267, # for ucl_id 175
-                          142, # for ucl_id 183
-                          93,94,95,97,98,99,100,101,102,103,104,105,106,# for ucl_id 199
-                          177, # for ucl_id 225
-                          245, # for ucl_id 237
-                          227,228,229, # for ucl_id 247
-                          30, # for ucl_id 251
-                          28,61,114, # for ucl_id 259
-                          219, # for ucl_id 300,
-                          182,183, # for ucl_id 322,
-                          173, # for ucl_id 327,
-                          175, # for ucl_id 328,
-                          247, # for ucl_id 352
-                          113, # for ucl_id 358,
-                          80,81,82,83,84,87,89, # for ucl_id 405,
-                          226, # for ucl_id 406,
-                          222, # for ucl_id 407
-                          223, # for ucl_id 407 it should be noted that the station 406 and 407 located in the same place, possiblely due to the large demand in hyde park need more bike and docks
-                          59,60,  # for ucl_id 410
-                          1, 66, 67, 70, 72,74,   # for ucl_id 428
-                          71, 73,   # for ucl_id 432
-                          185, # for ucl_id 443,
-                          46,138,139, # for ucl_id 497
-                          37,38,40,# for ucl_id 501
-                          125,147, # for ucl_id 551
-                          128, # for ucl_id 557
-                          126, # for ucl_id 558
-                          32, # for ucl_id 562
-                          24, # for ucl_id 568
-                          189, # for ucl_id 569
-                          119, # for ucl_id 588
-                          22, # for ucl_id 592
-                          148,149,150,151,152,153,154,155,156,157,158,160,164,165,166,167,168,169, #for ucl_id 629
-                          6,10,11,13,14,15,16,17, # for ucl_id 707
-                          240, # for ucl_id 725
-                          123, # for ucl_id 780
-                          250,251,252, # for ucl_id 781
-                          109, # for ucl_id 782
-                          143,144,145, # for ucl_id 783
-                          56,57,  # for ucl_id 784
-                          132,248, # for ucl_id 786
-                          242, 243, # for ucl_id 787
-                          48,49, 50,  # for ucl_id 788
-                          191,192, 193, # for ucl_id 789
-                          235, # for ucl_id790
-                          131, # for ucl_id794
-                          63,136,137, # for ucl_id 795
-                          255, # for ucl_id820
-                          269,270,271, # for ucl_id 829
-                          212 # for ucl_id 833
-                          
-  ))
+  filter((!((ucl_id==20)&(created_dt==as.POSIXct("2010-08-06 01:00:00",tz = "UTC")))), # for ucl_id 20
+         (!((ucl_id==33)&(created_dt %in% as.POSIXct(c("2010-08-06 01:00:00",
+                                                       "2016-02-23 16:04:01",
+                                                       "2016-04-20 10:08:07"),tz="UTC")))), # for ucl_id 33
+         (!((ucl_id==41)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 41
+         (!((ucl_id==45)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 45
+         (!((ucl_id==134)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 134
+         (!((ucl_id==153)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 153
+         (!((ucl_id==173)&(created_dt %in% as.POSIXct(c("2011-06-29 15:40:02",
+                                                        "2013-07-09 11:26:09"), tz = "UTC")))), # for ucl_id 173
+         (!((ucl_id==174)&(created_dt==as.POSIXct("2011-06-29 15:40:02", tz = "UTC")))), # for ucl_id 174
+         (!((ucl_id==175)&(created_dt %in% as.POSIXct(c("2010-08-06 01:00:00",
+                                                        "2018-06-22 14:46:02",
+                                                        "2018-08-29 11:00:03"), tz = "UTC")))), # for ucl_id 175
+         (!((ucl_id==183)&(created_dt==as.POSIXct("2015-06-15 15:36:02", tz = "UTC")))), # for ucl_id 183
+         (!((ucl_id==199)&(created_dt %in% as.POSIXct(c("2019-05-02 19:41:03",
+                                                        "2019-05-02 20:10:02", # This record also contains wrong coordinates and needs to be removed
+                                                        "2019-05-02 20:35:24",
+                                                        "2019-05-02 20:36:10",
+                                                        "2019-05-02 20:40:16",
+                                                        "2019-05-02 20:45:16",
+                                                        "2019-05-02 20:49:13",
+                                                        "2019-05-02 20:50:24",
+                                                        "2019-05-02 20:54:22",
+                                                        "2019-05-02 21:09:19",
+                                                        "2019-05-03 01:40:35",
+                                                        "2019-05-03 02:44:16"), tz = "UTC")))), # for ucl_id 199
+         (!((ucl_id==225)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 225
+         (!((ucl_id==237)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 237
+         (!((ucl_id==247)&(created_dt %in% as.POSIXct(c("2010-10-08 01:00:00",
+                                                        "2010-08-06 01:00:00", # This record also contains wrong coordinates and needs to be removed
+                                                        "2015-05-21 14:48:02"), tz = "UTC")))), # for ucl_id 247
+         (!((ucl_id==251)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 251
+         (!((ucl_id==259)&(created_dt %in% as.POSIXct(c("2018-04-12 11:16:02",
+                                                        "2010-10-08 01:00:00", 
+                                                        "2011-02-01 00:00:00"), tz = "UTC")))), # for ucl_id 259
+         (!((ucl_id==300)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 300
+         (!((ucl_id==322)&(created_dt %in% as.POSIXct(c("2011-06-29 15:40:02",
+                                                        "2011-11-29 17:01:06"), tz = "UTC")))), # for ucl_id 322
+         (!((ucl_id==327)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 327
+         (!((ucl_id==328)&(created_dt==as.POSIXct("2010-08-06 01:00:00", tz = "UTC")))), # for ucl_id 328
+         (!((ucl_id==352)&(created_dt==as.POSIXct("2011-02-01 00:00:00", tz = "UTC")))), # for ucl_id 352
+         (!((ucl_id==358)&(created_dt==as.POSIXct("2011-06-29 15:40:02", tz = "UTC")))), # for ucl_id 352
+         (!((ucl_id==405)&(created_dt %in% as.POSIXct(c("2019-05-02 20:10:04",
+                                                        "2019-05-02 20:20:12", 
+                                                        "2019-05-03 04:18:13",
+                                                        "2019-05-02 17:24:04",
+                                                        "2019-05-03 02:52:08",
+                                                        "2019-05-03 04:15:10",
+                                                        "2019-05-02 18:42:28"), tz = "UTC")))), # for ucl_id 405
+         (!((ucl_id==406)&(created_dt==as.POSIXct("2011-06-29 15:40:02", tz = "UTC")))), # for ucl_id 406
+         (!(ucl_id==407)), # for ucl_id 407 ; it should be noted that the station 406 and 407 have the same coord, so they are merged into one. we removed 407 and only keeped 406.
+         (!((ucl_id==410)&(created_dt %in% as.POSIXct(c("2011-06-29 15:40:02",
+                                                        "2011-11-29 17:01:06"), tz = "UTC")))), # for ucl_id 410
+         (!((ucl_id==428)&(created_dt %in% as.POSIXct(c("2018-04-26 23:00:03",
+                                                        "2011-11-29 17:01:06", 
+                                                        "2012-03-12 11:20:17",
+                                                        "2018-04-26 23:02:03",
+                                                        "2018-05-08 16:50:03",
+                                                        "2013-07-09 11:26:09"), tz = "UTC")))), # for ucl_id 428
+         (!((ucl_id==432)&(created_dt %in% as.POSIXct(c("2013-07-09 11:26:09",
+                                                        "2018-04-26 23:00:03"), tz = "UTC")))), # for ucl_id 432
+         (!((ucl_id==443)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 443
+         (!((ucl_id==497)&(created_dt %in% as.POSIXct(c("2012-03-12 11:20:17",
+                                                        "2019-07-08 10:08:02", 
+                                                        "2016-06-15 09:10:02"), tz = "UTC")))), # for ucl_id 497
+         (!((ucl_id==501)&(created_dt %in% as.POSIXct(c("2019-05-02 18:42:40",
+                                                        "2019-05-02 18:45:08", 
+                                                        "2019-05-02 20:00:42"), tz = "UTC")))), # for ucl_id 501
+         (!((ucl_id==551)&(created_dt %in% as.POSIXct(c("2012-03-12 11:20:17",
+                                                        "2018-07-19 15:02:04"), tz = "UTC")))), # for ucl_id 551
+         (!((ucl_id==557)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 557
+         (!((ucl_id==558)&(created_dt==as.POSIXct("2013-07-09 11:26:09", tz = "UTC")))), # for ucl_id 558
+         (!((ucl_id==562)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 562
+         (!((ucl_id==568)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 568
+         (!((ucl_id==569)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 569
+         (!((ucl_id==588)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 588
+         (!((ucl_id==592)&(created_dt==as.POSIXct("2012-03-12 11:20:17", tz = "UTC")))), # for ucl_id 592
+         (!((ucl_id==629)&(created_dt %in% as.POSIXct(c("2019-05-02 16:08:11", "2019-05-02 16:38:18", "2019-05-02 16:42:16", 
+                                                        "2019-05-02 16:54:27", "2019-05-02 17:28:07", "2019-05-02 17:38:16", 
+                                                        "2019-05-02 17:43:06", "2019-05-02 22:12:06", "2019-05-02 22:25:40",
+                                                        "2019-05-02 22:41:47", "2019-05-03 02:02:17", "2019-05-03 02:36:40", 
+                                                        "2019-05-03 02:52:08", "2019-05-03 03:29:12", "2019-05-03 03:40:03", 
+                                                        "2019-05-03 04:14:16", "2019-05-03 04:20:06", "2019-05-03 05:26:14"), tz = "UTC")))), # for ucl_id 629
+         (!((ucl_id==707)&(created_dt %in% as.POSIXct(c("2019-05-02 19:04:20", "2019-05-02 19:28:46", "2019-05-02 19:58:02",
+                                                        "2019-05-02 20:00:35", "2019-05-02 22:41:46", "2019-05-03 03:30:28", 
+                                                        "2019-05-03 03:30:51", "2019-05-03 03:36:01"), tz = "UTC")))), # for ucl_id 707
+         (!((ucl_id==725)&(created_dt==as.POSIXct("2014-02-19 18:15:01", tz = "UTC")))), # for ucl_id 725
+         (!((ucl_id==780)&(created_dt==as.POSIXct("2015-08-14 18:26:08", tz = "UTC")))), # for ucl_id 780
+         (!((ucl_id==781)&(created_dt %in% as.POSIXct(c("2015-11-24 15:22:02",
+                                                        "2016-04-01 11:50:01",
+                                                        "2017-03-28 12:14:02"), tz = "UTC")))), # for ucl_id 781
+         (!((ucl_id==782)&(created_dt==as.POSIXct("2015-11-24 15:24:01", tz = "UTC")))), # for ucl_id 782
+         (!((ucl_id==783)&(created_dt %in% as.POSIXct(c("2015-11-26 09:26:01",
+                                                        "2016-01-12 14:50:02",
+                                                        "2016-01-21 10:02:02"), tz = "UTC")))), # for ucl_id 783
+         (!((ucl_id==784)&(created_dt %in% as.POSIXct(c("2016-01-11 14:18:02",
+                                                        "2016-01-21 10:02:02"), tz = "UTC")))), # for ucl_id 784
+         (!((ucl_id==786)&(created_dt %in% as.POSIXct(c("2016-01-20 21:42:02",
+                                                        "2016-01-21 10:02:02"), tz = "UTC")))), # for ucl_id 786
+         (!((ucl_id==787)&(created_dt %in% as.POSIXct(c("2016-01-20 22:00:01",
+                                                        "2016-01-21 10:02:02"), tz = "UTC")))), # for ucl_id 787
+         (!((ucl_id==788)&(created_dt %in% as.POSIXct(c("2016-01-20 20:32:02",
+                                                        "2016-01-21 10:00:02",
+                                                        "2016-01-27 12:40:02"), tz = "UTC")))), # for ucl_id 788
+         (!((ucl_id==789)&(created_dt %in% as.POSIXct(c("2016-01-20 20:02:02",
+                                                        "2016-01-21 10:02:02",
+                                                        "2016-01-26 14:30:02"), tz = "UTC")))), # for ucl_id 789
+         (!((ucl_id==790)&(created_dt==as.POSIXct("2016-03-03 18:06:02", tz = "UTC")))), # for ucl_id 790
+         (!((ucl_id==794)&(created_dt==as.POSIXct("2016-04-13 13:00:02", tz = "UTC")))), # for ucl_id 794
+         (!((ucl_id==795)&(created_dt %in% as.POSIXct(c("2016-02-22 11:24:06",
+                                                        "2016-03-31 14:02:02",
+                                                        "2016-04-03 03:44:02"), tz = "UTC")))), # for ucl_id 795
+         (!((ucl_id==820)&(created_dt==as.POSIXct("2016-12-19 19:36:02", tz = "UTC")))), # for ucl_id 820
+         (!((ucl_id==829)&(created_dt %in% as.POSIXct(c("2018-01-16 11:58:03",
+                                                        "2019-05-02 18:52:34",
+                                                        "2019-05-02 19:59:48"), tz = "UTC")))), # for ucl_id 829
+         (!((ucl_id==833)&(created_dt==as.POSIXct("2018-02-07 14:12:02", tz = "UTC")))), # for ucl_id 833
+         (!((ucl_id==839)&(created_dt==as.POSIXct("2018-08-29 11:58:04", tz = "UTC")))) # for ucl_id 820 , this record contains wrong coords info, needs to be removed
+         
+         )
 
 
 
+# Combine single location station and mult-location stations - as station location clean for later processing
 
-
-# Remove the created column "ident_id" from multilocation station data, and rbind it with single location stations.
-station_multi_locations_sf<-station_multi_locations_sf %>% dplyr::select(-ident_id)
 station_locations_clean<-rbind(station_single_location_sf,station_multi_locations_sf) %>%
   arrange(ucl_id,operator_intid)
 
@@ -166,7 +229,6 @@ print(station_location_summarise %>% filter(num>=2))
 # ucl_id 5
 # ucl_id 8
 # ucl_id 29
-# ucl_id 33
 # ucl_id 46
 # ucl_id 79
 # ucl_id 82
@@ -313,70 +375,6 @@ station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==29)&(oper
 
 rm(station_29_start_trips)
 # Completed ------ end of ucl_id 29
-
-
-# ucl id 33------------------------------------------------------------------------------
-station_33_start_trips<-trips_df %>% filter(start_station_id==33)
-
-plot_monthly_trips <- station_33_start_trips %>%
-  mutate(
-    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-    year=year(start_time_dt),
-    month=month(start_time_dt), 
-    year_month=format(start_time_dt, "%Y-%m")) %>%
-  filter(!is.na(year_month)) %>% 
-  group_by(year_month) %>%
-  summarise(total=n(), month=first(month)) %>%
-  filter((year_month >="2011-01")&
-           (year_month <="2020-01")) %>%
-  ggplot(aes(x=year_month, y=total, group=1)) +
-  geom_line(colour="#3182bd", size=1.1) +
-  #scale_y_continuous(limits=c(0,11000))+
-  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-  theme(
-    axis.text.x=element_text(angle=90)
-  )
-plot_monthly_trips
-
-# The bike trip number pattern changed, and there is no bike trip during 2015/02/28 to 2016/02/10----------
-# The locatin change is supported by google street view
-# https://www.google.com/maps/place/51%C2%B031'00.5%22N+0%C2%B004'04.2%22W/@51.516936,-0.0677992,3a,75y,290.76h,77.08t/data=!3m7!1e1!3m5!1sR9bRT4clH5eapDruRRrK7w!2e0!5s20170801T000000!7i13312!8i6656!4m5!3m4!1s0x0:0x0!8m2!3d51.516816!4d-0.067828
-# https://www.google.com/maps/@51.5169115,-0.0678381,3a,75y,152.17h,85.72t/data=!3m8!1e1!3m6!1s1N2w91DnBUR6PjmwOe0sig!2e0!5s20150501T000000!6s%2F%2Fgeo2.ggpht.com%2Fcbk%3Fpanoid%3D1N2w91DnBUR6PjmwOe0sig%26output%3Dthumbnail%26cb_client%3Dmaps_sv.tactile.gps%26thumb%3D2%26w%3D203%26h%3D100%26yaw%3D157.97168%26pitch%3D0%26thumbfov%3D100!7i13312!8i6656
-# Solutions are as follows:
-# Change ucl_id 33 into 33001 and 33002 respetively, 
-# 33001 is the station before 2015/02/28 (using 2015-12-01 as the dividing point )
-# 33002 is the station after 2016/02/10 (using 2015-12-01 as the dividing point)
-
-station_locations_clean[(station_locations_clean$ucl_id==33)&(station_locations_clean$created_dt<="2015-12-01 00:00:00"),
-                        "ucl_id"]<-33001
-station_locations_clean[(station_locations_clean$ucl_id==33)&(station_locations_clean$created_dt>="2015-12-01 00:00:00"),
-                        "ucl_id"]<-33002
-
-
-
-# The trip_df should be modified accordingly
-station_33_start_trips_id_1<-trips_df %>% filter(start_station_id==33) %>% 
-  filter(start_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
-  dplyr::select(id) %>% as.vector() # identify the 33001 trips and derive their trip id in trips_df
-trips_df$start_station_id[station_33_start_trips_id_1$id]=33001 # change their start_station_id from 33 to 33001
-
-station_33_start_trips_id_2<-trips_df %>% filter(start_station_id==33) %>%
-  filter(start_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
-  dplyr::select(id) %>% as.vector() # identify the 33002 trips and derive their trip id in trips_df
-trips_df$start_station_id[station_33_start_trips_id_2$id]=33002 # change their start_station_id from 33 to 33002
-
-station_33_end_trips_id_1<-trips_df %>% filter(end_station_id==33) %>% 
-  filter(stop_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
-  dplyr::select(id) %>% as.vector() # identify the 33001 trips and derive their trip id in trips_df
-trips_df$end_station_id[station_33_end_trips_id_1$id]=33001 # change their end_station_id from 33 to 33001
-
-station_33_end_trips_id_2<-trips_df %>% filter(end_station_id==33) %>%
-  filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
-  dplyr::select(id) %>% as.vector() # identify the 33002 trips and derive their trip id in trips_df
-trips_df$end_station_id[station_33_end_trips_id_2$id]=33002 # change their end_station_id from 33 to 33002
-
-rm(station_33_start_trips)
-#----Completed------End of ucl_id 33
 
 
 # ucl id 46------------------------------------------------------------------------------
@@ -1053,7 +1051,7 @@ trips_df$end_station_id[station_502_end_trips_id_1$id]=502001 # change their end
 station_502_end_trips_id_2<-trips_df %>% filter(end_station_id==502) %>%
   filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
   dplyr::select(id) %>% as.vector() # identify the 502002 trips and derive their trip id in trips_df
-trips_df$end_station_id[station_502_end_trips_id_2$id]=502 # change their end_station_id from 502 to 502002
+trips_df$end_station_id[station_502_end_trips_id_2$id]=502002 # change their end_station_id from 502 to 502002
 
 rm(station_502_start_trips)
 #---Completed----end of ucl_id 502
@@ -1116,7 +1114,7 @@ trips_df$end_station_id[station_725_end_trips_id_1$id]=725001 # change their end
 station_725_end_trips_id_2<-trips_df %>% filter(end_station_id==725) %>%
   filter(stop_time>as.POSIXct("2018-12-01 00:00:00")) %>% 
   dplyr::select(id) %>% as.vector() # identify the 725002 trips and derive their trip id in trips_df
-trips_df$end_station_id[station_725_end_trips_id_2$id]=725 # change their end_station_id from 725 to 725002
+trips_df$end_station_id[station_725_end_trips_id_2$id]=725002 # change their end_station_id from 725 to 725002
 
 rm(station_725_start_trips)
 #---Completed----end of ucl_id 725
@@ -1143,8 +1141,10 @@ trips_df$end_station_id[station_407_end_trips_id$id]="406"
 
 
 #-------------------------------------------------------------------------------------------------
-
-
+# Check wether the mult-location stations have all been re-coded.
+# This shoule gives a tibble contains 0 observations, and it suggests that they have all been re-coded.
+station_locations_clean %>% group_by(ucl_id) %>%
+  summarise(num=n()) %>% filter(num>=2)
 
 # The data cleaning process is completed
 # Now save/output the cleaned data.
