@@ -57,7 +57,6 @@ You can do this starting with a 5% sample of the raw cycle hire trip records as 
 # for piggyback version
 piggyback::pb_download("data_raw_5pc.fst")
 pkgs = c(
-  "fasttime",
   "leaflet",
   "lubridate",
   "patchwork",
