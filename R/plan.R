@@ -18,9 +18,9 @@ plan = drake::drake_plan(
   #   mutate(Species = forcats::fct_inorder(Species)),
   # hist = create_plot(data),
   # fit = lm(Sepal.Width ~ Petal.Width + Species, data),
-  report = rmarkdown::render(
-    knitr_in("README.Rmd"),
-    output_file = file_out("README.md"),
-    quiet = TRUE
-  )
+  # report = rmarkdown::render(
+  #   knitr_in("README.Rmd"),
+  #   output_file = file_out("README.md"),
+  #   quiet = TRUE
+  # )
 )

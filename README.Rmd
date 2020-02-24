@@ -50,7 +50,7 @@ f = "sdf.geojson"
 To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
 You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=TRUE, echo=TRUE, message=FALSE}
 # for released version
 # u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
 # download.file(u, "data_raw_5pc.fst")
@@ -83,7 +83,7 @@ drake::make(plan)
 
 Visualise the build and a sample of the data from the project as follows:
 
-```{r, eval=TRUE}
+```{r, eval=TRUE, echo=TRUE}
 drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
 data_filtered_clean = drake::readd(data_filtered_clean)
 head(data_filtered_clean)
@@ -93,7 +93,7 @@ summary(data_filtered_clean)
 You can reproduce many of the results in the main paper using this sample of the data.
 The following, for example, produces a graph showing the number of hires per year:
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE}
 g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
 g
 ```

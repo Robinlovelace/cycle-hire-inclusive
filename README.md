@@ -16,8 +16,6 @@ a 5% sample of the raw cycle hire trip records as follows:
 # download.file(u, "data_raw_5pc.fst")
 # for piggyback version
 piggyback::pb_download("data_raw_5pc.fst")
-#> ✔ Setting active project to '/mnt/57982e2a-2874-4246-a6fe-115c199bc6bd/atfutures/repos/cycle-hire-inclusive'
-#> All files up-to-date already
 pkgs = c(
   "drake",
   "leaflet",
@@ -30,27 +28,6 @@ pkgs = c(
   "vroom"
 )
 pkgs_loaded = lapply(pkgs, library, character.only = TRUE, quietly = TRUE)
-#> 
-#> Attaching package: 'lubridate'
-#> The following object is masked from 'package:base':
-#> 
-#>     date
-#> Linking to GEOS 3.8.0, GDAL 3.0.2, PROJ 6.2.1
-#> ── Attaching packages ───────────────────────────────────────── tidyverse 1.3.0 ──
-#> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
-#> ✔ tibble  2.1.3     ✔ dplyr   0.8.4
-#> ✔ tidyr   1.0.2     ✔ stringr 1.4.0
-#> ✔ readr   1.3.1     ✔ forcats 0.4.0
-#> ── Conflicts ──────────────────────────────────────────── tidyverse_conflicts() ──
-#> ✖ lubridate::as.difftime() masks base::as.difftime()
-#> ✖ lubridate::date()        masks base::date()
-#> ✖ tidyr::expand()          masks drake::expand()
-#> ✖ dplyr::filter()          masks stats::filter()
-#> ✖ tidyr::gather()          masks drake::gather()
-#> ✖ lubridate::intersect()   masks base::intersect()
-#> ✖ dplyr::lag()             masks stats::lag()
-#> ✖ lubridate::setdiff()     masks base::setdiff()
-#> ✖ lubridate::union()       masks base::union()
 pkgs_loaded[[length(pkgs_loaded)]]
 #>  [1] "vroom"     "tmap"      "forcats"   "stringr"   "dplyr"     "purrr"    
 #>  [7] "readr"     "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stplanr"  
@@ -60,17 +37,16 @@ pkgs_loaded[[length(pkgs_loaded)]]
 source("R/get_london_cycle_hire_data.R")
 source("R/plan.R")
 plan
-#> # A tibble: 8 x 3
-#>   target          command                                                 format
-#>   <chr>           <expr>                                                  <chr> 
-#> 1 data_raw        fst::read.fst("data_raw_5pc.fst")                     … fst   
-#> 2 data_filtered   lchs_filter_select(data_raw)                          … fst   
-#> 3 data_filtered_… lchs_clean(data_filtered)                             … <NA>  
-#> 4 recoded_data    lchs_recode(trips_df = data_filtered_clean, stations =… <NA>  
-#> 5 trips_df        recoded_data[[1]]                                     … <NA>  
-#> 6 stations        recoded_data[[2]]                                     … <NA>  
-#> 7 drake_target_1  source("code/get-global-stations.R")                  … <NA>  
-#> 8 report          rmarkdown::render(knitr_in("README.Rmd"), output_file … <NA>
+#> # A tibble: 7 x 3
+#>   target           command                                                format
+#>   <chr>            <expr>                                                 <chr> 
+#> 1 data_raw         fst::read.fst("data_raw_5pc.fst")                    … fst   
+#> 2 data_filtered    lchs_filter_select(data_raw)                         … fst   
+#> 3 data_filtered_c… lchs_clean(data_filtered)                            … <NA>  
+#> 4 recoded_data     lchs_recode(trips_df = data_filtered_clean, stations … <NA>  
+#> 5 trips_df         recoded_data[[1]]                                    … <NA>  
+#> 6 stations         recoded_data[[2]]                                    … <NA>  
+#> 7 drake_target_1   source("code/get-global-stations.R")                 … <NA>
 ```
 
 To reproduce all the results in the paper, you can make the plan with:
@@ -78,36 +54,45 @@ To reproduce all the results in the paper, you can make the plan with:
 Visualise the build and a sample of the data from the project as
 follows:
 
+``` r
+drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
+```
+
 <img src="README_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" style="display: block; margin: auto;" />
 
-    #>            start_time           stop_time start_station_id end_station_id
-    #> 1 2016-04-14 09:36:00 2016-04-14 09:51:00               30            202
-    #> 2 2013-06-15 11:56:00 2013-06-15 12:20:00              230            108
-    #> 3 2019-09-20 06:23:00 2019-09-20 06:31:00              282            104
-    #> 4 2012-07-31 05:58:22 2012-07-31 06:20:14              195            268
-    #> 5 2018-06-24 21:18:00 2018-06-24 21:28:00              723            782
-    #> 6 2016-10-15 01:40:00 2016-10-15 02:23:00              780            738
-    #>   year_month
-    #> 1 2016-04-01
-    #> 2 2013-06-01
-    #> 3 2019-09-01
-    #> 4 2012-07-01
-    #> 5 2018-06-01
-    #> 6 2016-10-01
-    #>    start_time                    stop_time                   start_station_id  
-    #>  Min.   :2012-01-04 00:06:00   Min.   :1970-01-01 00:00:00   Length:4209093    
-    #>  1st Qu.:2013-08-09 15:25:00   1st Qu.:2013-08-08 17:25:00   Class :character  
-    #>  Median :2015-10-22 19:43:00   Median :2015-10-22 19:59:00   Mode  :character  
-    #>  Mean   :2015-11-06 07:46:57   Mean   :2015-08-26 08:53:49                     
-    #>  3rd Qu.:2017-11-29 18:46:00   3rd Qu.:2017-11-29 18:59:00                     
-    #>  Max.   :2019-12-31 23:46:00   Max.   :2019-12-31 23:55:00                     
-    #>  end_station_id       year_month                 
-    #>  Length:4209093     Min.   :2012-01-01 00:00:00  
-    #>  Class :character   1st Qu.:2013-08-01 00:00:00  
-    #>  Mode  :character   Median :2015-10-01 00:00:00  
-    #>                     Mean   :2015-10-21 23:29:44  
-    #>                     3rd Qu.:2017-11-01 00:00:00  
-    #>                     Max.   :2019-12-01 00:00:00
+``` r
+data_filtered_clean = drake::readd(data_filtered_clean)
+head(data_filtered_clean)
+#>            start_time           stop_time start_station_id end_station_id
+#> 1 2016-04-14 09:36:00 2016-04-14 09:51:00               30            202
+#> 2 2013-06-15 11:56:00 2013-06-15 12:20:00              230            108
+#> 3 2019-09-20 06:23:00 2019-09-20 06:31:00              282            104
+#> 4 2012-07-31 05:58:22 2012-07-31 06:20:14              195            268
+#> 5 2018-06-24 21:18:00 2018-06-24 21:28:00              723            782
+#> 6 2016-10-15 01:40:00 2016-10-15 02:23:00              780            738
+#>   year_month
+#> 1 2016-04-01
+#> 2 2013-06-01
+#> 3 2019-09-01
+#> 4 2012-07-01
+#> 5 2018-06-01
+#> 6 2016-10-01
+summary(data_filtered_clean)
+#>    start_time                    stop_time                   start_station_id  
+#>  Min.   :2012-01-04 00:06:00   Min.   :1970-01-01 00:00:00   Length:4209093    
+#>  1st Qu.:2013-08-09 15:25:00   1st Qu.:2013-08-08 17:25:00   Class :character  
+#>  Median :2015-10-22 19:43:00   Median :2015-10-22 19:59:00   Mode  :character  
+#>  Mean   :2015-11-06 07:46:57   Mean   :2015-08-26 08:53:49                     
+#>  3rd Qu.:2017-11-29 18:46:00   3rd Qu.:2017-11-29 18:59:00                     
+#>  Max.   :2019-12-31 23:46:00   Max.   :2019-12-31 23:55:00                     
+#>  end_station_id       year_month                 
+#>  Length:4209093     Min.   :2012-01-01 00:00:00  
+#>  Class :character   1st Qu.:2013-08-01 00:00:00  
+#>  Mode  :character   Median :2015-10-01 00:00:00  
+#>                     Mean   :2015-10-21 23:29:44  
+#>                     3rd Qu.:2017-11-01 00:00:00  
+#>                     Max.   :2019-12-01 00:00:00
+```
 
 You can reproduce many of the results in the main paper using this
 sample of the data. The following, for example, produces a graph showing
@@ -118,8 +103,6 @@ year:
 g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
 g
 ```
-
-<img src="README_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" style="display: block; margin: auto;" />
 
 To reproduce all the results, clone or download the repo, uncomment the
 relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command
