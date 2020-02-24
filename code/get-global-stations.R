@@ -77,6 +77,19 @@ bikeshare_growth_continent = bikeshare_core %>%
   summarise(Stations = sum(Stations), Bicycles = sum(Bicycles, na.rm = TRUE)) %>% 
   mutate(`Total stations` = cumsum(Stations)) %>% 
   ungroup() 
+latest_dates = bikeshare_growth_continent %>% 
+  group_by(Continent) %>% 
+  filter(Launched == max(Launched)) %>% 
+  ungroup() %>% 
+  mutate(Launched = max(Launched))
+
+earliest_dates = bikeshare_growth_continent %>% 
+  group_by(Continent) %>% 
+  filter(Launched == min(Launched)) %>% 
+  ungroup() %>% 
+  mutate(Launched = 2005)
+
+bikeshare_growth_continent = bind_rows(bikeshare_growth_continent, latest_dates)
 
 g1 = bikeshare_growth_continent %>% ggplot(aes(Launched, `Total stations`)) +
   theme(legend.position = c(0.1, 0.8)) +
@@ -100,7 +113,7 @@ g2 = bikeshare_growth_continent %>% ggplot(aes(Launched, `Total stations`)) +
   xlim(c(2005, 2020)) +
   theme(legend.position = c(0.1, 0.8))
 g2
-ggsave("figures/bikehshare-global-stations-growth2.png")
+ggsave("figures/bikehshare-global-stations-growth.png")
 
 
 # biggest countries for bikeshare
