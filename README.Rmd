@@ -196,7 +196,7 @@ Modern docked cycle hire schemes have been in operation since 1995, with the lau
 They have taken off since the early 2000s, with the greatest absolute period of growth occurring between around 2010 and 2015, after which the rate of new installations has dropped off (Figure \@ref(fig:global-growth)).
 
 ```{r global-growth, fig.cap="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent.", out.width="80%", fig.pos="h", eval=TRUE}
-# file.edit("get-global-stations.R") # to reproduce this plot
+# file.edit("code/get-global-stations.R") # to reproduce this plot
 knitr::include_graphics("figures/bikehshare-global-stations-growth.png")
 ```
 
@@ -366,6 +366,7 @@ source("R/cycle-hires-excel.R")
 ```
 
 ```{r cycle-hire-chart-daily, eval=TRUE, out.width="70%", fig.cap="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map).", fig.show='hold'}
+# file.edit("code/cycle-hires-excel.R")
 knitr::include_graphics(c("figures/cycle-hire-chart-daily.png", "figures/overview-2019.png"))
 ```
 

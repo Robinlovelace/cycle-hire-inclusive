@@ -12,7 +12,7 @@ plan = drake::drake_plan(
   recoded_data = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_sations()),
   trips_df = recoded_data[[1]],
   stations = recoded_data[[2]],
-  # check_raw_data = source("code/cycle-hires-excel.R"), # fails, commented
+  check_raw_data = source("code/cycle-hires-excel.R"), # fails, commented
   get_global_stations = source("code/get-global-stations.R"),
   # hist = create_plot(data),
   # fit = lm(Sepal.Width ~ Petal.Width + Species, data),

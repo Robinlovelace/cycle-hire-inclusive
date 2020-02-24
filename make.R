@@ -6,7 +6,6 @@
 
 pkgs = c(
   "drake",
-  "fasttime",
   "leaflet",
   "lubridate",
   "patchwork",
