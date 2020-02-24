@@ -32,7 +32,7 @@ source("R/plan.R")
 
 # make plan ---------------------------------------------------------------
 
-# vis_drake_graph(plan)
+vis_drake_graph(plan)
 make(plan)
 # 84950285 rows...
 # make(plan, parallelism = "future", jobs = 2) # worked

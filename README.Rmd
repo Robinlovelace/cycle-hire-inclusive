@@ -57,7 +57,7 @@ You can do this starting with a 5% sample of the raw cycle hire trip records as 
 # for piggyback version
 piggyback::pb_download("data_raw_5pc.fst")
 pkgs = c(
-  "fasttime",
+  "drake",
   "leaflet",
   "lubridate",
   "patchwork",
@@ -73,8 +73,18 @@ pkgs_loaded[[length(pkgs_loaded)]]
 source("R/get_london_cycle_hire_data.R")
 source("R/plan.R")
 plan
+```
+
+To reproduce all the results in the paper, you can make the plan with:
+
+```{r, eval=FALSE}
 drake::make(plan)
-drake::vis_drake_graph(plan)
+```
+
+Visualise the build and a sample of the data from the project as follows:
+
+```{r, eval=TRUE}
+drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
 data_filtered_clean = drake::readd(data_filtered_clean)
 head(data_filtered_clean)
 summary(data_filtered_clean)
