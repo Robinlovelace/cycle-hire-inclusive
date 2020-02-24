@@ -69,7 +69,7 @@ lchs_clean = function(data_filtered) {
   data_filtered %>% filter(!(is.na(start_time) | is.na(stop_time)))
 }
 
-lchs_check_dates = function(trips_df = data_filtered_clean) {
+lchs_check_dates = function(trips_df) {
   # time analysis
   trips_per_year = trips_df %>%
     group_by(year_month) %>%
@@ -80,19 +80,9 @@ lchs_check_dates = function(trips_df = data_filtered_clean) {
     geom_line(aes(year_month, total), col = "grey")
   g
   
-  # time analysis
-  trips_per_year = trips_df %>%
-    group_by(year_month) %>%
-    summarise(
-      total = n()
-    )
-  g = ggplot(trips_per_year) +
-    geom_line(aes(year_month, total), col = "grey")
-  g
-
-  trips_df$date = as.Date(trips_df$start_time)
   trips_per_day = trips_df %>%
-    group_by(date) %>%
+    mutate(Day = as.Date(start_time)) %>%
+    group_by(Day) %>%
     summarise(
       total_csvs = n()
     )
@@ -102,36 +92,6 @@ lchs_check_dates = function(trips_df = data_filtered_clean) {
     piggyback::pb_download("daily_hires.Rds")
   }
   trips_per_day_xls = readRDS("daily_hires.Rds")
-  trips_per_day_xls$date = trips_per_day_xls$Day
-  trips_daily = left_join(trips_per_day_xls, trips_per_day)
-
-  ggplot(trips_daily, aes(Day, `Number of hires`)) +
-    geom_point(alpha = 0.1) +
-    geom_line(aes(Day, Monthly), lwd = 1) +
-    geom_line(aes(Day, Yearly), colour = "blue", lwd = 1) +
-    # csv data
-    geom_point(aes(y = total_csvs), colour = "red", alpha = 0.1)
-  # finding: there are duplicate trips in the csv files
-
-  trips_df_duplicated = duplicated(trips_df %>% select(id))
-  summary(trips_df_duplicated) # but there are no duplicated duplicate ids!
-  trips_df_duplicated = distinct(trips_df %>% select(id))
-  nrow(trips_df_duplicated) / nrow(trips_df) # verified in tidyverse...
-  head(trips_df$start_time) # to nearest minute...
-  trips_df_duplicated = distinct(trips_df %>% select(start_time, stop_time, start_station_id))
-  nrow(trips_df_duplicated) / nrow(trips_df) # 82%
-  trips_df_distinct = trips_df %>%
-    distinct(start_time, stop_time, start_station_id, end_station_id)
-  nrow(trips_df_distinct) / nrow(trips_df) # 82.7 %
-  trips_df = trips_df_distinct
-
-  trips_per_day = trips_df %>%
-    mutate(date = as.Date(start_time)) %>%
-    group_by(date) %>%
-    summarise(
-      total_csvs = n()
-    )
-
   trips_daily = left_join(trips_per_day_xls, trips_per_day)
 
   ggplot(trips_daily, aes(Day, `Number of hires`)) +
@@ -147,6 +107,8 @@ lchs_check_dates = function(trips_df = data_filtered_clean) {
     # scale_x_continuous(breaks = 2010:2020)
     # scale_x_date(breaks = lubridate::ymd(paste0(2010:2020, "-01-01")))
     scale_x_date(date_breaks = "1 year", date_labels = "%Y")
+  
+  ggsave("figures/cycle-hire-chart-daily.png", width = 9, height = 4)
   
 }
 
