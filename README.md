@@ -37,17 +37,16 @@ pkgs_loaded[[length(pkgs_loaded)]]
 source("R/get_london_cycle_hire_data.R")
 source("R/plan.R")
 plan
-#> # A tibble: 8 x 3
+#> # A tibble: 7 x 3
 #>   target           command                                                format
 #>   <chr>            <expr>                                                 <chr> 
-#> 1 data_raw         fst::read.fst("data_raw_5pc.fst")                    … fst   
+#> 1 data_raw         fst::read.fst("data_raw.fst")                        … fst   
 #> 2 data_filtered    lchs_filter_select(data_raw)                         … fst   
 #> 3 data_filtered_c… lchs_clean(data_filtered)                            … <NA>  
 #> 4 recoded_data     lchs_recode(trips_df = data_filtered_clean, stations … <NA>  
 #> 5 trips_df         recoded_data[[1]]                                    … <NA>  
 #> 6 stations         recoded_data[[2]]                                    … <NA>  
-#> 7 check_raw_data   lchs_check_dates(trips_df)                           … <NA>  
-#> 8 get_global_stat… source("code/get-global-stations.R")                 … <NA>
+#> 7 get_global_stat… source("code/get-global-stations.R")                 … <NA>
 ```
 
 To reproduce all the results in the paper, you can make the plan with:
@@ -65,33 +64,33 @@ drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
 data_filtered_clean = drake::readd(data_filtered_clean)
 head(data_filtered_clean)
 #>            start_time           stop_time start_station_id end_station_id
-#> 1 2016-04-14 09:36:00 2016-04-14 09:51:00               30            202
-#> 2 2013-06-15 11:56:00 2013-06-15 12:20:00              230            108
-#> 3 2019-09-20 06:23:00 2019-09-20 06:31:00              282            104
-#> 4 2012-07-31 05:58:22 2012-07-31 06:20:14              195            268
-#> 5 2018-06-24 21:18:00 2018-06-24 21:28:00              723            782
-#> 6 2016-10-15 01:40:00 2016-10-15 02:23:00              780            738
+#> 1 2016-01-10 00:00:00 2016-01-10 00:04:00               18            383
+#> 2 2016-01-10 00:00:00 2016-01-10 00:05:00              479            719
+#> 3 2016-01-10 00:00:00 2016-01-10 00:20:00              425            272
+#> 4 2016-01-10 00:01:00 2016-01-10 00:14:00              487            471
+#> 5 2016-01-10 00:01:00 2016-01-10 00:11:00              501            399
+#> 6 2016-01-10 00:02:00 2016-01-10 00:09:00              769            671
 #>   year_month
-#> 1 2016-04-01
-#> 2 2013-06-01
-#> 3 2019-09-01
-#> 4 2012-07-01
-#> 5 2018-06-01
-#> 6 2016-10-01
+#> 1 2016-01-01
+#> 2 2016-01-01
+#> 3 2016-01-01
+#> 4 2016-01-01
+#> 5 2016-01-01
+#> 6 2016-01-01
 summary(data_filtered_clean)
 #>    start_time                    stop_time                   start_station_id  
-#>  Min.   :2012-01-04 00:06:00   Min.   :1970-01-01 00:00:00   Length:4209093    
-#>  1st Qu.:2013-08-09 15:25:00   1st Qu.:2013-08-08 17:25:00   Class :character  
-#>  Median :2015-10-22 19:43:00   Median :2015-10-22 19:59:00   Mode  :character  
-#>  Mean   :2015-11-06 07:46:57   Mean   :2015-08-26 08:53:49                     
-#>  3rd Qu.:2017-11-29 18:46:00   3rd Qu.:2017-11-29 18:59:00                     
-#>  Max.   :2019-12-31 23:46:00   Max.   :2019-12-31 23:55:00                     
+#>  Min.   :2012-01-04 00:00:00   Min.   :1970-01-01 00:00:00   Length:73720600   
+#>  1st Qu.:2014-04-02 09:35:00   1st Qu.:2014-04-02 09:51:45   Class :character  
+#>  Median :2016-03-20 22:28:00   Median :2016-03-20 22:55:00   Mode  :character  
+#>  Mean   :2016-02-14 00:05:17   Mean   :2015-12-18 06:33:07                     
+#>  3rd Qu.:2018-02-20 18:58:00   3rd Qu.:2018-02-20 19:12:00                     
+#>  Max.   :2019-12-31 23:56:00   Max.   :2019-12-31 23:59:00                     
 #>  end_station_id       year_month                 
-#>  Length:4209093     Min.   :2012-01-01 00:00:00  
-#>  Class :character   1st Qu.:2013-08-01 00:00:00  
-#>  Mode  :character   Median :2015-10-01 00:00:00  
-#>                     Mean   :2015-10-21 23:29:44  
-#>                     3rd Qu.:2017-11-01 00:00:00  
+#>  Length:73720600    Min.   :2012-01-01 00:00:00  
+#>  Class :character   1st Qu.:2014-04-01 00:00:00  
+#>  Mode  :character   Median :2016-03-01 00:00:00  
+#>                     Mean   :2016-01-29 17:01:43  
+#>                     3rd Qu.:2018-02-01 00:00:00  
 #>                     Max.   :2019-12-01 00:00:00
 ```
 
@@ -520,7 +519,24 @@ the LCHS, including:
     @ref(fig:cycle-hire-chart-daily).
   - Expansion in December 2013 West and Southwest
     <!-- London ?? bikes and ?? docking stations, --> corresponding with
-    a step change in the annual average number of hires after 2014.
+    a step change in the annual average number of hires after
+2014.
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/cycle-hire-chart-daily.png" alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme. Translucent dots represent daily counts; the black line is a monthly (30 day) rolling average; the blue line is the yearly rolling average number of hires per day. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" /><img src="figures/overview-2019.png" alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme. Translucent dots represent daily counts; the black line is a monthly (30 day) rolling average; the blue line is the yearly rolling average number of hires per day. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" />
+
+<p class="caption">
+
+Top: Number of cycles hired per day across the London Cycle Hire Scheme.
+Translucent dots represent daily counts; the black line is a monthly (30
+day) rolling average; the blue line is the yearly rolling average number
+of hires per day. Bottom: the extent of the scheme in 2019 (see
+<https://i.imgur.com/1rAfJgZ.gif> for an animated version of the map).
+
+</p>
+
+</div>
 
 <!-- reference needed -->
 

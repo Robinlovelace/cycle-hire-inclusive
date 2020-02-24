@@ -365,7 +365,7 @@ corresponding with a step change in the annual average number of hires after 201
 source("R/cycle-hires-excel.R")
 ```
 
-```{r cycle-hire-chart-daily, eval=FALSE, out.width="70%", fig.cap="Top: Number of cycles hired per day across the London Cycle Hire Scheme. Translucent dots represent daily counts; the black line is a monthly (30 day) rolling average; the blue line is the yearly rolling average number of hires per day. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map).", fig.show='hold'}
+```{r cycle-hire-chart-daily, eval=TRUE, out.width="70%", fig.cap="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map).", fig.show='hold'}
 knitr::include_graphics(c("figures/cycle-hire-chart-daily.png", "figures/overview-2019.png"))
 ```
 
