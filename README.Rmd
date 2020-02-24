@@ -195,7 +195,7 @@ Bicycle sharing systems (BSS) have been created in many cities to support multip
 Modern docked cycle hire schemes have been in operation since 1995, with the launch of a scheme in Copenhagen [@didonato_city-bike_2002].
 They have taken off since the early 2000s, with the greatest absolute period of growth occurring between around 2010 and 2015, after which the rate of new installations has dropped off (Figure \@ref(fig:global-growth)).
 
-```{r global-growth, fig.cap="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent.", out.width="80%", fig.pos="h"}
+```{r global-growth, fig.cap="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent.", out.width="80%", fig.pos="h", eval=TRUE}
 # file.edit("get-global-stations.R") # to reproduce this plot
 knitr::include_graphics("figures/bikehshare-global-stations-growth.png")
 ```
@@ -205,7 +205,7 @@ Asia saw very rapid uptake of sharing schemes from 2010. Seven of the top ten la
 North and South America have seen substantial interest in docked cycle hire schemes, although on a smaller scale than those in Europe and Asia, and a handful of cycle hire schemes have been launched in Australia.
 Within this global overview, the London BSS is an important player, ranking 8th in the top schemes by number of docking stations and launching relatively early in 2010.
 
-```{r global-stations-cycles, fig.cap="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles.", out.width="80%", fig.pos="h"}
+```{r global-stations-cycles, fig.cap="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles.", out.width="80%", fig.pos="h", eval=TRUE}
 knitr::include_graphics("figures/bikehshare-global-stations-bicycles.png")
 ```
 

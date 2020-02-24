@@ -30,18 +30,37 @@ pkgs = c(
   "vroom"
 )
 pkgs_loaded = lapply(pkgs, library, character.only = TRUE, quietly = TRUE)
+#> 
+#> Attaching package: 'lubridate'
+#> The following object is masked from 'package:base':
+#> 
+#>     date
+#> Linking to GEOS 3.8.0, GDAL 3.0.2, PROJ 6.2.1
+#> ── Attaching packages ───────────────────────────────────────── tidyverse 1.3.0 ──
+#> ✔ ggplot2 3.2.1     ✔ purrr   0.3.3
+#> ✔ tibble  2.1.3     ✔ dplyr   0.8.4
+#> ✔ tidyr   1.0.2     ✔ stringr 1.4.0
+#> ✔ readr   1.3.1     ✔ forcats 0.4.0
+#> ── Conflicts ──────────────────────────────────────────── tidyverse_conflicts() ──
+#> ✖ lubridate::as.difftime() masks base::as.difftime()
+#> ✖ lubridate::date()        masks base::date()
+#> ✖ tidyr::expand()          masks drake::expand()
+#> ✖ dplyr::filter()          masks stats::filter()
+#> ✖ tidyr::gather()          masks drake::gather()
+#> ✖ lubridate::intersect()   masks base::intersect()
+#> ✖ dplyr::lag()             masks stats::lag()
+#> ✖ lubridate::setdiff()     masks base::setdiff()
+#> ✖ lubridate::union()       masks base::union()
 pkgs_loaded[[length(pkgs_loaded)]]
-#>  [1] "tidyselect" "vroom"      "tmap"       "forcats"    "stringr"   
-#>  [6] "dplyr"      "purrr"      "readr"      "tidyr"      "tibble"    
-#> [11] "ggplot2"    "tidyverse"  "stplanr"    "sf"         "patchwork" 
-#> [16] "lubridate"  "leaflet"    "fasttime"   "drake"      "stats"     
-#> [21] "graphics"   "grDevices"  "utils"      "datasets"   "methods"   
-#> [26] "base"
+#>  [1] "vroom"     "tmap"      "forcats"   "stringr"   "dplyr"     "purrr"    
+#>  [7] "readr"     "tidyr"     "tibble"    "ggplot2"   "tidyverse" "stplanr"  
+#> [13] "sf"        "patchwork" "lubridate" "leaflet"   "drake"     "stats"    
+#> [19] "graphics"  "grDevices" "utils"     "datasets"  "methods"   "base"
 
 source("R/get_london_cycle_hire_data.R")
 source("R/plan.R")
 plan
-#> # A tibble: 7 x 3
+#> # A tibble: 8 x 3
 #>   target          command                                                 format
 #>   <chr>           <expr>                                                  <chr> 
 #> 1 data_raw        fst::read.fst("data_raw_5pc.fst")                     … fst   
@@ -50,7 +69,8 @@ plan
 #> 4 recoded_data    lchs_recode(trips_df = data_filtered_clean, stations =… <NA>  
 #> 5 trips_df        recoded_data[[1]]                                     … <NA>  
 #> 6 stations        recoded_data[[2]]                                     … <NA>  
-#> 7 report          rmarkdown::render(knitr_in("README.Rmd"), output_file … <NA>
+#> 7 drake_target_1  source("code/get-global-stations.R")                  … <NA>  
+#> 8 report          rmarkdown::render(knitr_in("README.Rmd"), output_file … <NA>
 ```
 
 To reproduce all the results in the paper, you can make the plan with:
@@ -237,7 +257,21 @@ have been in operation since 1995, with the launch of a scheme in
 Copenhagen (DiDonato, Herbert, and Vachhani 2002). They have taken off
 since the early 2000s, with the greatest absolute period of growth
 occurring between around 2010 and 2015, after which the rate of new
-installations has dropped off (Figure @ref(fig:global-growth)).
+installations has dropped off (Figure
+@ref(fig:global-growth)).
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikehshare-global-stations-growth.png" alt="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent." width="80%" />
+
+<p class="caption">
+
+Growth in docked cycle hire schemes worldwide in terms of docking
+stations by continent.
+
+</p>
+
+</div>
 
 European cities pioneered shared cycle mobility, with schemes in cities
 such as Amsterdam (The Netherlands) and Renne (France) demonstrating the
@@ -251,7 +285,21 @@ substantial interest in docked cycle hire schemes, although on a smaller
 scale than those in Europe and Asia, and a handful of cycle hire schemes
 have been launched in Australia. Within this global overview, the London
 BSS is an important player, ranking 8th in the top schemes by number of
-docking stations and launching relatively early in 2010.
+docking stations and launching relatively early in
+2010.
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikehshare-global-stations-bicycles.png" alt="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles." width="80%" />
+
+<p class="caption">
+
+Cycle hire schemes worldwide by continent, comparing number of docking
+stations with number of cycles.
+
+</p>
+
+</div>
 
 ## Determinants of cycle hire scheme usage
 
