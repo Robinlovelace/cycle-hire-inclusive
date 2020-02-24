@@ -37,7 +37,7 @@ pkgs_loaded[[length(pkgs_loaded)]]
 source("R/get_london_cycle_hire_data.R")
 source("R/plan.R")
 plan
-#> # A tibble: 7 x 3
+#> # A tibble: 8 x 3
 #>   target           command                                                format
 #>   <chr>            <expr>                                                 <chr> 
 #> 1 data_raw         fst::read.fst("data_raw_5pc.fst")                    … fst   
@@ -46,7 +46,8 @@ plan
 #> 4 recoded_data     lchs_recode(trips_df = data_filtered_clean, stations … <NA>  
 #> 5 trips_df         recoded_data[[1]]                                    … <NA>  
 #> 6 stations         recoded_data[[2]]                                    … <NA>  
-#> 7 drake_target_1   source("code/get-global-stations.R")                 … <NA>
+#> 7 check_raw_data   lchs_check_dates(trips_df)                           … <NA>  
+#> 8 get_global_stat… source("code/get-global-stations.R")                 … <NA>
 ```
 
 To reproduce all the results in the paper, you can make the plan with:

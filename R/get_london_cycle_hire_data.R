@@ -69,58 +69,6 @@ lchs_clean = function(data_filtered) {
   data_filtered %>% filter(!(is.na(start_time) | is.na(stop_time)))
 }
 
-lchs_check_dates = function(trips_df) {
-  # time analysis
-  trips_per_year = trips_df %>%
-    group_by(year_month) %>%
-    summarise(
-      total = n()
-    )
-  g = ggplot(trips_per_year) +
-    geom_line(aes(year_month, total), col = "grey")
-  g
-  
-  trips_per_day = trips_df %>%
-    mutate(Day = as.Date(start_time)) %>%
-    group_by(Day) %>%
-    summarise(
-      total_csvs = n()
-    )
-
-  if(!file.exists("daily_hires.Rds")) {
-    message("Download the daily hires file, from the releases. Trying with piggyback")
-    piggyback::pb_download("daily_hires.Rds")
-  }
-  trips_per_day_xls = readRDS("daily_hires.Rds")
-  trips_daily = left_join(trips_per_day_xls, trips_per_day)
-
-  ggplot(trips_daily, aes(Day, `Number of hires`)) +
-    geom_point(alpha = 0.1) +
-    geom_line(aes(Day, Monthly), lwd = 1) +
-    geom_line(aes(Day, Yearly), colour = "blue", lwd = 1) +
-    # csv data
-    geom_point(aes(y = total_csvs), colour = "red", alpha = 0.1) +
-    xlab("Year") +
-    ylim(c(0, 50000)) +
-    xlim(as.POSIXlt(c("2010-01-01", "2019-10-01"))) +
-    ylab("Number of cycle hire events per day") +
-    # scale_x_continuous(breaks = 2010:2020)
-    # scale_x_date(breaks = lubridate::ymd(paste0(2010:2020, "-01-01")))
-    scale_x_date(date_breaks = "1 year", date_labels = "%Y")
-  
-  ggsave("figures/cycle-hire-chart-daily.png", width = 9, height = 4)
-  
-}
-
-lchs_get_sations = function(){
-  if(!file.exists("bikelocations_london.csv")) {
-    message("Trying to downloading the stations file from the releases. See")
-    message("https://github.com/Robinlovelace/cycle-hire-inclusive/releases/")
-    piggyback::pb_download("bikelocations_london.csv")
-  }
-  readr::read_csv("bikelocations_london.csv")
-}
-
 # note: this function will recode the stations data for each year and return a data.frame with recoded ids
 lchs_recode = function(trips_df, stations) {
 

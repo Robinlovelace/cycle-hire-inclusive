@@ -58,4 +58,7 @@ make(plan)
 # piggyback::pb_upload("data_filtered_clean.fst")
 # piggyback::pb_download_url("data_filtered_clean.fst")
 # trips_df = readd(trips_df)
+# fst::write.fst(trips_df, "trips_df_all.fst") 
+# system("ls -hl *.fst") # 1.3 GB
+# piggyback::pb_upload("trips_df_all.fst")
 # stations = readd(stations)
