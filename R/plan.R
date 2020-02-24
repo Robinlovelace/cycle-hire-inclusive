@@ -10,14 +10,17 @@ plan = drake::drake_plan(
     , format = "fst"),
   data_filtered_clean = lchs_clean(data_filtered),
   # check_raw_data = 
-  trips_df = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_sations())
+  recoded_data = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_sations()),
+  trips_df = recoded_data[[1]],
+  stations = recoded_data[[2]],
+  source("code/get-global-stations.R"),
   # data = raw_data %>%
   #   mutate(Species = forcats::fct_inorder(Species)),
   # hist = create_plot(data),
   # fit = lm(Sepal.Width ~ Petal.Width + Species, data),
-  # report = rmarkdown::render(
-  #   knitr_in("report.Rmd"),
-  #   output_file = file_out("report.html"),
-  #   quiet = TRUE
-  # )
+  report = rmarkdown::render(
+    knitr_in("README.Rmd"),
+    output_file = file_out("README.md"),
+    quiet = TRUE
+  )
 )
