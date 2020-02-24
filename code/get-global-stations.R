@@ -59,7 +59,10 @@ bikeshare_table %>%
   ggrepel::geom_label_repel(data = bikeshare_labels, aes(Stations, Bicycles, label = City, fill = col), alpha = 0.5, show.legend = FALSE) +
   scale_fill_manual(values = c("yellow", NA)) +
   theme(legend.position = c(.9, .2))
-ggsave("figures/bikehshare-global-stations-bicycles.png")
+ggsave("figures/bikehshare-global-stations-bicycles.png", width = 9, height = 4)
+
+magick::image_read("figures/bikehshare-global-stations-bicycles.png")
+file.size("figures/bikehshare-global-stations-bicycles.png") / 1e6
 
 bikeshare_core = bikeshare_table %>% 
   select(Country, City, Launched, Stations, Bicycles, Continent)
@@ -111,10 +114,12 @@ g2
 g2 = bikeshare_growth_continent %>% ggplot(aes(Launched, `Total stations`)) +
   geom_line(aes(colour = Continent, group = Continent)) +
   xlim(c(2005, 2020)) +
-  theme(legend.position = c(0.1, 0.8))
+  theme(legend.position = c(0.1, 0.8)) +
+  xlab("Year")
 g2
-ggsave("figures/bikehshare-global-stations-growth.png")
+ggsave("figures/bikehshare-global-stations-growth.png", width = 9, height = 4)
 
+magick::image_read("figures/bikehshare-global-stations-growth.png")
 
 # biggest countries for bikeshare
 bikeshare_countries = bikeshare_table %>% 

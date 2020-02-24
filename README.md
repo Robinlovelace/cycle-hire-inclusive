@@ -78,10 +78,6 @@ To reproduce all the results in the paper, you can make the plan with:
 Visualise the build and a sample of the data from the project as
 follows:
 
-    #> Warning in value[[3L]](cond): Could not parse file 'README.Rmd'. drake
-    #> dependencies could not be extracted from code chunks: duplicate label 'global-
-    #> growth'
-
 <img src="README_files/figure-gfm/unnamed-chunk-4-1.png" width="90%" style="display: block; margin: auto;" />
 
     #>            start_time           stop_time start_station_id end_station_id
