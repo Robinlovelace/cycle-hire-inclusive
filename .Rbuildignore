@@ -13,3 +13,6 @@
 ^stations-clean\.Rds$
 ^trips_df_all\.fst$
 ^trips_df\.fst$
+^2020$
+^data$
+^figures$
