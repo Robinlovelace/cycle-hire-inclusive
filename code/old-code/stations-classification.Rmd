@@ -120,7 +120,7 @@ stations_income_yearly = station_lsoa %>%
     ) %>% 
   st_drop_geometry()
 stations_income_yearly
-ggsave("figures/stations-imd-facet-4.png")
+# ggsave("figures/stations-imd-facet-4.png")
 ```
 
 # Join with stations data
@@ -139,33 +139,37 @@ piggyback::pb_upload("stations_ucl_lsoa.Rds")
 ```
 
 ```{r}
-trips_df = fst::read_fst("data_clean_no_na_dates.fst")
+# trips_df = fst::read_fst("trips_df_all.fst")
+trips_df = readd(trips_df)
 
-stations = readRDS("stations_ucl_lsoa.Rds")
+stations = readd(stations)
 stations$years_in_operation = as.numeric(max(trips_df$start_time) - stations$created_dt + 100) / 365 
 trips_by_origin_station = trips_df %>% 
   group_by(id = start_station_id) %>% 
   summarise(total_n_trips_start = n())
 
 trips_by_origin_station$id = as.character(trips_by_origin_station$id)
+head(stations$ucl_id)
+head(trips_by_origin_station$id)
 
-stations = inner_join(stations, trips_by_origin_station)
-summary(stations$total_n_trips_start) # removed 2 stations
+stations = inner_join(stations %>% mutate(id = as.character(ucl_id)), trips_by_origin_station)
+summary(stations$total_n_trips_start) # all stations there!
 hist(stations$total_n_trips_start)
 stations$trips_per_year = stations$total_n_trips_start / stations$years_in_operation
 tm_shape(stations %>% select(operator_name, trips_per_year)) +
   tm_dots(size = "trips_per_year", alpha = 0.5) + # incorrect labels - bug in tmap?
   tm_scale_bar()
+summary(stations$trips_per_year)
 plot(stations$trips_per_year) # 500000 seems excessive
 plot(stations$years_in_operation, stations$trips_per_year)
 stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2] # all seem suspect
 median(stations$years_in_operation)
-stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2 ] = median(stations$years_in_operation)
-
+# stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2 ] = median(stations$years_in_operation)
+stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2 ] = NA
 stations$trips_per_year = stations$total_n_trips_start / stations$years_in_operation
 tm_shape(stations %>% select(operator_name, trips_per_year)) +
   tm_dots(size = "trips_per_year", alpha = 0.5) + # incorrect labels - bug in tmap?
-  tm_scale_bar()
+  tm_scale_bar() # looks good!
 
 tm_shape(stations %>% select(operator_name, total_n_trips_start)) +
   tm_dots(size = "total_n_trips_start", alpha = 0.5) + # incorrect labels - bug in tmap?
