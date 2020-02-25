@@ -10,3 +10,5 @@ data
 bikelocations_london.csv
 README.html
 *.csv
+*.geojson
+*.html

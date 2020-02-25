@@ -22,10 +22,10 @@ Get, plot and preprocess stations data
 
 ```{r, eval=FALSE}
 # from bikedata stations table
-stations_buff = sf::read_sf("stations_buff.geojson")
-stations = readRDS("bikelocations_sf.Rds")
+stations_region = readd(stations_region)
+stations = readd(stations_sf)
 stations$id = as.character(stations$ucl_id)
-stations_2019 = stations %>% filter(year == 2019)
+stations_2019 = stations %>% filter( == 2019)
 plot(stations_buff$geometry)
 plot(stations_2019["initial_size"], add = TRUE)
 ```

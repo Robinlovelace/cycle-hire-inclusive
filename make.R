@@ -15,7 +15,7 @@ source("R/plan.R")
 
 # make plan ---------------------------------------------------------------
 
-vis_drake_graph(plan)
+vis_drake_graph(plan, targets_only = T)
 make(plan)
 # 84950285 rows...
 # make(plan, parallelism = "future", jobs = 2) # worked
@@ -58,3 +58,4 @@ make(plan)
 # usethis::use_data(trips_df_1000)
 
 # stations = readd(stations)
+# saveRDS(stations)
