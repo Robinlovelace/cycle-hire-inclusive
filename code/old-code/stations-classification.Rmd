@@ -138,6 +138,8 @@ saveRDS(stations_ucl_lsoa, "stations_ucl_lsoa.Rds")
 piggyback::pb_upload("stations_ucl_lsoa.Rds")
 ```
 
+
+
 ```{r}
 # trips_df = fst::read_fst("trips_df_all.fst")
 trips_df = readd(trips_df)

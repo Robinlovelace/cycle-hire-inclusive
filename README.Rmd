@@ -527,7 +527,7 @@ The comparison between morning and afternoon usage patterns highlights the reaso
 
 <!-- todo: how the data were analysed (from Eva) -->
 
-```{r map-am-pm-peaks, out.width="100%", fig.cap="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks"}
+```{r map-am-pm-peaks, out.width="100%", fig.cap="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks", eval=TRUE}
 # see stations-classification.Rmd for source code
 knitr::include_graphics("figures/map-am-pm-peaks.png")
 ```
