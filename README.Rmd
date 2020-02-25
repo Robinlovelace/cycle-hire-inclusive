@@ -548,9 +548,9 @@ See [whythegap.london](http://whythegap.london) for the campaign for "Cycle Hire
 "There are lots of anomalies in that cycle hire scheme. We are going to explore them."
 ]
 
-```{r facet-map, out.width="50%", fig.cap="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat.", fig.show='hold', fig.align='left'}
+```{r facet-map, out.width="50%", fig.cap="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat.", fig.show='hold', fig.align='left', eval=TRUE}
 # note: previous caption said: Point size is proportional to capacity of docking stations, ranging from 10 to 70
-knitr::include_graphics(c("figures/facet-imd-cropped.png", "clean-figures/stations-imd-facet-4-grey.png"))
+knitr::include_graphics(c("figures/facet-imd.png", "figures/stations-imd-facet-4-grey.png"))
 ```
 
 Figure \@ref(fig:facet-map) (bottom) shows the percentage of docking stations associated with each income decile each of the four years plotted in map above (2010, 2012, 2014, 2019).

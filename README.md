@@ -715,7 +715,27 @@ interesting to note that these demographically diverse geographic
 outliers were selected instead of more geographically central areas such
 as Bermondsey (on the South bank of the River Thames to the East),
 leading to the ‘why the gap’ campaign for the scheme to be expanded into
-this part of the city.\[8\]
+this part of the
+city.\[8\]
+
+<div class="figure" style="text-align: left">
+
+<img src="figures/facet-imd.png" alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" /><img src="figures/stations-imd-facet-4-grey.png" alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" />
+
+<p class="caption">
+
+Changes in the spatial and social distribution of docking stations over
+time, 2010-2019, showing four stages of expansion. Zone colour
+represents income decile, with 1 (white) representing the lowest income
+areas and 10 represents (blue) wealthy areas (top). The percentage of
+docking station in each income decile over time (blue) overlaying a
+representative distribution of income deciles for London (grey) for the
+same years (bottom). Note: a distribution representative of national
+income levels would be flat.
+
+</p>
+
+</div>
 
 Figure @ref(fig:facet-map) (bottom) shows the percentage of docking
 stations associated with each income decile each of the four years
