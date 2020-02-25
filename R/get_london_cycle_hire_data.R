@@ -69,6 +69,10 @@ lchs_clean = function(data_filtered) {
   data_filtered %>% filter(!(is.na(start_time) | is.na(stop_time)))
 }
 
+lchs_get_stations_1000 = function() {
+  readr::read_csv("trips_df_1000.csv")
+}
+
 # test filtered dates, 0.2%, 160k records, empty!
 # test1 = lubridate::ymd_hms(data_filtered$start_time)
 # test2 = as.POSIXct(data_filtered$start_time, format="%Y-%m-%d %H:%M:%S")

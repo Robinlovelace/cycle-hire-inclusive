@@ -1,4 +1,12 @@
 # note: this function will recode the stations data for each year and return a data.frame with recoded ids
+# test code:
+# trips_raw = fst::read.fst("data_raw_5pc.fst")
+# stations_raw = readr::read_csv("bikelocations_london.csv")
+# clean_result = lchs_recode(trips_df = lchs_get_stations_1000(), stations = stations_raw)
+# stations_raw_sf = lchs_get_stations_sf(stations_raw)
+# stations_sf = lchs_get_stations_sf(clean_result$stations)
+# mapview::mapview(stations_raw_sf)
+# mapview::mapview(stations_sf)
 lchs_recode = function(trips_df, stations) {
   
   trips_df$id = c(1:nrow(trips_df)) # adding a trip id column, it will be used for modifying start and end stations later
@@ -1112,6 +1120,6 @@ lchs_recode = function(trips_df, stations) {
   
   message("Station and trip ids recoded and cleaned, returning a list with both")
   
-  list(trips = trips_df, stations = stations)
+  list(trips = trips_df, stations = station_locations_clean)
   
 }

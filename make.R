@@ -44,4 +44,17 @@ make(plan)
 # fst::write.fst(trips_df, "trips_df_all.fst") 
 # system("ls -hl *.fst") # 1.3 GB
 # piggyback::pb_upload("trips_df_all.fst")
+# trips_df$date = as.Date(trips_df$start_time)
+# most_recent_day = max(trips_df$date)
+# most_recent_day
+# trips_df_2019_12_31 = trips_df %>% filter(date == most_recent_day)
+# readr::write_csv(trips_df_2019_12_31, "trips_df_2019_12_31.csv")
+# piggyback::pb_upload("trips_df_2019_12_31.csv")
+# system("ls -hal trips*") # 1 mb
+# trips_df_1000 = sample_n(trips_df, 1000)
+# readr::write_csv(trips_df_1000, "trips_df_1000.csv")
+# piggyback::pb_upload("trips_df_1000.csv")
+# lchs_recode(trips_df = trips_df_1000, stations = stations) # for quickfire results
+# usethis::use_data(trips_df_1000)
+
 # stations = readd(stations)
