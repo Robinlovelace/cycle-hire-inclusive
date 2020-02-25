@@ -94,8 +94,8 @@ stations_yearly %>% ggplot() +
   facet_wrap(~year) +
   ylab("Proportion of docking stations in each income decile") 
 
-ggsave("figures/stations-imd-facet-4-grey.png")
-
+ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 5.5)
+magick::image_read("figures/stations-imd-facet-4-grey.png")
 # calculate scores 
 
 
