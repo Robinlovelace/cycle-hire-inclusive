@@ -2,25 +2,9 @@
 # See https://books.ropensci.org/drake/projects.html#code-files
 
 
-# Loads packages ----------------------------------------------------------
+# Loads packages + functions----------------------------------------------
 
-pkgs = c(
-  "drake",
-  "leaflet",
-  "lubridate",
-  "patchwork",
-  "sf",
-  "stplanr",
-  "tidyverse",
-  "tmap",
-  "vroom"
-)
-lapply(pkgs, library, character.only = TRUE)
-
-
-# Load functions ----------------------------------------------------------
-
-source("R/get_london_cycle_hire_data.R")
+devtools::load_all()
 
 # Create plan -------------------------------------------------------------
 
