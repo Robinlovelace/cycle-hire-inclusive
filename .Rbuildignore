@@ -1,0 +1,15 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^bikelocations_london\.csv$
+^bikeshare_table_clean\.csv$
+^bikeshare_table\.csv$
+^daily_hires\.Rds$
+^data_filtered_clean\.fst$
+^data_filtered\.fst$
+^data_raw_5pc\.fst$
+^data_raw\.fst$
+^LBHS_demo_profile\.csv$
+^london_bike_hire\.csv\.gz$
+^stations-clean\.Rds$
+^trips_df_all\.fst$
+^trips_df\.fst$
