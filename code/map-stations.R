@@ -34,7 +34,7 @@ magick::image_read("out-clean.gif")
 file.rename("out-clean.gif", "figures/out-clean.gif")
 
 # create facet map with 4 key stages for paper
-bikelocations_sf4 = bikelocations_sf %>% 
+bikelocations_sf4 = stations_yearly %>% 
   filter(year %in% c(2010, 2012, 2014, 2019))
 m4 = tm_shape(basemap) +
   tm_rgb() +
