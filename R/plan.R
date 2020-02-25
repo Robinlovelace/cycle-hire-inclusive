@@ -9,7 +9,7 @@ plan = drake::drake_plan(
     lchs_filter_select(data_raw)
     , format = "fst"),
   data_filtered_clean = lchs_clean(data_filtered),
-  recoded_data = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_sations()),
+  recoded_data = lchs_recode(trips_df = data_filtered_clean, stations = lchs_get_stations()),
   trips_df = recoded_data[[1]],
   stations = recoded_data[[2]],
   check_raw_data = source("code/cycle-hires-excel.R"), # fails, commented
