@@ -665,6 +665,21 @@ associated docking station (see Figure
 @ref(fig:bikeshare-resi-buildings)).
 <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikeshare-resi-buildings.png" alt="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red." width="70%" />
+
+<p class="caption">
+
+Method for estimating the residential population with access to docking
+stations within 150m. Blue shade represents the population in each
+Output Area, buildings are in green and buildings near docking stations
+are in red.
+
+</p>
+
+</div>
+
 Official population data from the 2011 Census were collected at Output
 Area and 2015 estimates of the Index of Multiple Deprivation and income
 deciles at the LSOA level.\[7\]
@@ -693,9 +708,23 @@ comparison between morning and afternoon usage patterns highlights the
 reasons for this emphasis: in the afternoon peak (16:00 to 20:00) many
 trips represent people renting cycles in the centre for the return leg
 of their journey and many more tourist and leisure trips are taken by
-non-residents during this time (see Figure @ref(fig:map-am-pm-peaks)).
+non-residents during this time (see Figure
+@ref(fig:map-am-pm-peaks)).
 
 <!-- todo: how the data were analysed (from Eva) -->
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/map-am-pm-peaks.png" alt="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks" width="100%" />
+
+<p class="caption">
+
+Spatial distribution of cycle hire points of origin during the morning
+and afternoon peaks
+
+</p>
+
+</div>
 
 # Results
 
@@ -782,6 +811,21 @@ time?
 <!-- So I think these become a little challenging to interpret due to the dominant non-London commuter and tourist users -- the fact that a very large share of trips are made by non-residents. For this reason the residential/non-residential station allocation may be instructive, certainly the am-peak-time focus is good. However, I wonder whether we should be doing change-over-time comparison on these. E.g. are there changes to the relative number of trips originating from more/less deprived stations? -- it would be similar to the small multiple plot by IMD, but separate line for each docking station
 I think it's worth exploring how this changes over time, but maybe one for after the reviewer's comments
 -->
+
+<div class="figure" style="text-align: center">
+
+<img src="figures/income-decile-am-pm-boxplot.png" alt="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks." width="70%" />
+
+<p class="caption">
+
+Boxplot showing docking station usage (y axis) by income decile of
+nearest residential areas (x axis, right is wealthier) during the
+morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00
+to 20:00) peaks.
+
+</p>
+
+</div>
 
 ## Changes in usage over time
 

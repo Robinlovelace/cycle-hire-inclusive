@@ -39,10 +39,11 @@ lsoa = read_sf("lsoa_bikeshare.geojson")
 plot(lsoa)
 lsoa = lsoa %>% select(`Income decile` = Income.Decile..where.1.is.most.deprived.10..of.LSOAs.)
 plot(lsoa)
-station_lsoa = st_join(stations, lsoa)
+stations_yearly_lsoa = st_join(stations, lsoa)
+saveRDS(stations_yearly_lsoa, "stations_yearly_lsoa.Rds")
 
 # counts
-station_lsoa %>%  
+stations_yearly_lsoa %>%  
   filter(year %in% c(2010, 2012, 2014, 2019)) %>%
   ggplot(aes(`Income decile`)) +
   geom_bar(fill = "blue") +
@@ -53,7 +54,7 @@ station_lsoa %>%
 # source("get-imd-data.R")
 source("code/old-code/get-imd-data.R") # if running from root dir
 
-station_lsoa %>%  
+stations_yearly_lsoa %>%  
   filter(year %in% c(2010, 2012, 2014, 2019)) %>%
   # mutate(n_year = sum(year == year)) %>% View()
   ggplot(aes(`Income decile`)) +
@@ -62,7 +63,7 @@ station_lsoa %>%
   facet_wrap(~year) +
   ggthemes::theme_clean()
 
-station_lsoa %>%  
+stations_yearly_lsoa %>%  
   filter(year %in% c(2010, 2012, 2014, 2019)) %>%
   # mutate(n_year = sum(year == year)) %>% View()
   ggplot(aes(`Income decile`)) +
@@ -71,7 +72,7 @@ station_lsoa %>%
   scale_y_continuous(labels = scales::percent_format()) +
   facet_wrap(~year) 
 
-stations_yearly = station_lsoa %>% 
+stations_yearly_4 = stations_yearly_lsoa %>% 
   filter(year %in% c(2010, 2012, 2014, 2019)) %>%
   sf::st_drop_geometry() %>% 
   group_by(year) %>% 
@@ -87,7 +88,7 @@ stations_yearly = station_lsoa %>%
   group_by(year) %>% 
   mutate(t = sum(p))
 
-stations_yearly %>% ggplot() +
+stations_yearly_4 %>% ggplot() +
   geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..) * 4), fill = "grey", width = .95) +
   geom_bar(aes(`Income decile`, p), stat = "identity", fill = "blue", width = .60, alpha = 0.7) +
   scale_y_continuous(labels = scales::percent_format()) +
@@ -96,22 +97,9 @@ stations_yearly %>% ggplot() +
 
 ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 5.5)
 magick::image_read("figures/stations-imd-facet-4-grey.png")
+
 # calculate scores 
-
-
-# outtake
-# station_lsoa %>%  
-#   filter(year %in% c(2010, 2012, 2014, 2019)) %>%
-#   group_by(year, `Income decile`) %>% 
-#   summarise(n = n()) %>% 
-#   ggplot(aes(`Income decile`)) +
-#   geom_bar(aes(y = (`Income decile`)/n), stat = "identity", fill = "blue") + 
-#           scale_y_continuous(labels=scales::percent) +
-#   ylab("Relative frequencies") +
-#   facet_wrap(~year) +
-#   ggthemes::theme_clean()
-
-stations_income_yearly = station_lsoa %>% 
+stations_income_yearly_df = stations_yearly_lsoa %>% 
   group_by(year) %>% 
   summarise(
     median_income_decile = median(`Income decile`),
@@ -119,32 +107,18 @@ stations_income_yearly = station_lsoa %>%
     sd_income_decile = sd(`Income decile`)
     ) %>% 
   st_drop_geometry()
-stations_income_yearly
+stations_income_yearly_df
 # ggsave("figures/stations-imd-facet-4.png")
 ```
 
 # Join with stations data
 
 ```{r}
-lsoa = read_sf("lsoa_bikeshare.geojson")
-plot(lsoa)
-lsoa = lsoa %>% select(`Income decile` = Income.Decile..where.1.is.most.deprived.10..of.LSOAs.)
-
-stations_ucl_lsoa = st_join(stations_ucl_clean, lsoa)
-plot(stations_ucl_lsoa["Income decile"])
-stations_ucl_lsoa = stations_ucl_lsoa %>% rename(id = ucl_id) %>% 
-  mutate(id = as.character(id))
-saveRDS(stations_ucl_lsoa, "stations_ucl_lsoa.Rds")
-piggyback::pb_upload("stations_ucl_lsoa.Rds")
-```
-
-
-
-```{r}
 # trips_df = fst::read_fst("trips_df_all.fst")
 trips_df = readd(trips_df)
 
 stations = readd(stations)
+stations = st_join(stations, lsoa)
 stations$years_in_operation = as.numeric(max(trips_df$start_time) - stations$created_dt + 100) / 365 
 trips_by_origin_station = trips_df %>% 
   group_by(id = start_station_id) %>% 
@@ -341,14 +315,13 @@ stations_pop = stations_pop %>% rename(Population = pop_per_building)
 
 stations_pop
 stations = st_join(stations, stations_pop)
-stations = stations %>% rename(income_decile = Income.decile)
 sum(stations_pop$Population, na.rm = TRUE)
 sum(lnd_osm_centroids$pop_per_building, na.rm = TRUE)
 plot(stations_pop)
-mapview::mapview(stations_pop) + mapview::mapview(lnd_osm_centroids)
-saveRDS(stations_pop, "stations_pop.Rds")
+# mapview::mapview(stations_pop) + mapview::mapview(lnd_osm_centroids)
+saveRDS(stations, "stations_pop.Rds")
 piggyback::pb_upload("stations_pop.Rds")
-write_sf(stations, "stations_pop.geojson", delete_dsn = TRUE)
+# write_sf(stations, "stations_pop.geojson", delete_dsn = TRUE)
 
 # plot result
 m = tm_shape(oaps) + tm_fill("Populaton2011", palette = "Blues", title = "Population") +
@@ -363,7 +336,7 @@ tmap_save(m, "figures/bikeshare-resi-buildings.png")
 
 
 ```{r}
-stations = sf::read_sf("stations_pop.geojson")
+stations = readRDS("stations_pop.Rds")
 stations$trips_per_person_yr = stations$trips_per_year / stations$Population / stations$years_in_operation
 stations$trips_per_person_yr_am = stations$trips_per_year_am / stations$Population 
 stations$trips_per_person_yr_pm = stations$trips_per_year_pm / stations$Population 
@@ -376,13 +349,15 @@ class(stations$income_decile) = "character"
 theme_set(theme_minimal())
 g1 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident")
 g1
-g2 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_am), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (AM)")
+g2 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_am), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (AM)") + xlab("Income decile")
 g2
-g3 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_pm), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (PM)")
+g3 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_pm), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (PM)") + xlab("Income decile")
 g3
 library(patchwork)
-g2 + g3 + plot_layout(ncol = 1)
-# save as figures/income-decile-am-pm-boxplot.png
+p = g2 + g3 + plot_layout(ncol = 1)
+p
+ggsave("figures/income-decile-am-pm-boxplot.png", p, width = 9, height = 7)
+magick::image_read("figures/income-decile-am-pm-boxplot.png")
 # ggplot(stations %>% filter(!is.na(income_decile))) + geom_boxplot(aes(group = income_decile, y = trips_per_person_yr)) + scale_x_discrete(labels = 1:10)
 summary(stations$income_decile)
 g = ggplot(stations) + geom_point(aes(Population, total_n_trips_start))

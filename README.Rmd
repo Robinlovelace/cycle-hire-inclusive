@@ -499,7 +499,7 @@ First we define the study area as a polygon resulting from a 500 m buffer around
 To estimate 'residential populations' who live in close proximity to docking stations, we developed a three-stage methodology involving: 1) estimating the average number of inhabitants per building, based on the smallest 'Output Area' population estimates and building footprint data from OpenStreetMap; 2) identifying residential buildings within a threshold distance (150 m was used) of docking stations; and 3) assigning the total estimated population in these buildings to their associated docking station (see Figure \@ref(fig:bikeshare-resi-buildings)).
  <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
-```{r bikeshare-resi-buildings, fig.cap="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red.", out.width="70%"}
+```{r bikeshare-resi-buildings, fig.cap="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red.", out.width="70%", eval=TRUE}
 knitr::include_graphics("figures/bikeshare-resi-buildings.png")
 ```
 
@@ -576,7 +576,7 @@ But how has usage changed over time?
 I think it's worth exploring how this changes over time, but maybe one for after the reviewer's comments
 -->
 
-```{r income-decile-am-pm-beeswarm, fig.cap="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks.", out.width="70%"}
+```{r income-decile-am-pm-beeswarm, fig.cap="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks.", out.width="70%", eval=TRUE}
 knitr::include_graphics("figures/income-decile-am-pm-boxplot.png")
 ```
 
