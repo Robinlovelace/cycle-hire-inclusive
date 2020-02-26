@@ -16,7 +16,11 @@ plan = drake::drake_plan(
   check_raw_data = source("code/cycle-hires-excel.R"), # fails, commented
   get_global_stations = source("code/get-global-stations.R"),
   stations_region = lchs_get_stations_region(stations_sf),
-  stations_yearly = lchs_stations_yearly(stations_sf)
+  stations_yearly = lchs_stations_yearly(stations_sf),
+  stations_classification = rmarkdown::render(
+    knitr_in("stations-classification.Rmd"),
+    output_file = file_out("stations-classification.md")
+    )
   # hist = create_plot(data),
   # fit = lm(Sepal.Width ~ Petal.Width + Species, data),
   # report = rmarkdown::render(

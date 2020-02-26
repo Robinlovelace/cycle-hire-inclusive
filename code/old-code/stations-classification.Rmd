@@ -8,12 +8,11 @@ The aim of the code in this document is to classify stations according to the de
 # Setup
 
 ```{r}
-library(sf)
-library(tidyverse)
-library(tmap)
+library(lchs)
+devtools::load_all(path = "..")
 tmap_mode("view")
 knitr::opts_knit$set(root.dir = "../..")
-knitr::opts_chunk$set(eval = FALSE)
+knitr::opts_chunk$set(eval = TRUE)
 ```
 
 
@@ -21,7 +20,7 @@ knitr::opts_chunk$set(eval = FALSE)
 
 Get, plot and preprocess stations data
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 # from bikedata stations table
 stations_region = readd(stations_region)
 stations = readd(stations_yearly)

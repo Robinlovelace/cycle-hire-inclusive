@@ -196,6 +196,7 @@ North and South America have seen substantial interest in docked cycle hire sche
 Within this global overview, the London BSS is an important player, ranking 8th in the top schemes by number of docking stations and launching relatively early in 2010.
 
 ```{r global-stations-cycles, fig.cap="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles.", out.width="80%", fig.pos="h", eval=TRUE}
+# see code/get-global-stations.R
 knitr::include_graphics("figures/bikehshare-global-stations-bicycles.png")
 ```
 
@@ -500,6 +501,7 @@ To estimate 'residential populations' who live in close proximity to docking sta
  <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
 ```{r bikeshare-resi-buildings, fig.cap="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red.", out.width="70%", eval=TRUE}
+# file.edit("stations-classification.Rmd") # to reproduce
 knitr::include_graphics("figures/bikeshare-resi-buildings.png")
 ```
 
@@ -528,7 +530,7 @@ The comparison between morning and afternoon usage patterns highlights the reaso
 <!-- todo: how the data were analysed (from Eva) -->
 
 ```{r map-am-pm-peaks, out.width="100%", fig.cap="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks", eval=TRUE}
-# see stations-classification.Rmd for source code
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics("figures/map-am-pm-peaks.png")
 ```
 
@@ -551,6 +553,7 @@ See [whythegap.london](http://whythegap.london) for the campaign for "Cycle Hire
 
 ```{r facet-map, out.width="50%", fig.cap="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat.", fig.show='hold', fig.align='left', eval=TRUE}
 # note: previous caption said: Point size is proportional to capacity of docking stations, ranging from 10 to 70
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics(c("figures/facet-imd.png", "figures/stations-imd-facet-4-grey.png"))
 ```
 
@@ -577,6 +580,7 @@ I think it's worth exploring how this changes over time, but maybe one for after
 -->
 
 ```{r income-decile-am-pm-beeswarm, fig.cap="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks.", out.width="70%", eval=TRUE}
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics("figures/income-decile-am-pm-boxplot.png")
 ```
 
