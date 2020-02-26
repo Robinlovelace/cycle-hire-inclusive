@@ -1106,7 +1106,7 @@ lchs_recode = function(trips_df, stations) {
   
   
   #----------------------------------------------------------------------------
-  # The final part is to deal with a problem in the hyder park
+  # This part is to deal with a problem in the hyder park
   # Hyde park had a large docking station (probably it was combined by two adjacent stations), it used two ucl_id(406 and 407)in the record
   # The 406 and 407 station have the same coordinates, so they together represent that large docking station.
   # We have deleted the station ucl_id 407 in previous cleaning process, and only keeped the 406 one.
@@ -1120,6 +1120,18 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector()
   
   trips_df$end_station_id[station_407_end_trips_id$id]="406"
+  
+  #---------------------------------------------------------------------------
+  # Some trip records needs to be removed due to the following reasons:
+  # (1) they do not have matching stations for either starting or ending
+  # (2) they start or end at pop-up station/docks (778)
+
+  trips_df = trips_df %>% 
+    filter(start_station_id > 0, end_station_id > 0) %>%
+    filter(!((start_station_id %in% c(198,346,413,434,567,778,825))|
+               (end_station_id %in% c(198,346,413,434,567,778,825))))
+
+  
   
   message("Station and trip ids recoded and cleaned, returning a list with both")
   
