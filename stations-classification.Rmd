@@ -294,7 +294,6 @@ mapview::mapview(stations_150m_buffer)
 # piggyback::pb_upload("lnd_osm_stations.Rds")
 lnd_osm_stations = readRDS("lnd_osm_stations.Rds")
 # plot(lnd_osm_stations$geometry) # slow to plot
-lnd_osm_stations$type[is.na(lnd_osm_centroids$type)]
 lnd_osm_resi = lnd_osm_stations %>% 
   filter(str_detect(string = type, pattern = "house|resi|apartments|terrace|flats|council_flats") |
            is.na(type))
@@ -372,18 +371,17 @@ cor(stations$Population, stations$trips_per_year_am, use = "complete.obs")
 quantile(x = stations$trips_per_person_yr, probs = c(0.1, 0.5, 0.7, 0.9), na.rm = T)
 
 # check deciles - are there really that many deprived oas in London?
-plot(stations_median_decile$index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as, stations$imd)
-plot(stations["imd_decile_median_where_1_is_most_deprived"])
-hist(oas$index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as, breaks = 0:11)
-hist(stations$imd_decile_median_where_1_is_most_deprived, breaks = 0:11)
-hist(stations$income_decile, breaks = 0:11)
-plot(stations[5:ncol(stations)])
 # file.remove("stations_imd_pop.geojson")
 write_sf(stations, "stations_imd_pop.geojson", delete_dsn = TRUE)
 piggyback::pb_upload("stations_imd_pop.geojson")
 # hist(stations$imd)
-hist(stations$imd_decile_median_where_1_is_most_deprived)
 
+```
+
+## Exploration of residential zones
+
+
+```{r, eval=FALSE}
 tmap_mode("view")
 tm_shape(stations) + tm_dots(col = "n_oas", size = 0.1)
 tmap_mode("plot")
@@ -410,7 +408,7 @@ piggyback::pb_upload("stations_residential.geojson")
 
 Subsetting only OD pairs with origins in the 'residential stations'.
 
-```{r}
+```{r, eval=FALSE}
 trips_df$id = as.character(trips_df$id)
 stations_residential$id
 unique(trips_df$start_station_id)
@@ -432,7 +430,7 @@ piggyback::pb_upload("london_bike_hire_cleaned_residential.fst")
 
 How does the distribution of IMD scores associated with the stations compare with IMD scores associated with randomly sampled points?
 
-```{r}
+```{r, eval=FALSE}
 sdf = read_sf("sdf.geojson")
 set.seed(1985)
 random_points = st_sample(x = sdf[4, ], size = nrow(stations))
@@ -468,7 +466,7 @@ plot(stations$initial_size, stations$curr_size) # interesting contrast
 
 
 
-```{r}
+```{r, eval=FALSE, echo=FALSE}
 # out-takes
 # old method
 summary(st_area(oas))
