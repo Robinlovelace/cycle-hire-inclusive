@@ -14,7 +14,8 @@ lchs_recode = function(trips_df, stations) {
   # Identify how many stations (same ID) have multiple locations (different lat/lon)
   station_locations_check <- stations %>% distinct(ucl_id,lat,lon) %>%
     group_by(ucl_id) %>% summarise(num_loc=n())
-  print(paste0("There are ", station_locations_check %>% filter(num_loc>=2) %>% nrow," stations (stationID) have multiple locations (coordinates):"))
+  
+  #print(paste0("There are ", station_locations_check %>% filter(num_loc>=2) %>% nrow," stations (stationID) have multiple locations (coordinates):"))
   
   
   #derive these multi-location stations records from raw CDRC station data
@@ -36,10 +37,10 @@ lchs_recode = function(trips_df, stations) {
   
   
   # plot multi-location stations
-  tmap_mode("view")
-  tm_shape(station_multi_locations_sf)+tm_dots()
+  #tmap_mode("view")
+  #tm_shape(station_multi_locations_sf)+tm_dots()
   # Some stations records are found to be located outside of London, they are wrong  and will be removed
-  tmap_mode("plot")
+  #tmap_mode("plot")
   
   #Firstly, delete stations that locate outside of London, they have wrong coordinates information
   station_multi_locations_sf<-station_multi_locations %>% 
@@ -51,11 +52,11 @@ lchs_recode = function(trips_df, stations) {
   
   
   # Check the station data - as shown in the map, wrong records (outside of London) has been removed
-  tmap_mode("view")
-  tm_shape(station_multi_locations_sf)+tm_dots()+
-    tm_shape(station_single_location_sf)+tm_dots(col="red")
+  #tmap_mode("view")
+  #tm_shape(station_multi_locations_sf)+tm_dots()+
+  #  tm_shape(station_single_location_sf)+tm_dots(col="red")
   # Some stations records are found to be located outside of London, they are wrong  and will be removed
-  tmap_mode("plot")
+  #tmap_mode("plot")
   
   # Because of service/system upgrade etc., Station may move to a nearby location that is very close to the original place
   # In this case they can be regarded as "no significant changes had happened spatially", and we will keep only one of them and remove other redundant records.
@@ -194,11 +195,11 @@ lchs_recode = function(trips_df, stations) {
     arrange(ucl_id,operator_intid)
   
   #Check 
-  station_location_summarise<-station_locations_clean %>% 
-    group_by(ucl_id) %>% dplyr::summarise(num=n()) %>%
-    arrange(desc(num),ucl_id)
+  #station_location_summarise<-station_locations_clean %>% 
+  #  group_by(ucl_id) %>% dplyr::summarise(num=n()) %>%
+  #  arrange(desc(num),ucl_id)
   
-  print(station_location_summarise %>% filter(num>=2))
+  #print(station_location_summarise %>% filter(num>=2))
   
   
   # There are also some station (identified by the "ucl_id") significantly changed their locations
@@ -229,26 +230,27 @@ lchs_recode = function(trips_df, stations) {
   
   
   # ucl id 5-----------------------------
-  station_5_start_trips<-trips_df %>% filter(start_station_id==5)
+  #station_5_start_trips<-trips_df %>% filter(start_station_id==5)
   
-  station_5_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
+  #station_5_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # The bike trip number seems right and consistent over the whole period
@@ -259,31 +261,30 @@ lchs_recode = function(trips_df, stations) {
   # there is a wrong record of ucl_id 5, it acutally duplicated the information of station ucl_403, this should be deleted. 
   # Solution as follows:
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==5)&(operator_name=="George Place Mews, Marylebone")))
-  rm(station_5_start_trips)
+  #rm(station_5_start_trips)
   #-----Compeleted---end of ucl_id 5, 
   
   # ucl id 8------------------------------------------------------------------------------
-  station_8_start_trips<-trips_df %>% filter(start_station_id==8)
+  #station_8_start_trips<-trips_df %>% filter(start_station_id==8)
   
-  plot_monthly_trips <- station_8_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2012-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_8_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2012-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+  #  labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  # )
+  #plot_monthly_trips
   
   # The bike trip number significantly changed as shown in the plot, and there is no bike trip during 2018/09/25 to 2018/10/24----------
   # Therefore, the change time can be identified
@@ -321,92 +322,92 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 8002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_8_end_trips_id_2$id]=8002 # change their end_station_id from 8 to 8002
   
-  rm(station_8_start_trips)
+  #rm(station_8_start_trips)
   #---Completed---end of ucl_id 8
   
   
   # ucl id 29------------------------------------------------------------------------------
-  station_29_start_trips<-trips_df %>% filter(start_station_id==29)
+  #station_29_start_trips<-trips_df %>% filter(start_station_id==29)
   
-  plot_monthly_trips <- station_29_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2012-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_29_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2012-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2012/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # the trip num pattern seems consistent, 
   # A further investigation suggested a faulty station record(ucl_id 29) duplicated with ucl_id 131, therefore, we can simply delete the wrong one
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==29)&(operator_name=="Eversholt Street , Camden Town")))
   
-  rm(station_29_start_trips)
+  #rm(station_29_start_trips)
   # Completed ------ end of ucl_id 29
   
   
   # ucl id 46------------------------------------------------------------------------------
-  station_46_start_trips<-trips_df %>% filter(start_station_id==46)
+  #station_46_start_trips<-trips_df %>% filter(start_station_id==46)
   
-  plot_monthly_trips <- station_46_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_46_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # A investigation suggested a faulty station record(ucl_id 46) duplicated the information of ucl_id 402, therefore, we can simply delete the wrong one
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==46)&(operator_name=="Penfold Street, Marylebone")))
   
-  rm(station_46_start_trips)
+  #rm(station_46_start_trips)
   #----Completed------End of ucl_id 46
   
   # ucl id 79------------------------------------------------------------------------------
-  station_79_start_trips<-trips_df %>% filter(start_station_id==79)
+  #station_79_start_trips<-trips_df %>% filter(start_station_id==79)
   
-  plot_monthly_trips <- station_79_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_79_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number pattern changed, and there is no bike trip during 2013/03/29 to 2018/02/20
   # Solutions are as follows:
@@ -443,33 +444,33 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 79002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_79_end_trips_id_2$id]=79002 # change their end_station_id from 79 to 79002
   
-  rm(station_79_start_trips)
+  #rm(station_79_start_trips)
   #--Completed--end of ucl_id 79------
   
   
   
   # ucl id 82------------------------------------------------------------------------------
-  station_82_start_trips<-trips_df %>% filter(start_station_id==82)
+  #station_82_start_trips<-trips_df %>% filter(start_station_id==82)
   
-  plot_monthly_trips <- station_82_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_82_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+  
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   
@@ -477,128 +478,127 @@ lchs_recode = function(trips_df, stations) {
   # Further Investigation suggested that the wrong record(ucl_id 82) duplicated with ucl_id 405, it needs to be removed
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==82)&(operator_name=="Gloucester Road Station, South Kensington")))
   
-  rm(station_82_start_trips)
+  #rm(station_82_start_trips)
   #-----Completed-----end of ucl_id 82
   
   
   
   # ucl id 131------------------------------------------------------------------------------
-  station_131_start_trips<-trips_df %>% filter(start_station_id==131)
+  #station_131_start_trips<-trips_df %>% filter(start_station_id==131)
   
-  plot_monthly_trips <- station_131_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_131_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number pattern is relatively continuous, 
   # Further Investigation suggested that the wrong record(ucl_id 131) duplicates ucl_id 378, it needs to be removed
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==131)&(operator_name=="Natural History Museum, South Kensington")))
   
-  rm(station_131_start_trips)
+  #rm(station_131_start_trips)
   #----Completed---end of ucl_id 138
   
   
   # ucl id 148------------------------------------------------------------------------------
-  station_148_start_trips<-trips_df %>% filter(start_station_id==148)
+  #station_148_start_trips<-trips_df %>% filter(start_station_id==148)
   
-  plot_monthly_trips <- station_148_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_148_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number pattern is relatively continuous
   # Further Investigation suggested that the wrong record(ucl_id 148) duplicates ucl_id 379, it needs to be removed
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==148)&(operator_name=="Turquoise Island, Notting Hill")))
   
-  rm(station_148_start_trips)
+  #rm(station_148_start_trips)
   #----Completed----end for ucl_id 148--------------------
   
   
   
   # ucl id 154------------------------------------------------------------------------------
-  station_154_start_trips<-trips_df %>% filter(start_station_id==154)
+  #station_154_start_trips<-trips_df %>% filter(start_station_id==154)
   
-  plot_monthly_trips <- station_154_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_154_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number pattern is relatively continuous, 
   # Further Investigation suggested that the wrong record(ucl_id 154) duplicates ucl_id 360, it needs to be removed
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==154)&(operator_name=="Howick Place, Westminster")))
   
-  rm(station_154_start_trips)
+  #rm(station_154_start_trips)
   #---Completed----end of ucl_id 154
   
   
   
   # ucl id 173------------------------------------------------------------------------------
-  station_173_start_trips<-trips_df %>% filter(start_station_id==173)
+  #station_173_start_trips<-trips_df %>% filter(start_station_id==173)
   
-  plot_monthly_trips <- station_173_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_173_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # The bike trip number pattern is relatively consistent
@@ -606,62 +606,62 @@ lchs_recode = function(trips_df, stations) {
   
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==173)&(operator_name=="Tachbrook Street, Victoria")))
   
-  rm(station_173_start_trips)
+  #rm(station_173_start_trips)
   #---Completed----end of ucl_id 173
   
   
   # ucl id 174------------------------------------------------------------------------------
-  station_174_start_trips<-trips_df %>% filter(start_station_id==174)
+  #station_174_start_trips<-trips_df %>% filter(start_station_id==174)
   
-  plot_monthly_trips <- station_174_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_174_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number pattern is relatively continuous,
   # Further Investigation suggested that the wrong record(ucl_id 174) duplicates ucl_id 427, it needs to be removed
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==174)&(operator_name=="Cheapside, Bank")))
   
-  rm(station_174_start_trips)
+  #rm(station_174_start_trips)
   #---Completed----end of ucl_id 174
   
   # ucl id 183------------------------------------------------------------------------------
-  station_183_start_trips<-trips_df %>% filter(start_station_id==183)
+  #station_183_start_trips<-trips_df %>% filter(start_station_id==183)
   
-  plot_monthly_trips <- station_183_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_183_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+   
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # There is no bike trip during 2013/07/03 to 2015/06/15---------
@@ -699,34 +699,34 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 183002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_183_end_trips_id_2$id]=183002 # change their end_station_id from 183 to 183002
   
-  rm(station_183_start_trips)
+  #rm(station_183_start_trips)
   #---Completed---end of ucl_id 183
   
   
   
   
   # ucl id 259------------------------------------------------------------------------------
-  station_259_start_trips<-trips_df %>% filter(start_station_id==259)
+  #station_259_start_trips<-trips_df %>% filter(start_station_id==259)
   
-  plot_monthly_trips <- station_259_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_259_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # The bike trip number has a gap between 2015/06/30 to 2018/04/11---------
@@ -766,32 +766,34 @@ lchs_recode = function(trips_df, stations) {
     filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 259002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_259_end_trips_id_2$id]=259002 # change their end_station_id from 259 to 259002
+  
+  #rm(station_259_start_trips)
   #----Completed----end of ucl_id 259
   
   
   
   # ucl id 302------------------------------------------------------------------------------
-  station_302_start_trips<-trips_df %>% filter(start_station_id==302)
+  #station_302_start_trips<-trips_df %>% filter(start_station_id==302)
   
-  plot_monthly_trips <- station_302_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_302_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   # The bike trip number has a gap between 2012/04/10 to 2015/04/09---------
   # station changed (two station used the same ucl_id, former one is cancelled)
@@ -830,66 +832,67 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 302002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_302_end_trips_id_2$id]=302 # change their end_station_id from 302 to 302002
   
-  rm(station_302_start_trips)
+  #rm(station_302_start_trips)
   #---Completed------end of ucl_id 302
   
   
   
   
   # ucl id 316------------------------------------------------------------------------------
-  station_316_start_trips<-trips_df %>% filter(start_station_id==316)
+  #station_316_start_trips<-trips_df %>% filter(start_station_id==316)
   
-  plot_monthly_trips <- station_316_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_316_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # Further Investigation suggested that the wrong record(ucl_id 316) duplicated with ucl_id 404, it needs to be removed
   # Solution:
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==316)&(operator_name=="Palace Gate, Kensington Gardens")))
   
+  #rm(station_316_start_trips)
   #---Completed----end of ucl_id 316
   
   
   
   # ucl id 322------------------------------------------------------------------------------
-  station_322_start_trips<-trips_df %>% filter(start_station_id==322)
+  #station_322_start_trips<-trips_df %>% filter(start_station_id==322)
   
-  plot_monthly_trips <- station_322_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_322_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+  
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # google stree view:
@@ -900,32 +903,32 @@ lchs_recode = function(trips_df, stations) {
   # Solution:
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==322)&(operator_name=="Speakers' Corner 1, Hyde Park")))
   
-  rm(station_322_start_trips)
+  #rm(station_322_start_trips)
   #---Completed----end of ucl_id 322
   
   
   # ucl id 323------------------------------------------------------------------------------
-  station_323_start_trips<-trips_df %>% filter(start_station_id==323)
+  #station_323_start_trips<-trips_df %>% filter(start_station_id==323)
   
-  plot_monthly_trips <- station_323_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_323_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # google stree view:
@@ -936,31 +939,31 @@ lchs_recode = function(trips_df, stations) {
   # Solution:
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==323)&(operator_name=="Speakers' Corner 2, Hyde Park")))
   
-  rm(station_323_start_trips)
+  #rm(station_323_start_trips)
   #---Completed----end of ucl_id 323
   
   # ucl id 360------------------------------------------------------------------------------
-  station_360_start_trips<-trips_df %>% filter(start_station_id==360)
+  #station_360_start_trips<-trips_df %>% filter(start_station_id==360)
   
-  plot_monthly_trips <- station_360_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2020-01")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_360_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2020-01")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # google stree view:
@@ -971,33 +974,33 @@ lchs_recode = function(trips_df, stations) {
   # Solution:
   station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==360)&(operator_name=="Waterloo Station 3, Waterloo")))
   
-  rm(station_360_start_trips)
+  #rm(station_360_start_trips)
   #---Completed----end of ucl_id 360
   
   
   
   # ucl id 502------------------------------------------------------------------------------
-  station_502_start_trips<-trips_df %>% filter(start_station_id==502)
+  #station_502_start_trips<-trips_df %>% filter(start_station_id==502)
   
-  plot_monthly_trips <- station_502_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2019-12")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_502_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2019-12")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # The bike trip number (identified by ucl_id) has a gap between 2015/08/20 to 2019/08/01---------
@@ -1032,31 +1035,31 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 502002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_502_end_trips_id_2$id]=502002 # change their end_station_id from 502 to 502002
   
-  rm(station_502_start_trips)
+  #rm(station_502_start_trips)
   #---Completed----end of ucl_id 502
   
   # ucl id 725------------------------------------------------------------------------------
-  station_725_start_trips<-trips_df %>% filter(start_station_id==725)
+  #station_725_start_trips<-trips_df %>% filter(start_station_id==725)
   
-  plot_monthly_trips <- station_725_start_trips %>%
-    mutate(
-      start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
-      year=year(start_time_dt),
-      month=month(start_time_dt), 
-      year_month=format(start_time_dt, "%Y-%m")) %>%
-    filter(!is.na(year_month)) %>% 
-    group_by(year_month) %>%
-    summarise(total=n(), month=first(month)) %>%
-    filter((year_month >="2011-01")&
-             (year_month <="2019-12")) %>%
-    ggplot(aes(x=year_month, y=total, group=1)) +
-    geom_line(colour="#3182bd", size=1.1) +
-    #scale_y_continuous(limits=c(0,11000))+
-    labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
-    theme(
-      axis.text.x=element_text(angle=90)
-    )
-  plot_monthly_trips
+  #plot_monthly_trips <- station_725_start_trips %>%
+  #  mutate(
+  #    start_time_dt=as.POSIXct(start_time, format="%Y-%m-%d %H:%M:%S"),
+  #    year=year(start_time_dt),
+  #    month=month(start_time_dt), 
+  #    year_month=format(start_time_dt, "%Y-%m")) %>%
+  #  filter(!is.na(year_month)) %>% 
+  #  group_by(year_month) %>%
+  #  summarise(total=n(), month=first(month)) %>%
+  #  filter((year_month >="2011-01")&
+  #           (year_month <="2019-12")) %>%
+  #  ggplot(aes(x=year_month, y=total, group=1)) +
+  #  geom_line(colour="#3182bd", size=1.1) +
+    
+  #  labs(title="Monthly trip counts 2011/01-2019/05, London Cycle Hire Scheme", x="", y="trip counts") +
+  #  theme(
+  #    axis.text.x=element_text(angle=90)
+  #  )
+  #plot_monthly_trips
   
   
   # The bike trip number (identified by ucl_id) has a gap between 2018-04-29 to 2019-06-09---------
@@ -1095,7 +1098,7 @@ lchs_recode = function(trips_df, stations) {
     dplyr::select(id) %>% as.vector() # identify the 725002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_725_end_trips_id_2$id]=725002 # change their end_station_id from 725 to 725002
   
-  rm(station_725_start_trips)
+  #rm(station_725_start_trips)
   #---Completed----end of ucl_id 725
   
   
