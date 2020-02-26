@@ -1,0 +1,503 @@
+---
+output: github_document
+---
+
+
+The aim of the code in this document is to classify stations according to the demographics of people living near them.
+
+# Setup
+
+```{r}
+library(lchs)
+tmap_mode("view")
+knitr::opts_chunk$set(eval = TRUE)
+```
+
+
+# Input data
+
+Get, plot and preprocess stations data
+
+```{r, eval=TRUE}
+# from bikedata stations table
+stations_region = readd(stations_region)
+stations = readd(stations_yearly)
+stations$id = as.character(stations$ucl_id)
+stations_2019 = stations %>% filter(year == 2019)
+qtm(stations_region) +
+  qtm(stations_2019)
+```
+
+# Change in income decile of LSOA over time
+
+```{r}
+# see code that generates this below
+lsoa = read_sf("lsoa_bikeshare.geojson")
+plot(lsoa)
+lsoa = lsoa %>% select(`Income decile` = Income.Decile..where.1.is.most.deprived.10..of.LSOAs.)
+plot(lsoa)
+stations_yearly_lsoa = st_join(stations, lsoa)
+saveRDS(stations_yearly_lsoa, "stations_yearly_lsoa.Rds")
+
+# counts
+stations_yearly_lsoa %>%  
+  filter(year %in% c(2010, 2012, 2014, 2019)) %>%
+  ggplot(aes(`Income decile`)) +
+  geom_bar(fill = "blue") +
+  facet_wrap(~year) +
+  ggthemes::theme_clean()
+
+# props
+# source("get-imd-data.R")
+source("code/old-code/get-imd-data.R") # if running from root dir
+
+stations_yearly_lsoa %>%  
+  filter(year %in% c(2010, 2012, 2014, 2019)) %>%
+  # mutate(n_year = sum(year == year)) %>% View()
+  ggplot(aes(`Income decile`)) +
+  geom_bar(aes(y=..count../sum(..count..)), fill = "blue") +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~year) +
+  ggthemes::theme_clean()
+
+stations_yearly_lsoa %>%  
+  filter(year %in% c(2010, 2012, 2014, 2019)) %>%
+  # mutate(n_year = sum(year == year)) %>% View()
+  ggplot(aes(`Income decile`)) +
+  geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..)), fill = "grey", width = .95) +
+  geom_bar(aes(y=..count../sum(..count..)), fill = "blue", width = .60, alpha = 0.7) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~year) 
+
+stations_yearly_4 = stations_yearly_lsoa %>% 
+  filter(year %in% c(2010, 2012, 2014, 2019)) %>%
+  sf::st_drop_geometry() %>% 
+  group_by(year) %>% 
+  mutate(n_year = n()) %>% 
+  ungroup() %>% 
+  group_by(year, `Income decile`) %>% 
+  summarise(
+    n_decile_year = n(),
+    n_year = unique(n_year),
+    s = diff(range(n_year)),
+    ) %>% 
+  mutate(p = n_decile_year / n_year) %>% 
+  group_by(year) %>% 
+  mutate(t = sum(p))
+
+stations_yearly_4 %>% ggplot() +
+  geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..) * 4), fill = "grey", width = .95) +
+  geom_bar(aes(`Income decile`, p), stat = "identity", fill = "blue", width = .60, alpha = 0.7) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  facet_wrap(~year) +
+  ylab("Proportion of docking stations in each income decile") 
+
+ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 5.5)
+magick::image_read("figures/stations-imd-facet-4-grey.png")
+
+# calculate scores 
+stations_income_yearly_df = stations_yearly_lsoa %>% 
+  group_by(year) %>% 
+  summarise(
+    median_income_decile = median(`Income decile`),
+    mean_income_decile = mean(`Income decile`),
+    sd_income_decile = sd(`Income decile`)
+    ) %>% 
+  st_drop_geometry()
+stations_income_yearly_df
+# ggsave("figures/stations-imd-facet-4.png")
+```
+
+# Join with stations data
+
+```{r}
+# trips_df = fst::read_fst("trips_df_all.fst")
+trips_df = readd(trips_df)
+
+stations = readd(stations)
+stations = st_join(stations, lsoa)
+stations$years_in_operation = as.numeric(max(trips_df$start_time) - stations$created_dt + 100) / 365 
+trips_by_origin_station = trips_df %>% 
+  group_by(id = start_station_id) %>% 
+  summarise(total_n_trips_start = n())
+
+trips_by_origin_station$id = as.character(trips_by_origin_station$id)
+head(stations$ucl_id)
+head(trips_by_origin_station$id)
+
+stations = inner_join(stations %>% mutate(id = as.character(ucl_id)), trips_by_origin_station)
+summary(stations$total_n_trips_start) # all stations there!
+hist(stations$total_n_trips_start)
+stations$trips_per_year = stations$total_n_trips_start / stations$years_in_operation
+tm_shape(stations %>% select(operator_name, trips_per_year)) +
+  tm_dots(size = "trips_per_year", alpha = 0.5) + # incorrect labels - bug in tmap?
+  tm_scale_bar()
+summary(stations$trips_per_year)
+plot(stations$trips_per_year) # 500000 seems excessive
+plot(stations$years_in_operation, stations$trips_per_year)
+stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2] # all seem suspect
+median(stations$years_in_operation)
+# stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2 ] = median(stations$years_in_operation)
+stations$years_in_operation[stations$trips_per_year > 50000 & stations$years_in_operation < 2 ] = NA
+stations$trips_per_year = stations$total_n_trips_start / stations$years_in_operation
+tm_shape(stations %>% select(operator_name, trips_per_year)) +
+  tm_dots(size = "trips_per_year", alpha = 0.5) + # incorrect labels - bug in tmap?
+  tm_scale_bar() # looks good!
+
+tm_shape(stations %>% select(operator_name, total_n_trips_start)) +
+  tm_dots(size = "total_n_trips_start", alpha = 0.5) + # incorrect labels - bug in tmap?
+  tm_scale_bar()
+# tm_shape(stations) + tm_markers(text = "operator_name")
+mapview::mapview(stations)
+```
+
+Add additional usage stats
+
+```{r}
+library(lubridate)
+am_peak_int <- interval(hms::as_hms("06:00:00"), hms::as_hms("09:59:59"))
+pm_peak_int <- interval(hms::as_hms("16:00:00"), hms::as_hms("19:59:59"))
+trips_am_peak = trips_df %>% filter(as.POSIXct(hms::as_hms(start_time)) %within% am_peak_int)
+trips_pm_peak = trips_df %>% filter(as.POSIXct(hms::as_hms(start_time)) %within% pm_peak_int)
+fst::write_fst(trips_am_peak, "trips_am_peak.fst")
+fst::write_fst(trips_pm_peak, "trips_pm_peak.fst")
+piggyback::pb_upload("trips_am_peak.fst")
+piggyback::pb_upload("trips_pm_peak.fst")
+```
+
+## Starting from am/pm peak data
+
+```{r}
+trips_pm_peak = fst::read.fst("trips_pm_peak.fst")
+trips_am_peak = fst::read.fst("trips_am_peak.fst")
+# am
+trips_by_origin_station = trips_am_peak %>% 
+  group_by(id = start_station_id) %>% 
+  summarise(total_n_am_peak = n())
+trips_by_origin_station$id = as.character(trips_by_origin_station$id)
+stations = inner_join(stations, trips_by_origin_station)
+stations$trips_per_year_am = stations$total_n_am_peak / stations$years_in_operation
+# pm
+trips_by_origin_station = trips_pm_peak %>% 
+  group_by(id = start_station_id) %>% 
+  summarise(total_n_pm_peak = n())
+trips_by_origin_station$id = as.character(trips_by_origin_station$id)
+stations = inner_join(stations, trips_by_origin_station)
+stations$trips_per_year_pm = stations$total_n_pm_peak / stations$years_in_operation
+
+sf::write_sf(stations, "stations_clean_am_pm.geojson", delete_dsn = TRUE)
+piggyback::pb_upload("stations_clean_am_pm.geojson")
+```
+
+
+```{r}
+tmap_mode("plot")
+m = tm_shape(stations %>% select(operator_name, trips_per_year, trips_per_year_am, trips_per_year_pm, years_in_operation)) +
+    tm_dots(size = c("trips_per_year_am", "trips_per_year_pm"),
+            col = "years_in_operation", palette = "viridis", contrast = c(0, 0.8), alpha = 0.5, scale = 1.5, title.size = "") +
+    tm_layout(panel.show = TRUE,
+              panel.labels = c("AM (06:00 - 10:00)", "PM (16:00 - 20:00)"),
+              legend.outside = T, title = "N. trips/year") +
+  tm_facets(ncol = 2)
+tmap_save(tm = m, "figures/map-am-pm-peaks.png")
+```
+
+Get OAC data (not evaluated)
+
+```{r, eval=FALSE}
+devtools::install_github("robinlovelace/ukboundaries")
+# download.file("https://data.cdrc.ac.uk/dataset/68771b14-72aa-4ad7-99f3-0b8d1124cb1b/resource/8fff55da-6235-459c-b66d-017577b060d3/download/output-area-classification.zip", "output-area-classification.zip") # fails
+oac = sf::read_sf("Output Area Classification/Shapefiles/2011_OAC.shp")
+u_oas_cents = "https://opendata.arcgis.com/datasets/ba64f679c85f4563bfff7fad79ae57b1_0.zip?outSR=%7B%22wkid%22%3A27700%2C%22latestWkid%22%3A27700%7D"
+u_oas_cents = ukboundaries::duraz(u_oas_cents)
+oas_lnd = u_oas_cents %>% st_transform(4326)
+oas_lnd = oas_lnd[stations_region, ] # works
+oac_lnd = oac %>% filter(OA_SA %in% oas_lnd$oa11cd)
+plot(oac_lnd["SPRGRP"])
+
+# IMD data (at LSOA level)
+# imd = readr::read_csv("https://opendata.arcgis.com/datasets/da3b33dd44d94f48a9628a3391957505_0.csv") # seems to be ranks...
+# imd = readr::read_csv("https://data.cdrc.ac.uk/dataset/4d3a8738-38af-401c-8070-6be5d85b2f5e/resource/a4230484-9104-4903-b754-0d07a1278862/download/imd2015eng.csv") # navigate to that URL and manually download...
+imd = readr::read_csv("imd2015eng.csv")
+lsoa = ukboundaries::lsoa2011_simple
+lsoa_lnd = lsoa[oas_lnd, ]
+imd = imd %>% 
+  rename(lsoa11cd = `LSOA code (2011)` )
+lsoa_lnd = inner_join(lsoa_lnd, imd)
+plot(lsoa_lnd["Index of Multiple Deprivation (IMD) Score"])
+sf::write_sf(lsoa_lnd, "lsoa_bikeshare.geojson")
+
+oas_lnd_imd = st_join(oas_lnd, lsoa_lnd)  
+plot(oas_lnd_imd["Index of Multiple Deprivation (IMD) Score"])
+sf::write_sf(oas_lnd_imd, "oas_bikeshare_imd.geojson")
+names(oas_lnd_imd) = snakecase::to_snake_case(names(oas_lnd_imd))
+names(oas_lnd)
+plot(oas_lnd_imd[7:20])
+# sf::write_sf(oas_lnd_imd, "oas_bikeshare_imd_tidynames.geojson")
+# piggyback::pb_upload("oas_bikeshare_imd_tidynames.geojson")
+# piggyback::pb_upload("oas_bikeshare_imd.geojson")
+# piggyback::pb_upload("lsoa_bikeshare.geojson")
+```
+
+![](https://user-images.githubusercontent.com/1825120/63284043-a3368980-c2aa-11e9-8b9f-1f96a7ff18ca.png)
+
+![](https://user-images.githubusercontent.com/1825120/63284333-353e9200-c2ab-11e9-9560-4d9cca1ab864.png)
+
+# Classify docking stations
+
+Based on number of nearby residential zones and IMD/income scores.
+Initial method: by distance to docking stations (flaw with 300m: misses reality of walking that far, try 200m).
+
+
+```{r}
+oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
+u_oas_pop = "https://www.ons.gov.uk/file?uri=%2fpeoplepopulationandcommunity%2fpopulationandmigration%2fpopulationestimates%2fdatasets%2fcensusoutputareaestimatesintheeastregionofengland%2fmid2018sape21dt10h/sape21dt10hmid2018east.zip"
+download.file(u_oas_pop, "sape21dt10hmid2018east.zip")
+unzip("sape21dt10hmid2018east.zip")
+# mid 2018 estimates: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/censusoutputareaestimatesintheeastregionofengland
+# oas_pop = readxl::read_excel("SAPE21DT10h-mid-2018-coa-unformatted-syoa-estimates-east.xlsx", sheet = 4)
+# oas_name = as.character(oas_pop[4, ])
+# oas_pop = oas_pop %>% slice(5:nrow(oas_pop))
+# names(oas_pop) = oas_name
+# oas_pop_16plus = oas_pop %>% mutate(Population = rowSums(select(., 20:(ncol(oas_pop) - 1)))) %>% 
+#   select(OA11CD, Population)
+# see https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london
+download.file("https://data.london.gov.uk/download/statistical-gis-boundary-files-london/9ba8c833-6370-4b11-abdc-314aa020d5e0/statistical-gis-boundaries-london.zip", "statistical-boundaries-london.zip")
+unzip("statistical-boundaries-london.zip")
+oaps_all_london = sf::read_sf("statistical-gis-boundaries-london/ESRI/OA_2011_London_gen_MHW.shp")
+plot(oaps_all_london$geometry)
+oaps = oaps_all_london %>% st_transform(4326) 
+oaps = oaps[stations_region, ]  
+plot(oaps)
+oaps = oaps %>% select(OA11CD, Populaton2011 = USUALRES)
+plot(oaps)
+
+stations = sf::read_sf("stations_clean_am_pm.geojson")
+plot(stations["Income.decile"])
+stations_150m_buffer = stations %>% 
+  st_transform(27700) %>% 
+  st_buffer(150) %>% 
+  st_transform(4326)
+
+mapview::mapview(stations_150m_buffer)
+
+# aim: get to trips per person within 200m per docking station
+# geofrabric method fails - see https://github.com/ITSLeeds/geofabric/issues/16
+lnd_osm = ukboundaries::duraz("http://download.geofabrik.de/europe/great-britain/england/greater-london-latest-free.shp.zip")
+lnd_osm = sf::read_sf("gis_osm_buildings_a_free_1.shp")
+lnd_osm_stations = lnd_osm[stations_region, ]
+plot(lnd_osm_stations$geometry)
+lnd_osm_stations$type[is.na(lnd_osm_centroids$type)]
+lnd_osm_resi = lnd_osm_stations %>% 
+  filter(str_detect(string = type, pattern = "house|resi|apartments|terrace|flats|council_flats") |
+           is.na(type))
+plot(lnd_osm_resi$geometry, col = "red", border = "red", add = TRUE)
+
+# idea: use building centroids and calculate n. people per building
+lnd_osm_centroids = st_centroid(lnd_osm_resi)
+table(lnd_osm_centroids$OA11CD) %>% head()
+lnd_osm_centroids = st_join(lnd_osm_centroids, oaps)
+# get number of buildings per zones
+lnd_osm_centroids_with_count = lnd_osm_centroids %>% dplyr::add_count(OA11CD)
+lnd_osm_centroids$n = lnd_osm_centroids_with_count$n
+mapview::mapview(lnd_osm_centroids %>% filter(n == max(n)))
+lnd_osm_centroids = lnd_osm_centroids %>% mutate(pop_per_building = Populaton2011 / n)
+
+lnd_osm_near_stations = lnd_osm_centroids[stations_150m_buffer, ]
+mapview::mapview(stations_150m_buffer) + mapview::mapview(lnd_osm_near_stations)
+
+stations_pop = aggregate(lnd_osm_near_stations["pop_per_building"], stations_150m_buffer, sum)
+
+stations_pop = stations_pop %>% rename(Population = pop_per_building)
+
+stations_pop
+stations = st_join(stations, stations_pop)
+sum(stations_pop$Population, na.rm = TRUE)
+sum(lnd_osm_centroids$pop_per_building, na.rm = TRUE)
+plot(stations_pop)
+# mapview::mapview(stations_pop) + mapview::mapview(lnd_osm_centroids)
+saveRDS(stations, "stations_pop.Rds")
+piggyback::pb_upload("stations_pop.Rds")
+# write_sf(stations, "stations_pop.geojson", delete_dsn = TRUE)
+
+# plot result
+m = tm_shape(oaps) + tm_fill("Populaton2011", palette = "Blues", title = "Population") +
+  tm_shape(lnd_osm_centroids) + tm_dots(col = "green", alpha = 0.2) +
+  tm_shape(lnd_osm_near_stations) + tm_dots(col = "red", alpha = 0.6) +
+  tm_shape(stations) + tm_dots(size = 0.07)
+m
+tmap_save(m, "figures/bikeshare-resi-buildings.png")
+```
+
+## Now use the population estimates to show AM peak usage (per year?)
+
+
+```{r}
+stations = readRDS("stations_pop.Rds")
+stations$trips_per_person_yr = stations$trips_per_year / stations$Population / stations$years_in_operation
+stations$trips_per_person_yr_am = stations$trips_per_year_am / stations$Population 
+stations$trips_per_person_yr_pm = stations$trips_per_year_pm / stations$Population 
+summary(stations$trips_per_person_yr)
+stations$trips_per_person_yr[stations$trips_per_person_yr > 5]
+unique(stations$income_decile)
+stations$income_decile = formatC(x = stations$income_decile, width = 2, flag = "0")
+class(stations$income_decile) = "character"
+# previously was ggbeeswarm::geom_beeswarm, replaced by geom_violin
+theme_set(theme_minimal())
+g1 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident")
+g1
+g2 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_am), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (AM)") + xlab("Income decile")
+g2
+g3 = ggplot(stations %>% filter(! income_decile == "NA")) + geom_boxplot(aes(income_decile, trips_per_person_yr_pm), draw_quantiles = c(0.25, 0.5, 0.75)) + scale_y_continuous(limits = c(0.1, 20)) + ylab("Number of trips per local resident (PM)") + xlab("Income decile")
+g3
+library(patchwork)
+p = g2 + g3 + plot_layout(ncol = 1)
+p
+ggsave("figures/income-decile-am-pm-boxplot.png", p, width = 9, height = 7)
+magick::image_read("figures/income-decile-am-pm-boxplot.png")
+# ggplot(stations %>% filter(!is.na(income_decile))) + geom_boxplot(aes(group = income_decile, y = trips_per_person_yr)) + scale_x_discrete(labels = 1:10)
+summary(stations$income_decile)
+g = ggplot(stations) + geom_point(aes(Population, total_n_trips_start))
+g
+cor(stations$Population, stations$total_n_trips_start, use = "complete.obs")
+cor(stations$Population, stations$trips_per_year_am, use = "complete.obs")
+# postive correlation, expected
+quantile(x = stations$trips_per_person_yr, probs = c(0.1, 0.5, 0.7, 0.9), na.rm = T)
+
+# check deciles - are there really that many deprived oas in London?
+plot(stations_median_decile$index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as, stations$imd)
+plot(stations["imd_decile_median_where_1_is_most_deprived"])
+hist(oas$index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as, breaks = 0:11)
+hist(stations$imd_decile_median_where_1_is_most_deprived, breaks = 0:11)
+hist(stations$income_decile, breaks = 0:11)
+plot(stations[5:ncol(stations)])
+# file.remove("stations_imd_pop.geojson")
+write_sf(stations, "stations_imd_pop.geojson", delete_dsn = TRUE)
+piggyback::pb_upload("stations_imd_pop.geojson")
+# hist(stations$imd)
+hist(stations$imd_decile_median_where_1_is_most_deprived)
+
+tmap_mode("view")
+tm_shape(stations) + tm_dots(col = "n_oas", size = 0.1)
+tmap_mode("plot")
+
+qtm(stations %>% filter(n_oas <= 2))
+stations_residential = stations %>% filter(trips_per_person_yr_am > 1, n_oas >= 1)
+tm_shape(stations_residential) + tm_dots()
+stations_residential %>% 
+  filter(trips_per_person_yr_am > 5) %>% 
+  tm_shape() + tm_dots() # excludes rail station
+nrow(stations_residential)
+summary(stations_residential$trips_per_person_yr)
+table(stations_residential$n_oas)
+summary(stations_residential$Population)
+# 0.16 with outliers removed
+cor(stations_residential$Population, stations_residential$total_n_trips_start, use = "complete.obs") # positive cor
+# write_sf(stations_residential, "stations_residential.geojson")
+# piggyback::pb_upload("stations_residential.geojson")
+tm_shape(stations) + tm_dots("grey") +
+  tm_shape(stations_residential) + tm_dots()
+sf::write_sf(stations_residential, "stations_residential.geojson", delete_dsn = TRUE)
+piggyback::pb_upload("stations_residential.geojson")
+```
+
+Subsetting only OD pairs with origins in the 'residential stations'.
+
+```{r}
+trips_df$id = as.character(trips_df$id)
+stations_residential$id
+unique(trips_df$start_station_id)
+trips_df_originating_in_residential_zones = trips_df$start_station_id %in% stations_residential$id
+summary(trips_df_originating_in_residential_zones) 
+sum(trips_df_originating_in_residential_zones) / nrow(trips_df) # 40% trips remain
+trips_resi = trips_df %>% 
+  filter(trips_df_originating_in_residential_zones)
+summary(trips_resi$start_station_id %in% stations_residential$id)
+summary(trips_resi$end_station_id %in% stations_residential$id)
+
+fst::write.fst(trips_resi, "london_bike_hire_cleaned_residential.fst")
+piggyback::pb_upload("london_bike_hire_cleaned_residential.fst")
+# vroom::vroom_write(trips_resi, "london_bike_hire_cleaned_residential.csv.gz")
+# piggyback::pb_upload("london_bike_hire_cleaned_residential.csv.gz")
+```
+
+# Quantifying inequality in provision, compared with randomly sampled points
+
+How does the distribution of IMD scores associated with the stations compare with IMD scores associated with randomly sampled points?
+
+```{r}
+sdf = read_sf("sdf.geojson")
+set.seed(1985)
+random_points = st_sample(x = sdf[4, ], size = nrow(stations))
+random_points_oas = aggregate(oas["index_of_multiple_deprivation_imd_score"], random_points, mean, join = j)
+random_points_oas = aggregate(oas["index_of_multiple_deprivation_imd_score"], random_points, mean, join = j)
+hist(random_points_oas$index_of_multiple_deprivation_imd_score)
+hist(stations$imd)
+```
+
+
+
+```{r cleaning-old, eval=FALSE, echo=FALSE}
+# from CDRC
+piggyback::pb_download("stations_ucl_yearly.geojson")
+piggyback::pb_download("stations2019.geojson")
+plot(stations, add = TRUE)
+length(unique(stations$ucl_id))
+
+# cleaning stations data
+stations = stations %>% ungroup() %>% rename(id = ucl_id) %>% mutate(id = as.character(id))
+table(stations$year) # trust the 2012, 2014, 2015, 2016 ones
+
+plot(stations$initial_size, stations$curr_size) # interesting contrast
+
+# ids in bikedata but not ucl
+(ids_in_bikedata_not_in_clean_ucl_data = stations_bikedata$id[! stations_bikedata$id %in% stations$id])
+(ids_in_bikedata_not_in_ucl_data = stations_bikedata$id[! stations_bikedata$id %in% stations$id])
+(ids_in_ucl_data_not_in_bikedata = stations$id[! stations$id %in% stations_bikedata$id])
+```
+
+
+
+
+
+
+```{r}
+# out-takes
+# old method
+summary(st_area(oas))
+plot(lsoa_lnd$geometry)
+(sum(st_area(lsoa_lnd)) / nrow(oas))^0.5 # on average around 200 apart
+sel_200 = st_is_within_distance(stations, oas, 200)
+summary(lengths(sel_200)) # catches on average 5 areas
+j = function(x, y) st_is_within_distance(x, y, dist = 200)
+# stations_oas = aggregate(oas["index_of_multiple_deprivation_imd_score"], stations, weighted.mean, join = j, w = oas$total_population_mid_2012_excluding_prisoners) # fails - w not of right length
+stations_oas = aggregate(oas["index_of_multiple_deprivation_imd_score"], stations, mean, join = j)
+stations$imd = stations_oas$index_of_multiple_deprivation_imd_score
+plot(stations["imd"]) 
+summary(stations$imd)
+plot(stations_oas) # they are the same
+
+stations_pop = aggregate(oas["population_aged_16_59_mid_2012_excluding_prisoners"], stations, sum, join = j)
+stations_n_oas = aggregate(oas["population_aged_16_59_mid_2012_excluding_prisoners"], stations, length, join = j)
+stations_median_decile = aggregate(oas["index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as"], stations, median, join = j)
+stations_median_income = aggregate(oas["income_decile_where_1_is_most_deprived_10_of_lso_as"], stations, median, join = j)
+names(stations_n_oas)[1] = "n_oas_200m"
+plot(stations_pop)
+plot(stations_n_oas)
+hist(stations_n_oas$n_oas_200m)
+
+# <!-- Let's plot what just happened. Let's take station 1: -->
+
+oas1 = oas[stations[1, ], , op = st_is_within_distance, dist = 200]
+mapview::mapview(oas1) + mapview::mapview(stations[1, ])
+
+# Note: The distance for 300m buffer looked far for the outer stations. Note: try with lower distance in future.
+
+# For now, let's add the new aggregated values and save the result:
+
+# stations$pop_centroid_within_200m = stations_pop$population_aged_16_59_mid_2012_excluding_prisoners
+stations$n_oas = stations_n_oas$n_oas_200m
+stations$imd_decile_median_where_1_is_most_deprived = stations_median_decile$index_of_multiple_deprivation_imd_decile_where_1_is_most_deprived_10_of_lso_as %>% round()
+plot(stations$imd_decile_median_where_1_is_most_deprived)
+stations$income_decile = stations_median_income$income_decile_where_1_is_most_deprived_10_of_lso_as %>% round()
+```
