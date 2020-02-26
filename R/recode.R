@@ -1129,7 +1129,8 @@ lchs_recode = function(trips_df, stations) {
   trips_df = trips_df %>% 
     filter(start_station_id > 0, end_station_id > 0) %>%
     filter(!((start_station_id %in% c(198,346,413,434,567,778,825))|
-               (end_station_id %in% c(198,346,413,434,567,778,825))))
+               (end_station_id %in% c(198,346,413,434,567,778,825)))) %>%
+    dplyr::select(-id)
 
   
   
