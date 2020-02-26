@@ -340,6 +340,9 @@ tmap_save(m, "figures/bikeshare-resi-buildings.png")
 
 ```{r}
 stations = readRDS("stations_pop.Rds")
+names(stations)
+stations = stations %>% rename(income_decile = Income.decile)
+summary(stations$income_decile)
 stations$trips_per_person_yr = stations$trips_per_year / stations$Population / stations$years_in_operation
 stations$trips_per_person_yr_am = stations$trips_per_year_am / stations$Population 
 stations$trips_per_person_yr_pm = stations$trips_per_year_pm / stations$Population 
