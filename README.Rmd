@@ -1,7 +1,7 @@
 ---
 output:
-   github_document
-  # bookdown::pdf_document2:
+   # github_document
+  bookdown::pdf_document2:
   # bookdown::word_document2
   #   number_sections: true
 # title: "Can cycle hire schemes support transport equality? An evaluation of almost a decade of trips"
@@ -91,9 +91,9 @@ g
 To reproduce all the results, clone or download the repo, uncomment the relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command demonstrated above.
 
 ```{r, eval=FALSE, echo=FALSE}
-file.rename("README.pdf", "bike-hire-inequalities.pdf")
-piggyback::pb_upload("bike-hire-inequalities.pdf")
-piggyback::pb_download_url("bike-hire-inequalities.pdf")
+file.rename("README.pdf", "cycle-hire-inclusive.pdf")
+piggyback::pb_upload("cycle-hire-inclusive.pdf")
+piggyback::pb_download_url("cycle-hire-inclusive.pdf")
 
 # Get citations
 # refs_new = RefManageR::ReadBib("refs-new.bib") # way to read-in ad-hoc references

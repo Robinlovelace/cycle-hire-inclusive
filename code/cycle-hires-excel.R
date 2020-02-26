@@ -19,6 +19,8 @@
 # daily_hires$Day = as.Date(daily_hires$Day)
 # class(daily_hires$Day)
 
+
+
 drake::loadd(trips_df)
 trips_per_year = trips_df %>%
   group_by(year_month) %>%
