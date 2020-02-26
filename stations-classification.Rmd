@@ -153,7 +153,7 @@ mapview::mapview(stations)
 
 Add additional usage stats
 
-```{r}
+```{r, eval=FALSE}
 library(lubridate)
 am_peak_int <- interval(hms::as_hms("06:00:00"), hms::as_hms("09:59:59"))
 pm_peak_int <- interval(hms::as_hms("16:00:00"), hms::as_hms("19:59:59"))
@@ -251,9 +251,11 @@ Initial method: by distance to docking stations (flaw with 300m: misses reality 
 
 ```{r}
 oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
-u_oas_pop = "https://www.ons.gov.uk/file?uri=%2fpeoplepopulationandcommunity%2fpopulationandmigration%2fpopulationestimates%2fdatasets%2fcensusoutputareaestimatesintheeastregionofengland%2fmid2018sape21dt10h/sape21dt10hmid2018east.zip"
-download.file(u_oas_pop, "sape21dt10hmid2018east.zip")
-unzip("sape21dt10hmid2018east.zip")
+if(!file.exists("sape21dt10hmid2018east.zip")) {
+  u_oas_pop = "https://www.ons.gov.uk/file?uri=%2fpeoplepopulationandcommunity%2fpopulationandmigration%2fpopulationestimates%2fdatasets%2fcensusoutputareaestimatesintheeastregionofengland%2fmid2018sape21dt10h/sape21dt10hmid2018east.zip"
+  download.file(u_oas_pop, "sape21dt10hmid2018east.zip")
+  unzip("sape21dt10hmid2018east.zip")
+}
 # mid 2018 estimates: https://www.ons.gov.uk/peoplepopulationandcommunity/populationandmigration/populationestimates/datasets/censusoutputareaestimatesintheeastregionofengland
 # oas_pop = readxl::read_excel("SAPE21DT10h-mid-2018-coa-unformatted-syoa-estimates-east.xlsx", sheet = 4)
 # oas_name = as.character(oas_pop[4, ])
@@ -262,8 +264,10 @@ unzip("sape21dt10hmid2018east.zip")
 # oas_pop_16plus = oas_pop %>% mutate(Population = rowSums(select(., 20:(ncol(oas_pop) - 1)))) %>% 
 #   select(OA11CD, Population)
 # see https://data.london.gov.uk/dataset/statistical-gis-boundary-files-london
-download.file("https://data.london.gov.uk/download/statistical-gis-boundary-files-london/9ba8c833-6370-4b11-abdc-314aa020d5e0/statistical-gis-boundaries-london.zip", "statistical-boundaries-london.zip")
-unzip("statistical-boundaries-london.zip")
+if(!file.exists("statistical-boundaries-london.zip")) {
+  download.file("https://data.london.gov.uk/download/statistical-gis-boundary-files-london/9ba8c833-6370-4b11-abdc-314aa020d5e0/statistical-gis-boundaries-london.zip", "statistical-boundaries-london.zip")
+  unzip("statistical-boundaries-london.zip")
+}
 oaps_all_london = sf::read_sf("statistical-gis-boundaries-london/ESRI/OA_2011_London_gen_MHW.shp")
 plot(oaps_all_london$geometry)
 oaps = oaps_all_london %>% st_transform(4326) 
@@ -283,10 +287,13 @@ mapview::mapview(stations_150m_buffer)
 
 # aim: get to trips per person within 200m per docking station
 # geofrabric method fails - see https://github.com/ITSLeeds/geofabric/issues/16
-lnd_osm = ukboundaries::duraz("http://download.geofabrik.de/europe/great-britain/england/greater-london-latest-free.shp.zip")
-lnd_osm = sf::read_sf("gis_osm_buildings_a_free_1.shp")
-lnd_osm_stations = lnd_osm[stations_region, ]
-plot(lnd_osm_stations$geometry)
+# lnd_osm = ukboundaries::duraz("http://download.geofabrik.de/europe/great-britain/england/greater-london-latest-free.shp.zip")
+# lnd_osm = sf::read_sf("gis_osm_buildings_a_free_1.shp")
+# lnd_osm_stations = lnd_osm[stations_region, ]
+# saveRDS(lnd_osm_stations, "lnd_osm_stations.Rds")
+# piggyback::pb_upload("lnd_osm_stations.Rds")
+lnd_osm_stations = readRDS("lnd_osm_stations.Rds")
+# plot(lnd_osm_stations$geometry) # slow to plot
 lnd_osm_stations$type[is.na(lnd_osm_centroids$type)]
 lnd_osm_resi = lnd_osm_stations %>% 
   filter(str_detect(string = type, pattern = "house|resi|apartments|terrace|flats|council_flats") |
