@@ -12,26 +12,26 @@ lchs_recode = function(trips_df, stations) {
   trips_df$id = c(1:nrow(trips_df)) # adding a trip id column, it will be used for modifying start and end stations later
   
   # Identify how many stations (same ID) have multiple locations (different lat/lon)
-  station_locations_check <- stations %>% distinct(ucl_id,lat,lon) %>%
+  station_locations_check = stations %>% distinct(ucl_id,lat,lon) %>%
     group_by(ucl_id) %>% summarise(num_loc=n())
   
   #print(paste0("There are ", station_locations_check %>% filter(num_loc>=2) %>% nrow," stations (stationID) have multiple locations (coordinates):"))
   
   
   #derive these multi-location stations records from raw CDRC station data
-  station_multi_locations <- station_locations_check %>% filter(num_loc>=2)
-  station_multi_locations.vector <- station_multi_locations$ucl_id
-  station_multi_locations<- stations %>% filter(ucl_id %in% station_multi_locations.vector)
-  station_single_location<- stations %>% filter(!ucl_id %in% station_multi_locations.vector) %>%
+  station_multi_locations = station_locations_check %>% filter(num_loc>=2)
+  station_multi_locations.vector = station_multi_locations$ucl_id
+  station_multi_locations = stations %>% filter(ucl_id %in% station_multi_locations.vector)
+  station_single_location = stations %>% filter(!ucl_id %in% station_multi_locations.vector) %>%
     filter(!ucl_id %in% c(824,822,791))  %>% # the three stations are for test/workshop purpose and need to be deleted
     dplyr::distinct(ucl_id,.keep_all=T)  # Some stations, although have only one location (coordinate), may still have multiple data records
   # E.g. THE station (ucl id - 540), have two records, one's operator_name is "Albany Street, Regent's Park",  and another is "Albany Street, The Regent's Park"
   # These similar (duplicated ) records are removed by using distict function
   
   # convert dataframe to sf
-  station_single_location_sf<-st_as_sf(station_single_location,coords=c("lon","lat")) %>% st_set_crs(4326)
+  station_single_location_sf = st_as_sf(station_single_location,coords=c("lon","lat")) %>% st_set_crs(4326)
   
-  station_multi_locations_sf<-st_as_sf(station_multi_locations,coords = c("lon","lat")) %>% st_set_crs(4326)
+  station_multi_locations_sf = st_as_sf(station_multi_locations,coords = c("lon","lat")) %>% st_set_crs(4326)
   
   
   
@@ -43,7 +43,7 @@ lchs_recode = function(trips_df, stations) {
   #tmap_mode("plot")
   
   #Firstly, delete stations that locate outside of London, they have wrong coordinates information
-  station_multi_locations_sf<-station_multi_locations %>% 
+  station_multi_locations_sf = station_multi_locations %>% 
     filter(lon<=0.002342,lon>=-0.216573,lat<=51.549369,lat>=51.450531) %>% # remove wrong records outside of London
     st_as_sf(coords = c("lon","lat")) %>% st_set_crs(4326) %>% 
     filter(!operator_name %in% c("Pop Up Dock 1",
@@ -64,7 +64,7 @@ lchs_recode = function(trips_df, stations) {
   # Here we start to remove the redundant records:
   
   
-  station_multi_locations_sf <- station_multi_locations_sf %>% 
+  station_multi_locations_sf = station_multi_locations_sf %>% 
     filter((!((ucl_id==20)&(created_dt==as.POSIXct("2010-08-06 01:00:00",tz = "UTC")))), # for ucl_id 20
            (!((ucl_id==33)&(created_dt %in% as.POSIXct(c("2010-08-06 01:00:00",
                                                          "2016-02-23 16:04:01",
@@ -191,7 +191,7 @@ lchs_recode = function(trips_df, stations) {
   
   # Combine single location station and mult-location stations - as station location clean for later processing
   
-  station_locations_clean<-rbind(station_single_location_sf,station_multi_locations_sf) %>%
+  station_locations_clean = rbind(station_single_location_sf,station_multi_locations_sf) %>%
     arrange(ucl_id,operator_intid)
   
   #Check 
@@ -260,7 +260,7 @@ lchs_recode = function(trips_df, stations) {
   # Further investigation suggested that
   # there is a wrong record of ucl_id 5, it acutally duplicated the information of station ucl_403, this should be deleted. 
   # Solution as follows:
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==5)&(operator_name=="George Place Mews, Marylebone")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==5)&(operator_name=="George Place Mews, Marylebone")))
   #rm(station_5_start_trips)
   #-----Compeleted---end of ucl_id 5, 
   
@@ -297,27 +297,27 @@ lchs_recode = function(trips_df, stations) {
   # 8002 is the station after 2018/10/24 ( using 2018/10/01 as the dividing point)
   
   station_locations_clean[(station_locations_clean$ucl_id==8)&(station_locations_clean$created_dt<= as.POSIXct( "2018-10-01 00:00:00")),
-                          "ucl_id"]<-8001
+                          "ucl_id"] = 8001
   station_locations_clean[(station_locations_clean$ucl_id==8)&(station_locations_clean$created_dt>= as.POSIXct( "2018-10-01 00:00:00")),
-                          "ucl_id"]<-8002
+                          "ucl_id"] = 8002
   
   # The trip_df should be modified accordingly
-  station_8_start_trips_id_1<-trips_df %>% filter(start_station_id==8) %>% 
+  station_8_start_trips_id_1 = trips_df %>% filter(start_station_id==8) %>% 
     filter(start_time<as.POSIXct("2018-10-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 8001 trips and derive their trip id in trips_df
   trips_df$start_station_id[station_8_start_trips_id_1$id]=8001 # change their start_station_id from 8 to 8001
   
-  station_8_start_trips_id_2<-trips_df %>% filter(start_station_id==8) %>%
+  station_8_start_trips_id_2 = trips_df %>% filter(start_station_id==8) %>%
     filter(start_time>as.POSIXct("2018-10-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 8002 trips and derive their trip id in trips_df
   trips_df$start_station_id[station_8_start_trips_id_2$id]=8002 # change their start_station_id from 8 to 8002
   
-  station_8_end_trips_id_1<-trips_df %>% filter(end_station_id==8) %>% 
+  station_8_end_trips_id_1 = trips_df %>% filter(end_station_id==8) %>% 
     filter(stop_time<as.POSIXct("2018-10-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 8001 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_8_end_trips_id_1$id]=8001 # change their end_station_id from 8 to 8001
   
-  station_8_end_trips_id_2<-trips_df %>% filter(end_station_id==8) %>%
+  station_8_end_trips_id_2 = trips_df %>% filter(end_station_id==8) %>%
     filter(stop_time>as.POSIXct("2018-10-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 8002 trips and derive their trip id in trips_df
   trips_df$end_station_id[station_8_end_trips_id_2$id]=8002 # change their end_station_id from 8 to 8002
@@ -351,7 +351,7 @@ lchs_recode = function(trips_df, stations) {
   
   # the trip num pattern seems consistent, 
   # A further investigation suggested a faulty station record(ucl_id 29) duplicated with ucl_id 131, therefore, we can simply delete the wrong one
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==29)&(operator_name=="Eversholt Street , Camden Town")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==29)&(operator_name=="Eversholt Street , Camden Town")))
   
   #rm(station_29_start_trips)
   # Completed ------ end of ucl_id 29
@@ -381,7 +381,7 @@ lchs_recode = function(trips_df, stations) {
   #plot_monthly_trips
   
   # A investigation suggested a faulty station record(ucl_id 46) duplicated the information of ucl_id 402, therefore, we can simply delete the wrong one
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==46)&(operator_name=="Penfold Street, Marylebone")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==46)&(operator_name=="Penfold Street, Marylebone")))
   
   #rm(station_46_start_trips)
   #----Completed------End of ucl_id 46
@@ -416,33 +416,33 @@ lchs_recode = function(trips_df, stations) {
   # 079002 is the station after 2018/02/20 (using 2015-12-01 00:00:00 as the dividing point)
   
   station_locations_clean[(station_locations_clean$ucl_id==79)&(station_locations_clean$created_dt<="2015-12-01 00:00:00"),
-                          "ucl_id"]<-79001
+                          "ucl_id"] = 79001
   station_locations_clean[(station_locations_clean$ucl_id==79)&(station_locations_clean$created_dt>="2015-12-01 00:00:00"),
-                          "ucl_id"]<-79002
+                          "ucl_id"] = 79002
   
   
   
   
   # The trip_df should be modified accordingly
-  station_79_start_trips_id_1<-trips_df %>% filter(start_station_id==79) %>% 
+  station_79_start_trips_id_1 = trips_df %>% filter(start_station_id==79) %>% 
     filter(start_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 79001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_79_start_trips_id_1$id]=79001 # change their start_station_id from 79 to 79001
+  trips_df$start_station_id[station_79_start_trips_id_1$id] = 79001 # change their start_station_id from 79 to 79001
   
-  station_79_start_trips_id_2<-trips_df %>% filter(start_station_id==79) %>%
+  station_79_start_trips_id_2 = trips_df %>% filter(start_station_id==79) %>%
     filter(start_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 79001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_79_start_trips_id_2$id]=79002 # change their start_station_id from 79 to 79002
+  trips_df$start_station_id[station_79_start_trips_id_2$id] = 79002 # change their start_station_id from 79 to 79002
   
-  station_79_end_trips_id_1<-trips_df %>% filter(end_station_id==79) %>% 
+  station_79_end_trips_id_1 = trips_df %>% filter(end_station_id==79) %>% 
     filter(stop_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 79001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_79_end_trips_id_1$id]=79001 # change their end_station_id from 79 to 79001
+  trips_df$end_station_id[station_79_end_trips_id_1$id] = 79001 # change their end_station_id from 79 to 79001
   
-  station_79_end_trips_id_2<-trips_df %>% filter(end_station_id==79) %>%
+  station_79_end_trips_id_2 = trips_df %>% filter(end_station_id==79) %>%
     filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 79002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_79_end_trips_id_2$id]=79002 # change their end_station_id from 79 to 79002
+  trips_df$end_station_id[station_79_end_trips_id_2$id] = 79002 # change their end_station_id from 79 to 79002
   
   #rm(station_79_start_trips)
   #--Completed--end of ucl_id 79------
@@ -476,7 +476,7 @@ lchs_recode = function(trips_df, stations) {
   
   # The trips number pattern is consistent
   # Further Investigation suggested that the wrong record(ucl_id 82) duplicated with ucl_id 405, it needs to be removed
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==82)&(operator_name=="Gloucester Road Station, South Kensington")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==82)&(operator_name=="Gloucester Road Station, South Kensington")))
   
   #rm(station_82_start_trips)
   #-----Completed-----end of ucl_id 82
@@ -508,7 +508,7 @@ lchs_recode = function(trips_df, stations) {
   
   # The bike trip number pattern is relatively continuous, 
   # Further Investigation suggested that the wrong record(ucl_id 131) duplicates ucl_id 378, it needs to be removed
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==131)&(operator_name=="Natural History Museum, South Kensington")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==131)&(operator_name=="Natural History Museum, South Kensington")))
   
   #rm(station_131_start_trips)
   #----Completed---end of ucl_id 138
@@ -538,7 +538,7 @@ lchs_recode = function(trips_df, stations) {
   
   # The bike trip number pattern is relatively continuous
   # Further Investigation suggested that the wrong record(ucl_id 148) duplicates ucl_id 379, it needs to be removed
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==148)&(operator_name=="Turquoise Island, Notting Hill")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==148)&(operator_name=="Turquoise Island, Notting Hill")))
   
   #rm(station_148_start_trips)
   #----Completed----end for ucl_id 148--------------------
@@ -570,7 +570,7 @@ lchs_recode = function(trips_df, stations) {
   
   # The bike trip number pattern is relatively continuous, 
   # Further Investigation suggested that the wrong record(ucl_id 154) duplicates ucl_id 360, it needs to be removed
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==154)&(operator_name=="Howick Place, Westminster")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==154)&(operator_name=="Howick Place, Westminster")))
   
   #rm(station_154_start_trips)
   #---Completed----end of ucl_id 154
@@ -604,7 +604,7 @@ lchs_recode = function(trips_df, stations) {
   # The bike trip number pattern is relatively consistent
   # Further Investigation suggested that the wrong record(ucl_id 173) duplicated with ucl_id 148, it needs to be deleted
   
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==173)&(operator_name=="Tachbrook Street, Victoria")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==173)&(operator_name=="Tachbrook Street, Victoria")))
   
   #rm(station_173_start_trips)
   #---Completed----end of ucl_id 173
@@ -635,7 +635,7 @@ lchs_recode = function(trips_df, stations) {
   
   # The bike trip number pattern is relatively continuous,
   # Further Investigation suggested that the wrong record(ucl_id 174) duplicates ucl_id 427, it needs to be removed
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==174)&(operator_name=="Cheapside, Bank")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==174)&(operator_name=="Cheapside, Bank")))
   
   #rm(station_174_start_trips)
   #---Completed----end of ucl_id 174
@@ -674,30 +674,30 @@ lchs_recode = function(trips_df, stations) {
   # 183002 is the station after 2015/06/15 (using 2014-12-01 00:00:00 as the dividing point)
   
   station_locations_clean[(station_locations_clean$ucl_id==183)&(station_locations_clean$created_dt<="2014-12-01 00:00:00"),
-                          "ucl_id"]<-183001
+                          "ucl_id"] = 183001
   station_locations_clean[(station_locations_clean$ucl_id==183)&(station_locations_clean$created_dt>="2014-12-01 00:00:00"),
-                          "ucl_id"]<-183002
+                          "ucl_id"] = 183002
   
   # The trip_df should be modified accordingly
-  station_183_start_trips_id_1<-trips_df %>% filter(start_station_id==183) %>% 
+  station_183_start_trips_id_1 = trips_df %>% filter(start_station_id==183) %>% 
     filter(start_time<as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 183001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_183_start_trips_id_1$id]=183001 # change their start_station_id from 183 to 183001
+  trips_df$start_station_id[station_183_start_trips_id_1$id] = 183001 # change their start_station_id from 183 to 183001
   
-  station_183_start_trips_id_2<-trips_df %>% filter(start_station_id==183) %>%
+  station_183_start_trips_id_2 = trips_df %>% filter(start_station_id==183) %>%
     filter(start_time>as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 183002 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_183_start_trips_id_2$id]=183002 # change their start_station_id from 183 to 183002
+  trips_df$start_station_id[station_183_start_trips_id_2$id] = 183002 # change their start_station_id from 183 to 183002
   
-  station_183_end_trips_id_1<-trips_df %>% filter(end_station_id==183) %>% 
+  station_183_end_trips_id_1 = trips_df %>% filter(end_station_id==183) %>% 
     filter(stop_time<as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 183001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_183_end_trips_id_1$id]=183001 # change their end_station_id from 183 to 183001
+  trips_df$end_station_id[station_183_end_trips_id_1$id] = 183001 # change their end_station_id from 183 to 183001
   
-  station_183_end_trips_id_2<-trips_df %>% filter(end_station_id==183) %>%
+  station_183_end_trips_id_2 = trips_df %>% filter(end_station_id==183) %>%
     filter(stop_time>as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 183002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_183_end_trips_id_2$id]=183002 # change their end_station_id from 183 to 183002
+  trips_df$end_station_id[station_183_end_trips_id_2$id] = 183002 # change their end_station_id from 183 to 183002
   
   #rm(station_183_start_trips)
   #---Completed---end of ucl_id 183
@@ -741,31 +741,31 @@ lchs_recode = function(trips_df, stations) {
   
   
   station_locations_clean[(station_locations_clean$ucl_id==259)&(station_locations_clean$created_dt<="2015-12-01 00:00:00"),
-                          "ucl_id"]<-259001
+                          "ucl_id"] = 259001
   station_locations_clean[(station_locations_clean$ucl_id==259)&(station_locations_clean$created_dt>="2015-12-01 00:00:00"),
-                          "ucl_id"]<-259002
+                          "ucl_id"] = 259002
   
   
   # The trip_df should be modified accordingly
-  station_259_start_trips_id_1<-trips_df %>% filter(start_station_id==259) %>% 
+  station_259_start_trips_id_1 = trips_df %>% filter(start_station_id==259) %>% 
     filter(start_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 259001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_259_start_trips_id_1$id]=259001 # change their start_station_id from 259 to 259001
+  trips_df$start_station_id[station_259_start_trips_id_1$id] = 259001 # change their start_station_id from 259 to 259001
   
-  station_259_start_trips_id_2<-trips_df %>% filter(start_station_id==259) %>%
+  station_259_start_trips_id_2 = trips_df %>% filter(start_station_id==259) %>%
     filter(start_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 259002 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_259_start_trips_id_2$id]=259002 # change their start_station_id from 259 to 259002
+  trips_df$start_station_id[station_259_start_trips_id_2$id] = 259002 # change their start_station_id from 259 to 259002
   
-  station_259_end_trips_id_1<-trips_df %>% filter(end_station_id==259) %>% 
+  station_259_end_trips_id_1 = trips_df %>% filter(end_station_id==259) %>% 
     filter(stop_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 259001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_259_end_trips_id_1$id]=259001 # change their end_station_id from 259 to 259001
+  trips_df$end_station_id[station_259_end_trips_id_1$id] = 259001 # change their end_station_id from 259 to 259001
   
-  station_259_end_trips_id_2<-trips_df %>% filter(end_station_id==259) %>%
+  station_259_end_trips_id_2 = trips_df %>% filter(end_station_id==259) %>%
     filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 259002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_259_end_trips_id_2$id]=259002 # change their end_station_id from 259 to 259002
+  trips_df$end_station_id[station_259_end_trips_id_2$id] = 259002 # change their end_station_id from 259 to 259002
   
   #rm(station_259_start_trips)
   #----Completed----end of ucl_id 259
@@ -807,30 +807,30 @@ lchs_recode = function(trips_df, stations) {
   
   
   station_locations_clean[(station_locations_clean$ucl_id==302)&(station_locations_clean$created_dt<="2014-12-01 00:00:00"),
-                          "ucl_id"]<-302001
+                          "ucl_id"] = 302001
   station_locations_clean[(station_locations_clean$ucl_id==302)&(station_locations_clean$created_dt>="2014-12-01 00:00:00"),
-                          "ucl_id"]<-302002
+                          "ucl_id"] = 302002
   
   # The trip_df should be modified accordingly
-  station_302_start_trips_id_1<-trips_df %>% filter(start_station_id==302) %>% 
+  station_302_start_trips_id_1 = trips_df %>% filter(start_station_id==302) %>% 
     filter(start_time<as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 302001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_302_start_trips_id_1$id]=302001 # change their start_station_id from 302 to 302001
+  trips_df$start_station_id[station_302_start_trips_id_1$id] = 302001 # change their start_station_id from 302 to 302001
   
-  station_302_start_trips_id_2<-trips_df %>% filter(start_station_id==302) %>%
+  station_302_start_trips_id_2 = trips_df %>% filter(start_station_id==302) %>%
     filter(start_time>as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 302002 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_302_start_trips_id_2$id]=302002 # change their start_station_id from 302 to 302002
+  trips_df$start_station_id[station_302_start_trips_id_2$id] = 302002 # change their start_station_id from 302 to 302002
   
-  station_302_end_trips_id_1<-trips_df %>% filter(end_station_id==302) %>% 
+  station_302_end_trips_id_1 = trips_df %>% filter(end_station_id==302) %>% 
     filter(stop_time<as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 302001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_302_end_trips_id_1$id]=302001 # change their end_station_id from 302 to 302001
+  trips_df$end_station_id[station_302_end_trips_id_1$id] = 302001 # change their end_station_id from 302 to 302001
   
-  station_302_end_trips_id_2<-trips_df %>% filter(end_station_id==302) %>%
+  station_302_end_trips_id_2 = trips_df %>% filter(end_station_id==302) %>%
     filter(stop_time>as.POSIXct("2014-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 302002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_302_end_trips_id_2$id]=302 # change their end_station_id from 302 to 302002
+  trips_df$end_station_id[station_302_end_trips_id_2$id]=302002 # change their end_station_id from 302 to 302002
   
   #rm(station_302_start_trips)
   #---Completed------end of ucl_id 302
@@ -864,7 +864,7 @@ lchs_recode = function(trips_df, stations) {
   
   # Further Investigation suggested that the wrong record(ucl_id 316) duplicated with ucl_id 404, it needs to be removed
   # Solution:
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==316)&(operator_name=="Palace Gate, Kensington Gardens")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==316)&(operator_name=="Palace Gate, Kensington Gardens")))
   
   #rm(station_316_start_trips)
   #---Completed----end of ucl_id 316
@@ -901,7 +901,7 @@ lchs_recode = function(trips_df, stations) {
   # Both locations all have docking stations
   # Further Investigation suggested that the wrong record(ucl_id 322) duplicated  ucl_id 406/407
   # Solution:
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==322)&(operator_name=="Speakers' Corner 1, Hyde Park")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==322)&(operator_name=="Speakers' Corner 1, Hyde Park")))
   
   #rm(station_322_start_trips)
   #---Completed----end of ucl_id 322
@@ -937,7 +937,7 @@ lchs_recode = function(trips_df, stations) {
   # Both place have docking stations
   # Further Investigation suggested that the wrong record(ucl_id 323) duplicated ucl_id 406/407
   # Solution:
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==323)&(operator_name=="Speakers' Corner 2, Hyde Park")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==323)&(operator_name=="Speakers' Corner 2, Hyde Park")))
   
   #rm(station_323_start_trips)
   #---Completed----end of ucl_id 323
@@ -972,7 +972,7 @@ lchs_recode = function(trips_df, stations) {
   # Both place have docking stations
   # Further Investigation suggested that the wrong record(ucl_id 360) duplicated ucl_id 154
   # Solution:
-  station_locations_clean<-station_locations_clean %>% filter(!((ucl_id==360)&(operator_name=="Waterloo Station 3, Waterloo")))
+  station_locations_clean = station_locations_clean %>% filter(!((ucl_id==360)&(operator_name=="Waterloo Station 3, Waterloo")))
   
   #rm(station_360_start_trips)
   #---Completed----end of ucl_id 360
@@ -1010,30 +1010,30 @@ lchs_recode = function(trips_df, stations) {
   # 502001 is the station before 2015/08/20 (using 2015-12-01  as the dividing point)
   # 502002 is the station after 2019/08/01 (using 2015-12-01  as the dividing point)
   station_locations_clean[(station_locations_clean$ucl_id==502)&(station_locations_clean$created_dt<="2015-12-01 00:00:00"),
-                          "ucl_id"]<-502001
+                          "ucl_id"] = 502001
   station_locations_clean[(station_locations_clean$ucl_id==502)&(station_locations_clean$created_dt>="2015-12-01 00:00:07"),
-                          "ucl_id"]<-502002
+                          "ucl_id"] = 502002
   
   # The trip_df should be modified accordingly
-  station_502_start_trips_id_1<-trips_df %>% filter(start_station_id==502) %>% 
+  station_502_start_trips_id_1 = trips_df %>% filter(start_station_id==502) %>% 
     filter(start_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 502001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_502_start_trips_id_1$id]=502001 # change their start_station_id from 502 to 502001
+  trips_df$start_station_id[station_502_start_trips_id_1$id] = 502001 # change their start_station_id from 502 to 502001
   
-  station_502_start_trips_id_2<-trips_df %>% filter(start_station_id==502) %>%
+  station_502_start_trips_id_2 = trips_df %>% filter(start_station_id==502) %>%
     filter(start_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 502002 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_502_start_trips_id_2$id]=502002 # change their start_station_id from 502 to 502002
+  trips_df$start_station_id[station_502_start_trips_id_2$id] = 502002 # change their start_station_id from 502 to 502002
   
-  station_502_end_trips_id_1<-trips_df %>% filter(end_station_id==502) %>% 
+  station_502_end_trips_id_1 = trips_df %>% filter(end_station_id==502) %>% 
     filter(stop_time<as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 502001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_502_end_trips_id_1$id]=502001 # change their end_station_id from 502 to 502001
+  trips_df$end_station_id[station_502_end_trips_id_1$id] = 502001 # change their end_station_id from 502 to 502001
   
-  station_502_end_trips_id_2<-trips_df %>% filter(end_station_id==502) %>%
+  station_502_end_trips_id_2 = trips_df %>% filter(end_station_id==502) %>%
     filter(stop_time>as.POSIXct("2015-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 502002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_502_end_trips_id_2$id]=502002 # change their end_station_id from 502 to 502002
+  trips_df$end_station_id[station_502_end_trips_id_2$id] = 502002 # change their end_station_id from 502 to 502002
   
   #rm(station_502_start_trips)
   #---Completed----end of ucl_id 502
@@ -1073,30 +1073,30 @@ lchs_recode = function(trips_df, stations) {
   # 725001 is the station before 2018-04-29 (using 2018-12-01 00:00:00 as the dividing point)
   # 723002 is the station after 2019-06-09 (using 2018-12-01 00:00:00 as the dividing point)
   station_locations_clean[(station_locations_clean$ucl_id==725)&(station_locations_clean$created_dt<="2018-12-01 00:00:00"),
-                          "ucl_id"]<-725001
+                          "ucl_id"] = 725001
   station_locations_clean[(station_locations_clean$ucl_id==725)&(station_locations_clean$created_dt>="2018-12-01 00:00:00"),
-                          "ucl_id"]<-725002
+                          "ucl_id"] = 725002
   
   # The trip_df should be modified accordingly
-  station_725_start_trips_id_1<-trips_df %>% filter(start_station_id==725) %>% 
+  station_725_start_trips_id_1 = trips_df %>% filter(start_station_id==725) %>% 
     filter(start_time<as.POSIXct("2018-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 725001 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_725_start_trips_id_1$id]=725001 # change their start_station_id from 725 to 725001
+  trips_df$start_station_id[station_725_start_trips_id_1$id] = 725001 # change their start_station_id from 725 to 725001
   
-  station_725_start_trips_id_2<-trips_df %>% filter(start_station_id==725) %>%
+  station_725_start_trips_id_2 = trips_df %>% filter(start_station_id==725) %>%
     filter(start_time>as.POSIXct("2018-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 725002 trips and derive their trip id in trips_df
-  trips_df$start_station_id[station_725_start_trips_id_2$id]=725002 # change their start_station_id from 725 to 725002
+  trips_df$start_station_id[station_725_start_trips_id_2$id] = 725002 # change their start_station_id from 725 to 725002
   
-  station_725_end_trips_id_1<-trips_df %>% filter(end_station_id==725) %>% 
+  station_725_end_trips_id_1 = trips_df %>% filter(end_station_id==725) %>% 
     filter(stop_time<as.POSIXct("2018-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 725001 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_725_end_trips_id_1$id]=725001 # change their end_station_id from 725 to 725001
+  trips_df$end_station_id[station_725_end_trips_id_1$id] = 725001 # change their end_station_id from 725 to 725001
   
-  station_725_end_trips_id_2<-trips_df %>% filter(end_station_id==725) %>%
+  station_725_end_trips_id_2 = trips_df %>% filter(end_station_id==725) %>%
     filter(stop_time>as.POSIXct("2018-12-01 00:00:00")) %>% 
     dplyr::select(id) %>% as.vector() # identify the 725002 trips and derive their trip id in trips_df
-  trips_df$end_station_id[station_725_end_trips_id_2$id]=725002 # change their end_station_id from 725 to 725002
+  trips_df$end_station_id[station_725_end_trips_id_2$id] = 725002 # change their end_station_id from 725 to 725002
   
   #rm(station_725_start_trips)
   #---Completed----end of ucl_id 725
@@ -1111,12 +1111,12 @@ lchs_recode = function(trips_df, stations) {
   # The 406 and 407 station have the same coordinates, so they together represent that large docking station.
   # We have deleted the station ucl_id 407 in previous cleaning process, and only keeped the 406 one.
   # Now it is necessay to change 407-related bike trips to 406
-  station_407_start_trips_id<-trips_df %>% filter(start_station_id==407) %>%
+  station_407_start_trips_id = trips_df %>% filter(start_station_id==407) %>%
     dplyr::select(id) %>% as.vector()
   
-  trips_df$start_station_id[station_407_start_trips_id$id]="406"
+  trips_df$start_station_id[station_407_start_trips_id$id] = "406"
   
-  station_407_end_trips_id<-trips_df %>% filter(end_station_id==407) %>% 
+  station_407_end_trips_id = trips_df %>% filter(end_station_id==407) %>% 
     dplyr::select(id) %>% as.vector()
   
   trips_df$end_station_id[station_407_end_trips_id$id]="406"
