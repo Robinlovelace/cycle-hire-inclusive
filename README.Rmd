@@ -2,8 +2,6 @@
 output:
    github_document
   # bookdown::pdf_document2:
-  # bookdown::word_document2
-  #   number_sections: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -53,13 +51,13 @@ You can do this starting with a 5% sample of the raw cycle hire trip records as 
 devtools::install_github("robinlovelace/cycle-hire-inclusive")
 ```
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+```{r, eval=FALSE, echo=TRUE, message=FALSE}
 # for released version
 # u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
 # download.file(u, "data_raw_5pc.fst")
 # for piggyback version
-piggyback::pb_download("data_raw_5pc.fst")
-library(lchs)
+piggyback::pb_download("data_raw_5pc.fst") # downloads a subset of the data
+library(lchs) # loads all packages needed to reproduce the results
 source("R/plan.R")
 plan
 ```
@@ -72,18 +70,17 @@ drake::make(plan)
 
 Visualise the build and a sample of the data from the project as follows:
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=FALSE, echo=TRUE}
 drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
-data_filtered_clean = drake::readd(data_filtered_clean)
-head(data_filtered_clean)
-summary(data_filtered_clean)
+trips_df = drake::readd(trips_df) # get the clean trips dataset
+head(trips_df)
 ```
 
 You can reproduce many of the results in the main paper using this sample of the data.
 The following, for example, produces a graph showing the number of hires per year:
 
 ```{r, eval=FALSE, echo=TRUE}
-g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
+g = lchs_check_dates(trips_df %>% filter(year_month > as.Date("2014-01-01")))
 g
 ```
 
@@ -110,31 +107,6 @@ RefManageR::WriteBib(refs, "references.bib")
 # citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "references.bib") # fails
 # citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "~/data/allrefs.bib", file = "references.bib") # works but slow
 ```
-
-```{r, echo=FALSE, eval=FALSE, engine='bash'}
-cp README.pdf ~/Dropbox/paper-submissions/bike-hire-inequalities.pdf
-cp README.docx ~/Dropbox/paper-submissions/bike-hire-inequalities.docx
-```
-
-<!-- # Title 1 : Cycle hire and accessibility: an environmental justice perspective on the first 70 million trips -->
-
-<!-- # Title 2 : Assessing the transport equity impacts of cycle hire schemes: a geographic analysis -->
-
-<!-- # Title 3 : Is the London Cycle Hire scheme becoming more equal? An evaluation of almost a decade of trips -->
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-<!-- # Comments to authors (work in progress for comment) -->
-
-<!-- Additional references to cite: -->
-
-<!-- - Policy context [@parkin_designing_2018; ] -->
-<!-- - Previous work in inequalities of LCHS [@goodman_inequalities_2014; @ogilvie_inequalities_2012] -->
-<!-- - US assessment of cycle hire and inequality [@aultman-hall_quantifying_2015] -->
-<!-- - Software [@lovelace_stplanr:_2018; @padgham_bikedata:_2017; @boeing_osmnx:_2017] -->
-<!-- - Methods [@beecham_exploring_2014] -->
-<!-- - [@campbell_sharing_2017] -->
 
 \newpage
 

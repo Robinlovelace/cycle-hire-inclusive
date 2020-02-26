@@ -15,25 +15,10 @@ a 5% sample of the raw cycle hire trip records as follows:
 # u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
 # download.file(u, "data_raw_5pc.fst")
 # for piggyback version
-piggyback::pb_download("data_raw_5pc.fst")
-library(lchs)
+piggyback::pb_download("data_raw_5pc.fst") # downloads a subset of the data
+library(lchs) # loads all packages needed to reproduce the results
 source("R/plan.R")
 plan
-#> # A tibble: 12 x 3
-#>    target            command                                              format
-#>    <chr>             <expr>                                               <chr> 
-#>  1 data_raw          fst::read.fst("data_raw.fst")                      … fst   
-#>  2 data_filtered     lchs_filter_select(data_raw)                       … fst   
-#>  3 data_filtered_cl… lchs_clean(data_filtered)                          … <NA>  
-#>  4 recoded_data      lchs_recode(trips_df = data_filtered_clean, station… <NA>  
-#>  5 trips_df          recoded_data[[1]]                                  … <NA>  
-#>  6 stations          recoded_data[[2]]                                  … <NA>  
-#>  7 stations_sf       lchs_get_stations_sf(stations = stations)          … <NA>  
-#>  8 check_raw_data    source("code/cycle-hires-excel.R")                 … <NA>  
-#>  9 get_global_stati… source("code/get-global-stations.R")               … <NA>  
-#> 10 stations_region   lchs_get_stations_region(stations_sf)              … <NA>  
-#> 11 stations_yearly   lchs_stations_yearly(stations_sf)                  … <NA>  
-#> 12 stations_classif… rmarkdown::render(knitr_in("stations-classification… <NA>
 ```
 
 To reproduce all the results in the paper, you can make the plan with:
@@ -43,42 +28,8 @@ follows:
 
 ``` r
 drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
-```
-
-<img src="README_files/figure-gfm/unnamed-chunk-5-1.png" width="90%" style="display: block; margin: auto;" />
-
-``` r
-data_filtered_clean = drake::readd(data_filtered_clean)
-head(data_filtered_clean)
-#>            start_time           stop_time start_station_id end_station_id
-#> 1 2016-01-10 00:00:00 2016-01-10 00:04:00               18            383
-#> 2 2016-01-10 00:00:00 2016-01-10 00:05:00              479            719
-#> 3 2016-01-10 00:00:00 2016-01-10 00:20:00              425            272
-#> 4 2016-01-10 00:01:00 2016-01-10 00:14:00              487            471
-#> 5 2016-01-10 00:01:00 2016-01-10 00:11:00              501            399
-#> 6 2016-01-10 00:02:00 2016-01-10 00:09:00              769            671
-#>   year_month
-#> 1 2016-01-01
-#> 2 2016-01-01
-#> 3 2016-01-01
-#> 4 2016-01-01
-#> 5 2016-01-01
-#> 6 2016-01-01
-summary(data_filtered_clean)
-#>    start_time                    stop_time                   start_station_id  
-#>  Min.   :2012-01-04 00:00:00   Min.   :1970-01-01 00:00:00   Length:73720600   
-#>  1st Qu.:2014-04-02 09:35:00   1st Qu.:2014-04-02 09:51:45   Class :character  
-#>  Median :2016-03-20 22:28:00   Median :2016-03-20 22:55:00   Mode  :character  
-#>  Mean   :2016-02-14 00:05:17   Mean   :2015-12-18 06:33:07                     
-#>  3rd Qu.:2018-02-20 18:58:00   3rd Qu.:2018-02-20 19:12:00                     
-#>  Max.   :2019-12-31 23:56:00   Max.   :2019-12-31 23:59:00                     
-#>  end_station_id       year_month                 
-#>  Length:73720600    Min.   :2012-01-01 00:00:00  
-#>  Class :character   1st Qu.:2014-04-01 00:00:00  
-#>  Mode  :character   Median :2016-03-01 00:00:00  
-#>                     Mean   :2016-01-29 17:01:43  
-#>                     3rd Qu.:2018-02-01 00:00:00  
-#>                     Max.   :2019-12-01 00:00:00
+trips_df = drake::readd(trips_df) # get the clean trips dataset
+head(trips_df)
 ```
 
 You can reproduce many of the results in the main paper using this
@@ -87,40 +38,13 @@ the number of hires per
 year:
 
 ``` r
-g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
+g = lchs_check_dates(trips_df %>% filter(year_month > as.Date("2014-01-01")))
 g
 ```
 
 To reproduce all the results, clone or download the repo, uncomment the
 relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command
-demonstrated
-above.
-
-<!-- # Title 1 : Cycle hire and accessibility: an environmental justice perspective on the first 70 million trips -->
-
-<!-- # Title 2 : Assessing the transport equity impacts of cycle hire schemes: a geographic analysis -->
-
-<!-- # Title 3 : Is the London Cycle Hire scheme becoming more equal? An evaluation of almost a decade of trips -->
-
-<!-- badges: start -->
-
-<!-- badges: end -->
-
-<!-- # Comments to authors (work in progress for comment) -->
-
-<!-- Additional references to cite: -->
-
-<!-- - Policy context [@parkin_designing_2018; ] -->
-
-<!-- - Previous work in inequalities of LCHS [@goodman_inequalities_2014; @ogilvie_inequalities_2012] -->
-
-<!-- - US assessment of cycle hire and inequality [@aultman-hall_quantifying_2015] -->
-
-<!-- - Software [@lovelace_stplanr:_2018; @padgham_bikedata:_2017; @boeing_osmnx:_2017] -->
-
-<!-- - Methods [@beecham_exploring_2014] -->
-
-<!-- - [@campbell_sharing_2017] -->
+demonstrated above.
 
 # Abstract
 
