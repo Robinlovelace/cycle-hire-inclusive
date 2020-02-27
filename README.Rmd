@@ -1,7 +1,7 @@
 ---
 output:
-   # github_document
-  bookdown::pdf_document2:
+    github_document
+   # bookdown::pdf_document2:
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -552,7 +552,7 @@ I think it's worth exploring how this changes over time, but maybe one for after
 
 ```{r income-decile-am-pm-beeswarm, fig.cap="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks.", out.width="70%", eval=TRUE}
 # file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
-knitr::include_graphics("figures/income-decile-am-pm-boxplot.png")
+knitr::include_graphics("figures/income-decile-am-pm-boxplot_minor.png")
 ```
 
 ## Changes in usage over time
@@ -577,16 +577,16 @@ The increases in AM peak-time trips starting at docking stations located in the 
 Continued gradual increases from 2016 to 2018 can be seen from docking stations associated with income deciles 1 to 4.
 More gradual increases are visible in mid-to-high income areas (5th to 8th income deciles); the docking stations associated with the wealthiest areas (in close proximity to zones in the 10th income decile) shows relatively little change. -->
 
-```{r change-time-income, fig.cap="Rolling daily trip counts by income decile (red) and docking stations within income deciles (grey) for 2012-2019. Frequencies are locally scaled by income decile and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples from lowest (1) to highest (10) income deciles. Grey fill within each decile plot varies according to overall trip counts originating from dockin stations in that decile", out.width="100%"}
+```{r change-time-income, fig.cap="Rolling daily trip counts by income decile (red) and docking stations within income deciles (grey) for 2012-2019. Frequencies are locally scaled by income decile and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples from lowest (1) to highest (10) income deciles. Grey fill within each decile plot varies according to overall trip counts originating from dockin stations in that decile", out.width="100%", eval=TRUE}
 # Facet plot showing change all trips from docking stations by income deciles, from 1 (lowest) to 10 (highest) income areas (right).
-knitr::include_graphics("figures/daily_hires_station_imd.png")
+knitr::include_graphics("figures/daily_hires_station_imd_minor.png")
 ```
 
 <!-- Todo: delete or act on this comment from RB: So next to each facet, we should probably show a map of docking stations -- relate decile groups to real geog of London -->
 
 
-```{r change-time-boroughs, fig.cap="Rolling daily trip counts by London borough (red) and for stations within London boroughs (grey) for 2012-2019. Frequencies are locally scaled by London borough and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough", out.width="100%"}
-knitr::include_graphics("figures/daily_hires_station_bor.png")
+```{r change-time-boroughs, fig.cap="Rolling daily trip counts by London borough (red) and for stations within London boroughs (grey) for 2012-2019. Frequencies are locally scaled by London borough and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough",eval=TRUE, out.width="100%"}
+knitr::include_graphics("figures/daily_hires_station_bor_minor.png")
 ```
 
 
@@ -599,8 +599,8 @@ This can be largely explained by commuting behaviour.
 However, an increasing pattern of morning peak-time journeys is present for boroughs that contain large resident populations and that are not located at a major rail hub (docking stations in Wandsworth and Hackney), suggesting that the use of the LCHS by resident commuters is increasing.
 Furthermore, docking stations in these and non-central London boroughs (Kingston, Hammersmith and Tower Hamlets) are associated with large and increasing numbers of weekend trips, suggesting that use of the scheme for _leisure_ trips may not merely be the preserve of tourists.
 
-```{r trip-types-boroughs, fig.cap="Rolling daily trip counts by trip type in London boroughs for 2012-2019. Frequencies are locally scaled by London borough and with a 365-day smoothing. Small multiples are ordered according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough", out.width="100%"}
-knitr::include_graphics("figures/trip_types_by_borough.png")
+```{r trip-types-boroughs, fig.cap="Rolling daily trip counts by trip type in London boroughs for 2012-2019. Frequencies are locally scaled by London borough and with a 365-day smoothing. Small multiples are ordered according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough", eval=TRUE, out.width="100%"}
+knitr::include_graphics("figures/trip_types_by_borough_minor.png")
 ```
 
 <!-- ## A case study of two boroughs -->
