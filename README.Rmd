@@ -1,10 +1,7 @@
 ---
 output:
-   github_document
-  # bookdown::pdf_document2:
-  # bookdown::word_document2
-  #   number_sections: true
-# title: "Can cycle hire schemes support transport equality? An evaluation of almost a decade of trips"
+   # github_document
+  bookdown::pdf_document2:
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -45,27 +42,27 @@ f = "sdf.geojson"
 # oas = read_sf("oas_bikeshare_imd_tidynames.geojson")
 ```
 
-## Reproducing the results
+<!-- ## Reproducing the results -->
 
-To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used.
-You can do this starting with a 5% sample of the raw cycle hire trip records as follows:
+<!-- To reproduce the analysis presented in this paper, a good starting point is loading a sample of the datasets used. -->
+<!-- You can do this starting with a 5% sample of the raw cycle hire trip records as follows: -->
 
 ```{r, eval=FALSE}
 devtools::install_github("robinlovelace/cycle-hire-inclusive")
 ```
 
-```{r, eval=TRUE, echo=TRUE, message=FALSE}
+```{r, eval=FALSE, message=FALSE}
 # for released version
 # u = "https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/data_raw_5pc.fst"
 # download.file(u, "data_raw_5pc.fst")
 # for piggyback version
-piggyback::pb_download("data_raw_5pc.fst")
-library(lchs)
+piggyback::pb_download("data_raw_5pc.fst") # downloads a subset of the data
+library(lchs) # loads all packages needed to reproduce the results
 source("R/plan.R")
 plan
 ```
 
-To reproduce all the results in the paper, you can make the plan with:
+<!-- To reproduce all the results in the paper, you can make the plan with: -->
 
 ```{r, eval=FALSE}
 drake::make(plan)
@@ -73,27 +70,26 @@ drake::make(plan)
 
 Visualise the build and a sample of the data from the project as follows:
 
-```{r, eval=TRUE, echo=TRUE}
+```{r, eval=FALSE}
 drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)
-data_filtered_clean = drake::readd(data_filtered_clean)
-head(data_filtered_clean)
-summary(data_filtered_clean)
+trips_df = drake::readd(trips_df) # get the clean trips dataset
+head(trips_df)
 ```
 
-You can reproduce many of the results in the main paper using this sample of the data.
-The following, for example, produces a graph showing the number of hires per year:
+<!-- You can reproduce many of the results in the main paper using this sample of the data. -->
+<!-- The following, for example, produces a graph showing the number of hires per year: -->
 
-```{r, eval=FALSE, echo=TRUE}
-g = lchs_check_dates(data_filtered_clean %>% filter(year_month > as.Date("2014-01-01")))
+```{r, eval=FALSE}
+g = lchs_check_dates(trips_df %>% filter(year_month > as.Date("2014-01-01")))
 g
 ```
 
-To reproduce all the results, clone or download the repo, uncomment the relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command demonstrated above.
+<!-- To reproduce all the results, clone or download the repo, uncomment the relevant lines in `R/plan.R`, and re-run the `drake::make(plan)` command demonstrated above. -->
 
 ```{r, eval=FALSE, echo=FALSE}
-file.rename("README.pdf", "bike-hire-inequalities.pdf")
-piggyback::pb_upload("bike-hire-inequalities.pdf")
-piggyback::pb_download_url("bike-hire-inequalities.pdf")
+file.rename("README.pdf", "cycle-hire-inclusive.pdf")
+piggyback::pb_upload("cycle-hire-inclusive.pdf")
+piggyback::pb_download_url("cycle-hire-inclusive.pdf")
 
 # Get citations
 # refs_new = RefManageR::ReadBib("refs-new.bib") # way to read-in ad-hoc references
@@ -111,31 +107,6 @@ RefManageR::WriteBib(refs, "references.bib")
 # citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "references.bib") # fails
 # citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "~/data/allrefs.bib", file = "references.bib") # works but slow
 ```
-
-```{r, echo=FALSE, eval=FALSE, engine='bash'}
-cp README.pdf ~/Dropbox/paper-submissions/bike-hire-inequalities.pdf
-cp README.docx ~/Dropbox/paper-submissions/bike-hire-inequalities.docx
-```
-
-<!-- # Title 1 : Cycle hire and accessibility: an environmental justice perspective on the first 70 million trips -->
-
-<!-- # Title 2 : Assessing the transport equity impacts of cycle hire schemes: a geographic analysis -->
-
-<!-- # Title 3 : Is the London Cycle Hire scheme becoming more equal? An evaluation of almost a decade of trips -->
-
-<!-- badges: start -->
-<!-- badges: end -->
-
-<!-- # Comments to authors (work in progress for comment) -->
-
-<!-- Additional references to cite: -->
-
-<!-- - Policy context [@parkin_designing_2018; ] -->
-<!-- - Previous work in inequalities of LCHS [@goodman_inequalities_2014; @ogilvie_inequalities_2012] -->
-<!-- - US assessment of cycle hire and inequality [@aultman-hall_quantifying_2015] -->
-<!-- - Software [@lovelace_stplanr:_2018; @padgham_bikedata:_2017; @boeing_osmnx:_2017] -->
-<!-- - Methods [@beecham_exploring_2014] -->
-<!-- - [@campbell_sharing_2017] -->
 
 \newpage
 
@@ -196,6 +167,7 @@ North and South America have seen substantial interest in docked cycle hire sche
 Within this global overview, the London BSS is an important player, ranking 8th in the top schemes by number of docking stations and launching relatively early in 2010.
 
 ```{r global-stations-cycles, fig.cap="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles.", out.width="80%", fig.pos="h", eval=TRUE}
+# see code/get-global-stations.R
 knitr::include_graphics("figures/bikehshare-global-stations-bicycles.png")
 ```
 
@@ -500,6 +472,7 @@ To estimate 'residential populations' who live in close proximity to docking sta
  <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
 ```{r bikeshare-resi-buildings, fig.cap="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red.", out.width="70%", eval=TRUE}
+# file.edit("stations-classification.Rmd") # to reproduce
 knitr::include_graphics("figures/bikeshare-resi-buildings.png")
 ```
 
@@ -528,7 +501,7 @@ The comparison between morning and afternoon usage patterns highlights the reaso
 <!-- todo: how the data were analysed (from Eva) -->
 
 ```{r map-am-pm-peaks, out.width="100%", fig.cap="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks", eval=TRUE}
-# see stations-classification.Rmd for source code
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics("figures/map-am-pm-peaks.png")
 ```
 
@@ -551,6 +524,7 @@ See [whythegap.london](http://whythegap.london) for the campaign for "Cycle Hire
 
 ```{r facet-map, out.width="50%", fig.cap="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat.", fig.show='hold', fig.align='left', eval=TRUE}
 # note: previous caption said: Point size is proportional to capacity of docking stations, ranging from 10 to 70
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics(c("figures/facet-imd.png", "figures/stations-imd-facet-4-grey.png"))
 ```
 
@@ -577,6 +551,7 @@ I think it's worth exploring how this changes over time, but maybe one for after
 -->
 
 ```{r income-decile-am-pm-beeswarm, fig.cap="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks.", out.width="70%", eval=TRUE}
+# file.edit("stations-classification.Rmd") # see stations-classification.Rmd for source code
 knitr::include_graphics("figures/income-decile-am-pm-boxplot.png")
 ```
 
