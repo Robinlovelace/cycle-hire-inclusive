@@ -12,3 +12,5 @@ README.html
 *.csv
 *.geojson
 *.html
+*.zip
+gis_osm*
