@@ -13,6 +13,12 @@ sqf = file.path(data_dir, "london_bike_hire_2020-02-21.sqlite")
 
 source("R/plan.R")
 
+
+# settings ----------------------------------------------------------------
+
+theme_set(theme_minimal(base_family = "Avenir Book"))
+
+
 # make plan ---------------------------------------------------------------
 
 vis_drake_graph(plan, targets_only = T)

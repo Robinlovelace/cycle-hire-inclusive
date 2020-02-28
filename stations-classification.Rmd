@@ -85,14 +85,33 @@ stations_yearly_4 = stations_yearly_lsoa %>%
   group_by(year) %>% 
   mutate(t = sum(p))
 
+# stations_yearly_4 = stations_yearly_4 %>% 
+#   mutate(`Income decile` = formatC(x = `Income decile`, width = 2, flag = "0"))
+
+stations_yearly_4 = stations_yearly_4 %>%
+  mutate(`Income decile` = as.numeric(x = `Income decile`))
+
+
 stations_yearly_4 %>% ggplot() +
-  geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..) * 4), fill = "grey", width = .95) +
-  geom_bar(aes(`Income decile`, p), stat = "identity", fill = "blue", width = .60, alpha = 0.7) +
+  geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..) * 4), 
+           fill = "#bdbdbd", width = .95) +
+  geom_bar(aes(`Income decile`, p), stat = "identity", fill = "#3182bd", width = .60, alpha = 0.7) +
   scale_y_continuous(labels = scales::percent_format()) +
+  scale_x_continuous(breaks = 1:10) +
   facet_wrap(~year) +
   ylab("Proportion of docking stations in each income decile") 
 
+# 1 row version
+stations_yearly_4 %>% ggplot() +
+  geom_bar(data = lsoa_lnd_joined, aes(`Income decile`, y=..count../sum(..count..) * 4), 
+           fill = "#bdbdbd", width = .95) +
+  geom_bar(aes(`Income decile`, p), stat = "identity", fill = "#3182bd", width = .60, alpha = 0.7) +
+  scale_y_continuous(labels = scales::percent_format()) +
+  scale_x_continuous(breaks = 1:10) +
+  facet_wrap(~year, nrow = 1) +
+  ylab("Proportion of docking stations in each income decile") 
 ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 5.5)
+
 magick::image_read("figures/stations-imd-facet-4-grey.png")
 
 # calculate scores 
@@ -199,6 +218,7 @@ m = tm_shape(stations %>% select(operator_name, trips_per_year, trips_per_year_a
               panel.labels = c("AM (06:00 - 10:00)", "PM (16:00 - 20:00)"),
               legend.outside = T, title = "N. trips/year") +
   tm_facets(ncol = 2)
+m
 tmap_save(tm = m, "figures/map-am-pm-peaks.png")
 ```
 
