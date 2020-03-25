@@ -54,6 +54,7 @@ bikeshare_labels = bind_rows(
 bikeshare_table %>% 
   ggplot(aes(Stations, Bicycles)) +
   geom_point(aes(colour = Continent)) +
+  scale_color_brewer(palette="Set1")+
   scale_x_log10() +
   scale_y_log10(labels = scales::comma) +
   ggrepel::geom_label_repel(data = bikeshare_labels, aes(Stations, Bicycles, label = City, fill = col), alpha = 0.5, show.legend = FALSE) +
@@ -97,6 +98,7 @@ bikeshare_growth_continent = bind_rows(bikeshare_growth_continent, latest_dates)
 g1 = bikeshare_growth_continent %>% ggplot(aes(Launched, `Total stations`)) +
   theme(legend.position = c(0.1, 0.8)) +
   geom_line(aes(colour = Continent, group = Continent), size = 2) +
+  scale_color_brewer(palette="Set1")+
   xlim(c(2005, 2020)) +
   ylab("Number of docking stations") +
   theme(legend.position = c(0.1, 0.8))
@@ -114,6 +116,7 @@ g2
 g2 = bikeshare_growth_continent %>% ggplot(aes(Launched, `Total stations`)) +
   geom_line(aes(colour = Continent, group = Continent)) +
   xlim(c(2005, 2020)) +
+  scale_color_brewer(palette="Set1")+
   theme(legend.position = c(0.1, 0.8)) +
   xlab("Year")
 g2

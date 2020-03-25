@@ -45,20 +45,20 @@ if(!file.exists("daily_hires.Rds")) {
 trips_per_day_xls = readRDS("daily_hires.Rds")
 trips_daily = left_join(trips_per_day_xls, trips_per_day)
 
-trips_daily$Monthly_raw = slide::slide_dbl(trips_daily$total_csvs, ~mean(.x, na.rm = TRUE), .before = 30)
-trips_daily$Yearly_raw = slide::slide_dbl(trips_daily$total_csvs, ~mean(.x), .before = 365)
+trips_daily$Monthly_raw = slider::slide_dbl(trips_daily$total_csvs, ~mean(.x, na.rm = TRUE), .before = 30)
+trips_daily$Yearly_raw = slider::slide_dbl(trips_daily$total_csvs, ~mean(.x), .before = 365)
 
 
 g = ggplot(trips_daily, aes(Day, `Number of hires`)) +
-  geom_point(alpha = 0.1, colour = "blue") +
-  geom_line(aes(Day, Monthly), lwd = 0.3, colour = "blue") +
-  geom_line(aes(Day, Yearly), colour = "blue", lwd = 0.3, linetype = 2) +
+  geom_point(alpha = 0.1, colour = "#67000d") +
+  geom_line(aes(Day, Monthly), lwd = 0.5, colour = "#67000d", alpha=0.7) +
+  geom_line(aes(Day, Yearly), colour = "#67000d", lwd = 0.8, linetype = 2) +
   # csv data
-  geom_point(aes(y = total_csvs), colour = "black", alpha = 0.1) +
-  geom_line(aes(Day, Monthly_raw), colour = "black") +
+  geom_point(aes(y = total_csvs), colour = "#252525", alpha = 0.1) +
+  geom_line(aes(Day, Monthly_raw), colour = "#252525", lwd = 0.5,  alpha=0.7) +
   # geom_line(aes(Day, Yearly_raw), colour = "grey", lwd = 1) +
   ylim(c(0, 50000)) +
-  xlim(as.POSIXlt(c("2010-01-01", "2019-10-01"))) +
+  #xlim(as.POSIXlt(c("2010-01-01", "2019-10-01"))) +
   ylab("Number of cycle hire events per day") +
   # scale_x_continuous(breaks = 2010:2020)
   # scale_x_date(breaks = lubridate::ymd(paste0(2010:2020, "-01-01")))

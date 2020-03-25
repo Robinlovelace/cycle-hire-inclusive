@@ -307,9 +307,14 @@ See https://madeby.tfl.gov.uk/2019/08/09/cycle-hire-trivia-and-facts/ for more c
 ]
 The stated aim was to provide "a major new form of public transport in London, delivering an additional 40,000 cycle trips per day" [@transport_for_london_cycling_2010] (currently the scheme averages 30,000 hires per day over the year, around double the initial level of usage, with peaks over 45,000 trips on busy summer days).
 Although the scheme currently delivers only around 0.1% of trips in Greater London overall, it serves a much higher percentage of trips in the congested central areas during the vital rush hours.
-By providing a new form of transport targeting commuters, another important aim was to relieve peak capacity constraints on the tube and bus network.^[
+By providing a new form of transport targeting commuters, another important aim was to relieve peak capacity constraints on the tube and bus network^[
 ‘We want thousands of commuters to switch to bikes for the last stage of their journeys to work, significantly relieving pressure on the Tube and bus networks in central London.’ https://www.london.gov.uk/sites/default/files/cycling_vision_gla_template_final.pdf
-]
+]. It should be noted that in recent years new bikeshare operators have established themselves in London, many of which offering more flexible dockless usage. Whilst these schemes offer exciting opportunities for analysis -- many contain in-built GPS recording users' full journey trajectories -- the Santander scheme remains by far the largest and most widely used  \@ref(fig:cycle-hire-players).
+
+```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="A summary of bishare schemes operating in London. Bars are sized by number of bikes and colouted according to the year in which the scheme was introduced.", fig.show='hold'}
+knitr::include_graphics("figures/london-bike-hire-players.png")
+```
+
 
 ```{r, echo=FALSE, eval=FALSE}
 # what % of trips in London are made by bikeshare?
