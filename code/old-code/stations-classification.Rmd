@@ -285,7 +285,9 @@ mapview::mapview(stations_150m_buffer)
 
 # aim: get to trips per person within 200m per docking station
 # geofrabric method fails - see https://github.com/ITSLeeds/geofabric/issues/16
-lnd_osm = ukboundaries::duraz("http://download.geofabrik.de/europe/great-britain/england/greater-london-latest-free.shp.zip")
+if(!file.exists("gis_osm_buildings_a_free_1.shp")) {
+  lnd_osm = ukboundaries::duraz("http://download.geofabrik.de/europe/great-britain/england/greater-london-latest-free.shp.zip")
+}
 lnd_osm = sf::read_sf("gis_osm_buildings_a_free_1.shp")
 lnd_osm_stations = lnd_osm[stations_region, ]
 plot(lnd_osm_stations$geometry)

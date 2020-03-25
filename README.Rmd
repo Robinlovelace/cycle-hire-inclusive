@@ -1,7 +1,7 @@
 ---
 output:
-    github_document
-   # bookdown::pdf_document2:
+    # github_document
+   bookdown::pdf_document2:
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -48,6 +48,7 @@ f = "sdf.geojson"
 <!-- You can do this starting with a 5% sample of the raw cycle hire trip records as follows: -->
 
 ```{r, eval=FALSE}
+devtools::load_all()
 devtools::install_github("robinlovelace/cycle-hire-inclusive")
 ```
 
@@ -62,13 +63,14 @@ source("R/plan.R")
 plan
 ```
 
+<!-- To get the full input dataset, download the following file: https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/recoded_data.Rds -->
 <!-- To reproduce all the results in the paper, you can make the plan with: -->
 
 ```{r, eval=FALSE}
 drake::make(plan)
 ```
 
-Visualise the build and a sample of the data from the project as follows:
+<!-- Visualise the build and a sample of the data from the project as follows: -->
 
 ```{r, eval=FALSE}
 drake::vis_drake_graph(plan, targets_only = TRUE, make_imports = FALSE)

@@ -10,6 +10,8 @@ of the shifting spatial distribution of uptake based on 70 million trips
 
 <!-- You can do this starting with a 5% sample of the raw cycle hire trip records as follows: -->
 
+<!-- To get the full input dataset, download the following file: https://github.com/Robinlovelace/cycle-hire-inclusive/releases/download/0.0.1/recoded_data.Rds -->
+
 <!-- To reproduce all the results in the paper, you can make the plan with: -->
 
 Visualise the build and a sample of the data from the project as
@@ -108,7 +110,8 @@ in the next section, the paper describes the LCHS in detail, outlines
 methods for comparing usage levels over time across geographic areas,
 and presents the findings. We discuss the findings in relation to
 pressing policy and research questions and conclude with recommendations
-for transport policymakers and researchers.
+for transport policymakers and
+researchers.
 
 # Background
 
@@ -121,9 +124,21 @@ have been in operation since 1995, with the launch of a scheme in
 Copenhagen (DiDonato, Herbert, and Vachhani 2002). They have taken off
 since the early 2000s, with the greatest absolute period of growth
 occurring between around 2010 and 2015, after which the rate of new
-installations has dropped off (Figure @ref(fig:global-growth)).
+installations has dropped off (Figure
+@ref(fig:global-growth)).
 
-<img src="figures/bikehshare-global-stations-growth.png" title="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent." alt="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent." width="80%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikehshare-global-stations-growth.png" alt="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent." width="80%" />
+
+<p class="caption">
+
+Growth in docked cycle hire schemes worldwide in terms of docking
+stations by continent.
+
+</p>
+
+</div>
 
 European cities pioneered shared cycle mobility, with schemes in cities
 such as Amsterdam (The Netherlands) and Renne (France) demonstrating the
@@ -137,9 +152,21 @@ substantial interest in docked cycle hire schemes, although on a smaller
 scale than those in Europe and Asia, and a handful of cycle hire schemes
 have been launched in Australia. Within this global overview, the London
 BSS is an important player, ranking 8th in the top schemes by number of
-docking stations and launching relatively early in 2010.
+docking stations and launching relatively early in
+2010.
 
-<img src="figures/bikehshare-global-stations-bicycles.png" title="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles." alt="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles." width="80%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikehshare-global-stations-bicycles.png" alt="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles." width="80%" />
+
+<p class="caption">
+
+Cycle hire schemes worldwide by continent, comparing number of docking
+stations with number of cycles.
+
+</p>
+
+</div>
 
 ## Determinants of cycle hire scheme usage
 
@@ -152,7 +179,7 @@ own a bicycle (Ogilvie and Goodman 2012; Fishman, Washington, and
 Haworth 2013; Zhao et al. 2019; Soltani et al. 2019; Heinen,
 Kamruzzaman, and Turrell 2018). These socio-economic characteristics may
 seem <!--are--> similar to those that are generally linked to cycling
-(see e.g. Heinen, Wee, and Maat 2010).
+(see e.g. Heinen, Wee, and Maat 2010).
 <!-- A survey by shared mobility organisation CoMoUK found that 21% of BSS users in the UK were on an income of less than £20,000, 9% on an income of less than £10,000, and less than 1% were unemployed.^[ -->
 <!-- See https://como.org.uk/wp-content/uploads/2019/10/CoMoUK-Bike-Share-Survey-2019-web-2.pdf -->
 <!-- ] -->
@@ -165,7 +192,7 @@ However, some research reveals certain differences between cyclists
 using BSS and ‘normal’ cyclists that imply BSS can open up cycling to a
 wider range of users.
 <!-- @buck_are_2013, for example, report that in Washington, D.C., BSS users are more likely to be female, younger, from lower (household) income backgrounds, and own fewer cars and bicycles than other cyclists. -->
-Buck et al. (2013, 112) found in the Washington, D.C., region that,
+Buck et al. (2013, 112) found in the Washington, D.C., region that,
 compared with regular cyclists, bike-share users “are more likely
 female, younger, have lower household incomes, own fewer cars and fewer
 bicycles, and are more likely to cycle for utilitarian trip purposes”.
@@ -195,9 +222,10 @@ American Bicyclists and Club 2015; Sustrans 2019). In Boston, Chicago,
 Denver, Seattle, and New York City (US), Aultman-Hall and Ursaki (2015)
 found significant differences in access based on race and income
 variables. In Porto Alegre, Recife, Rio, Salvador and Sao Paulo
-(Brazil), Duran et al. (2018) found that the coverage of bicycle-sharing
+(Brazil), Duran et al. (2018) found that the coverage of bicycle-sharing
 systems favoured wealthier and centrally located neighborhoods with
-higher proportion of white population.
+higher proportion of white
+population.
 
 ## Bicycle sharing schemes, transport equity and social inclusion
 
@@ -270,7 +298,7 @@ Accessibility to and awareness of BSS is also not equally spread across
 the population. Areas with no docking stations have been found to have
 lower levels of awareness of shared mobility as a transport option
 (Bernatchez et al. 2015). BSSs tend to be more easily accessible to
-higher socio-economic groups (e.g. Ricci 2015) and one reason offered
+higher socio-economic groups (e.g. Ricci 2015) and one reason offered
 for this is that stations may not be placed in less economically
 advantaged areas. Ogilvie and Goodman (2012) reported that registered
 users of the London scheme were more likely to live in socioeconomically
@@ -379,9 +407,26 @@ the LCHS, including:
     @ref(fig:cycle-hire-chart-daily).
   - Expansion in December 2013 West and Southwest
     <!-- London ?? bikes and ?? docking stations, --> corresponding with
-    a step change in the annual average number of hires after 2014.
+    a step change in the annual average number of hires after
+2014.
 
-<img src="figures/cycle-hire-chart-daily.png" title="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" style="display: block; margin: auto;" /><img src="figures/overview-2019.png" title="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/cycle-hire-chart-daily.png" alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" /><img src="figures/overview-2019.png" alt="Top: Number of cycles hired per day across the London Cycle Hire Scheme, with TfL daily totals in blue and the totals from the individual trip records in black, translucent dots representing daily counts, the solid blue line representing the monthly (30 day) rolling average and dashed blue line representing the yearly rolling average. Bottom: the extent of the scheme in 2019 (see https://i.imgur.com/1rAfJgZ.gif for an animated version of the map)." width="70%" />
+
+<p class="caption">
+
+Top: Number of cycles hired per day across the London Cycle Hire Scheme,
+with TfL daily totals in blue and the totals from the individual trip
+records in black, translucent dots representing daily counts, the solid
+blue line representing the monthly (30 day) rolling average and dashed
+blue line representing the yearly rolling average. Bottom: the extent of
+the scheme in 2019 (see <https://i.imgur.com/1rAfJgZ.gif> for an
+animated version of the map).
+
+</p>
+
+</div>
 
 <!-- reference needed -->
 
@@ -416,9 +461,20 @@ income, there were significant differences between casual users (which
 in 2017 represented 41% of all users) and member users. While casual
 users were from all income levels in similar proportions (except for a
 small greater proportion of those between £20k-£40k), members were
-mostly the wealthiest populations (see figure 4).
+mostly the wealthiest populations (see figure
+4).
 
-<img src="figures/profile_users_lchs.png" title="Profile of the casual users and members of the LCHS" alt="Profile of the casual users and members of the LCHS" width="70%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/profile_users_lchs.png" alt="Profile of the casual users and members of the LCHS" width="70%" />
+
+<p class="caption">
+
+Profile of the casual users and members of the LCHS
+
+</p>
+
+</div>
 
 A question that has not yet been addressed, however, is has the LCHS
 *become more equal* over time? Of course, this is a broad and to some
@@ -433,7 +489,8 @@ questions are:
 > Since the LCHS scheme was expanded in 2014, has the geographic
 > distribution of docking stations and usage become more equal, and has
 > the uptake of use at docking stations in low income areas exceeded
-> growth in the scheme overall?
+> growth in the scheme
+overall?
 
 <!-- * Network of docking stations is reasonably dense -- neighbouring docking stations located no more than 300m from one another. -->
 
@@ -510,7 +567,20 @@ associated docking station (see Figure
 @ref(fig:bikeshare-resi-buildings)).
 <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
-<img src="figures/bikeshare-resi-buildings.png" title="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red." alt="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red." width="70%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/bikeshare-resi-buildings.png" alt="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red." width="70%" />
+
+<p class="caption">
+
+Method for estimating the residential population with access to docking
+stations within 150m. Blue shade represents the population in each
+Output Area, buildings are in green and buildings near docking stations
+are in red.
+
+</p>
+
+</div>
 
 Official population data from the 2011 Census were collected at Output
 Area and 2015 estimates of the Index of Multiple Deprivation and income
@@ -540,11 +610,23 @@ comparison between morning and afternoon usage patterns highlights the
 reasons for this emphasis: in the afternoon peak (16:00 to 20:00) many
 trips represent people renting cycles in the centre for the return leg
 of their journey and many more tourist and leisure trips are taken by
-non-residents during this time (see Figure @ref(fig:map-am-pm-peaks)).
+non-residents during this time (see Figure
+@ref(fig:map-am-pm-peaks)).
 
 <!-- todo: how the data were analysed (from Eva) -->
 
-<img src="figures/map-am-pm-peaks.png" title="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks" alt="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks" width="100%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/map-am-pm-peaks.png" alt="Spatial distribution of cycle hire points of origin during the morning and afternoon peaks" width="100%" />
+
+<p class="caption">
+
+Spatial distribution of cycle hire points of origin during the morning
+and afternoon peaks
+
+</p>
+
+</div>
 
 # Results
 
@@ -564,9 +646,27 @@ interesting to note that these demographically diverse geographic
 outliers were selected instead of more geographically central areas such
 as Bermondsey (on the South bank of the River Thames to the East),
 leading to the ‘why the gap’ campaign for the scheme to be expanded into
-this part of the city.\[8\]
+this part of the
+city.\[8\]
 
-<img src="figures/facet-imd.png" title="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" style="display: block; margin: auto auto auto 0;" /><img src="figures/stations-imd-facet-4-grey.png" title="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" style="display: block; margin: auto auto auto 0;" />
+<div class="figure" style="text-align: left">
+
+<img src="figures/facet-imd.png" alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" /><img src="figures/stations-imd-facet-4-grey.png" alt="Changes in the spatial and social distribution of docking stations over time, 2010-2019, showing four stages of expansion. Zone colour represents income decile, with 1 (white) representing the lowest income areas and 10 represents (blue) wealthy areas (top). The percentage of docking station in each income decile over time (blue) overlaying a representative distribution of income deciles for London (grey) for the same years (bottom). Note: a distribution representative of national income levels would be flat." width="50%" />
+
+<p class="caption">
+
+Changes in the spatial and social distribution of docking stations over
+time, 2010-2019, showing four stages of expansion. Zone colour
+represents income decile, with 1 (white) representing the lowest income
+areas and 10 represents (blue) wealthy areas (top). The percentage of
+docking station in each income decile over time (blue) overlaying a
+representative distribution of income deciles for London (grey) for the
+same years (bottom). Note: a distribution representative of national
+income levels would be flat.
+
+</p>
+
+</div>
 
 Figure @ref(fig:facet-map) (bottom) shows the percentage of docking
 stations associated with each income decile each of the four years
@@ -579,7 +679,8 @@ associated with docking stations has dropped from 5.7 to 4.9 since the
 scheme’s inception and the standard deviation has increased slightly
 from 2.87 income deciles to 2.94. The question remains whether this
 increased provision of docking stations in low income areas also
-coincided with increased used in those areas?
+coincided with increased used in those
+areas?
 
 <!-- Be good to compare this to the distribution for London as a whole -- e.g. how representative provision is of the London  population? It looks like, if anything, the distribution is becoming *less* diverse -- more polarised around very low and high deprivation. However, I suspect this may be more reflective of how LSOAs distribute in London on IMD -- in which case the argument that the provision is become more *representative* of London's socio-economic geography can be made in a compelling way. -->
 
@@ -606,13 +707,27 @@ docking stations in zones with an income decile of 4 (slightly below
 mean income) which have high levels of usage per resident person per
 year and docking stations in zones with an income decile of 7 (slightly
 above average income), which are associated with relatively low levels
-of usage. But how has usage changed over time?
+of usage. But how has usage changed over
+time?
 
 <!-- So I think these become a little challenging to interpret due to the dominant non-London commuter and tourist users -- the fact that a very large share of trips are made by non-residents. For this reason the residential/non-residential station allocation may be instructive, certainly the am-peak-time focus is good. However, I wonder whether we should be doing change-over-time comparison on these. E.g. are there changes to the relative number of trips originating from more/less deprived stations? -- it would be similar to the small multiple plot by IMD, but separate line for each docking station
 I think it's worth exploring how this changes over time, but maybe one for after the reviewer's comments
 -->
 
-<img src="figures/income-decile-am-pm-boxplot_minor.png" title="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks." alt="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks." width="70%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/income-decile-am-pm-boxplot_minor.png" alt="Boxplot showing docking station usage (y axis) by income decile of nearest residential areas (x axis, right is wealthier) during the morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00 to 20:00) peaks." width="70%" />
+
+<p class="caption">
+
+Boxplot showing docking station usage (y axis) by income decile of
+nearest residential areas (x axis, right is wealthier) during the
+morning (top panel, 06:00 to 10:00) and afternoon (bottom panel, 16:00
+to 20:00) peaks.
+
+</p>
+
+</div>
 
 ## Changes in usage over time
 
@@ -655,7 +770,8 @@ increases in trip frequencies for docking stations in these boroughs
 perhaps suggests a more utilitarian and residential usage characteristic
 than the dominant stereotype for the LCHS of the rail commuter making
 regular peak-time journeys between hub stations or the tourist using
-making occasional leisure journeys in London’s parks.
+making occasional leisure journeys in London’s
+parks.
 
 <!-- This shows a mixed pattern, with growth in the diverse Hackney and Camden boroughs and steady or falling levels in the wealthy central and Westminster boroughs.
 Tower Hamlets, a borough with many low income areas, saw steady levels of use over time. -->
@@ -666,11 +782,45 @@ The increases in AM peak-time trips starting at docking stations located in the 
 Continued gradual increases from 2016 to 2018 can be seen from docking stations associated with income deciles 1 to 4.
 More gradual increases are visible in mid-to-high income areas (5th to 8th income deciles); the docking stations associated with the wealthiest areas (in close proximity to zones in the 10th income decile) shows relatively little change. -->
 
-<img src="figures/daily_hires_station_imd_minor.png" title="Rolling daily trip counts by income decile (red) and docking stations within income deciles (grey) for 2012-2019. Frequencies are locally scaled by income decile and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples from lowest (1) to highest (10) income deciles. Grey fill within each decile plot varies according to overall trip counts originating from dockin stations in that decile" alt="Rolling daily trip counts by income decile (red) and docking stations within income deciles (grey) for 2012-2019. Frequencies are locally scaled by income decile and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples from lowest (1) to highest (10) income deciles. Grey fill within each decile plot varies according to overall trip counts originating from dockin stations in that decile" width="100%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/daily_hires_station_imd_minor.png" alt="Rolling daily trip counts by income decile (red) and docking stations within income deciles (grey) for 2012-2019. Frequencies are locally scaled by income decile and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples from lowest (1) to highest (10) income deciles. Grey fill within each decile plot varies according to overall trip counts originating from dockin stations in that decile" width="100%" />
+
+<p class="caption">
+
+Rolling daily trip counts by income decile (red) and docking stations
+within income deciles (grey) for 2012-2019. Frequencies are locally
+scaled by income decile and docking station and with a 365-day
+smoothing. Docking stations are ordered within small multiples from
+lowest (1) to highest (10) income deciles. Grey fill within each decile
+plot varies according to overall trip counts originating from dockin
+stations in that
+decile
+
+</p>
+
+</div>
 
 <!-- Todo: delete or act on this comment from RB: So next to each facet, we should probably show a map of docking stations -- relate decile groups to real geog of London -->
 
-<img src="figures/daily_hires_station_bor_minor.png" title="Rolling daily trip counts by London borough (red) and for stations within London boroughs (grey) for 2012-2019. Frequencies are locally scaled by London borough and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" alt="Rolling daily trip counts by London borough (red) and for stations within London boroughs (grey) for 2012-2019. Frequencies are locally scaled by London borough and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" width="100%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/daily_hires_station_bor_minor.png" alt="Rolling daily trip counts by London borough (red) and for stations within London boroughs (grey) for 2012-2019. Frequencies are locally scaled by London borough and docking station and with a 365-day smoothing. Docking stations are ordered within small multiples according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" width="100%" />
+
+<p class="caption">
+
+Rolling daily trip counts by London borough (red) and for stations
+within London boroughs (grey) for 2012-2019. Frequencies are locally
+scaled by London borough and docking station and with a 365-day
+smoothing. Docking stations are ordered within small multiples according
+to the approximate geographic location of London boroughs. Grey fill
+within each borough varies according to overall trip counts originating
+from that
+borough
+
+</p>
+
+</div>
 
 <!-- [I wonder whether time series analysis has summary statistics that we can use to describe *amount* of seasonality and *daily* variability. Generating these for each borough and IMD level might be instructive in allowing us to make claims about usage characteristics -- especially if we were able to calculate these using a moving window and show change over time. I tried to do this already mind with the trip typology analysis and this wasn't particularly illuminating.] -->
 
@@ -694,7 +844,22 @@ with large and increasing numbers of weekend trips, suggesting that use
 of the scheme for *leisure* trips may not merely be the preserve of
 tourists.
 
-<img src="figures/trip_types_by_borough_minor.png" title="Rolling daily trip counts by trip type in London boroughs for 2012-2019. Frequencies are locally scaled by London borough and with a 365-day smoothing. Small multiples are ordered according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" alt="Rolling daily trip counts by trip type in London boroughs for 2012-2019. Frequencies are locally scaled by London borough and with a 365-day smoothing. Small multiples are ordered according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" width="100%" style="display: block; margin: auto;" />
+<div class="figure" style="text-align: center">
+
+<img src="figures/trip_types_by_borough_minor.png" alt="Rolling daily trip counts by trip type in London boroughs for 2012-2019. Frequencies are locally scaled by London borough and with a 365-day smoothing. Small multiples are ordered according to the approximate geographic location of London boroughs. Grey fill within each borough varies according to overall trip counts originating from that borough" width="100%" />
+
+<p class="caption">
+
+Rolling daily trip counts by trip type in London boroughs for 2012-2019.
+Frequencies are locally scaled by London borough and with a 365-day
+smoothing. Small multiples are ordered according to the approximate
+geographic location of London boroughs. Grey fill within each borough
+varies according to overall trip counts originating from that
+borough
+
+</p>
+
+</div>
 
 <!-- ## A case study of two boroughs -->
 
@@ -747,11 +912,10 @@ contains less than 2000 people), the study lacks demographic data at
 level of individual bikeshare users. We know very little about the
 income (and other) characteristics of users *compared with the
 demographic profile of their local area*. Could the high rates of growth
-in low income areas reflect the behaviour of more affluent people
-(e.g. ‘hipsters’) living in low income areas? Likewise, are the
-bikeshare users (especially those living in prosperous areas) on
-relatively low incomes, reflecting ‘micro-segregation’ (Keddie and
-Tonkiss 2010)?
+in low income areas reflect the behaviour of more affluent people (e.g.
+‘hipsters’) living in low income areas? Likewise, are the bikeshare
+users (especially those living in prosperous areas) on relatively low
+incomes, reflecting ‘micro-segregation’ (Keddie and Tonkiss 2010)?
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
 Answers to such questions are outside the scope of this paper. However,
 given the consistentcy of growth in a range of low income areas and
@@ -796,7 +960,8 @@ that are accessible to everyone? Regardless of the answers to these
 emerging questions, the paper provides a counterpoint to the notion that
 cycle hire schemes only benefit affluent areas and their populations,
 and suggests that interventions to expand access into poorer areas of
-major cities can work.
+major cities can
+work.
 
 <!-- ## Analysis -->
 
@@ -1356,7 +1521,7 @@ Nanjing, China.” *Transportation Research Part A: Policy and Practice*
 
 3.   Although Bell (2016) is focussed on the British influence, many of
     the paper’s main points are particularly relevant to London. In
-    terms of tourism, London attracts \~30 million visitors each year
+    terms of tourism, London attracts ~30 million visitors each year
     according [London’s Economic
     Plan](http://www.uncsbrp.org/tourism.htm).
 
