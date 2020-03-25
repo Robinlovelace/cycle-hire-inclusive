@@ -665,16 +665,23 @@ Time series plots disaggregated by income decile and geographic location reveal 
 The _relatively_ lower income boroughs of Lambeth and Southwark have, for example, experienced high rates of growth compared with high income areas in Westminster and Kensington, especially during the morning rush hour when users are most likely to be local residents.
 <!-- ## Research limitations -->
 The conclusion that we take from the research (expanded on in the next section) is that shared mobility policies, and BSS in particular, can succeed in low income areas.
-However, there are some limitations to the study that should be considered before generalising the findings.
 
-The first limitation relates to the measure of income.
-Although the geographic resolution of analysis was relatively high (each LSOA zone contains less than 2000 people), the study lacks demographic data at level of individual bikeshare users.
-We know very little about the income (and other) characteristics of users *compared with the demographic profile of their local area*.
+There are some limitations to the study that should be considered before attempting to generalise the findings, however.
+The first limitation relatest to the level of analysis: although the geographic resolution of analysis was relatively high (each LSOA zone contains less than 2000 people), the study lacks demographic data at level of individual bikeshare users.
+We know very little about the income (and other) characteristics of users *compared with the demographic profile of their local area*, raising the following question:
 Could the high rates of growth in low income areas reflect the behaviour of more affluent people (e.g. 'hipsters') living in low income areas?
-Likewise, are the bikeshare users (especially those living in prosperous areas) on relatively low incomes, reflecting 'micro-segregation' [@keddie_market_2010]?
-<!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
+
 Answers to such questions are outside the scope of this paper.
-However, given the consistentcy of growth in a range of low income areas and considering the finances (£2 for 24 hour bikeshare access vs £4.80+ for a single tube ticket), our hypothesis is that future research will find that people on low incomes *are* using the LCHS and other BSS where provision is evenly distributed geographically, and fairly priced.
+However, given the consistency of growth in a range of low income areas and considering the finances (£2 for 24 hour bikeshare access vs £4.80+ for a single tube ticket), our hypothesis is that future research will find that people on low incomes *are* using the LCHS and other BSS where provision is evenly distributed geographically, and fairly priced.
+Figure \@ref(fig:profile-users-lchs) shows that although the income profile of casual users is relatively flat, LCHS members tend to be relatively wealthy, with the majority falling into the £75k+ income category.
+Follow-on research could explore the extent to which growth in cycle usage in relativley low income areas is driven by wealthy new members or casual users on low incomes.
+Furthermore, although the analysis uses small areas as the basis of the analyis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
+<!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
+
+Methodological advances could also help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
+Although income estimates are rarely available for small areas in cities internationally, new methods for estimating wealth and deprivation [@jean_combining_2016] could support further international comparative research into inequalities in cycle hire schemes.
+Finally, there is great potential for further technical and software development work, to make cycle hire research more accessible and reproducible.
+Building on the the **bikedata** R package, future work could develop tools that automate time-consuming parts of the analysis, allowing future research to focus on the policy issues rather than the time-consuming yet vital data cleaning and analysis stages in cycle hire research.
 
 # Conclusion
 
