@@ -112,7 +112,7 @@ system("cat cycle-hire.bib >> /tmp/allrefs.bib")
 citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "/tmp/allrefs.bib", file = "cycle-hire.bib") # works but slow
 ```
 
-\newpage
+<!-- \newpage -->
 
 # Abstract {-}
 
@@ -423,55 +423,28 @@ The research questions are:
 # Data and methods
 
 The methods reflected the available datasets on the LCHS, which were large and messy.
-We used R [@R-base]
+We used the open source statistical environment R [@R-base] for the analysis, making use of packages such as **sf** and **ggplot2** for geographic analysis and visualisation, respectively [@pebesma_simple_2018; @ggplot2].
+To ensure reproducibility and encourage others to build on the work we have done, saving time spent on data cleaning, the code underlying the analysis presented in this paper has been made freely available for others to learn from and use (see [github.com/to-be-confirmed](https://github.com)). 
+A detailed account of the input datasets and methods used to characterise shifting trip patterns are provided below.
 
+[Note: this repository will be made available on publication.]
 
-
-## London Cycle Hire trip data
+## Trip and docking station datasets
 
 Data on docking stations was provided by the Consumer Data Research Centre ([data.cdrc.ac.uk](https://data.cdrc.ac.uk/product/ffc94eb2-baf0-46f9-bf7d-5e8dd424b95d?accesslevel=open&q=&sort=title_string+asc)).
 This was provided in a '.csv' file containing 1,130 rows with 19 variables including docking station ID, name, location coordinates and its opening date.
-The other key dataset used in this study was Origin-Destination (OD) trip data, published by [Transport for London](https://cycling.data.tfl.gov.uk) and made easily accessible via the [bikedata](https://github.com/ropensci/bikedata) R package [@padgham_bikedata:_2017]. Both datasets can be linked via a docking station ID. In the _trips_ table, the origin and destination docking station and corresponding timestamps is recorded. The _docking station_ table contains IDs, names and geographic coordinates for each docking station. For each trip in the _trips_ table, the origin and destination docking station is linked to the _docking station_ table via the _docking station id_ variable.
-After cleaning the database to remove duplicate trips and ensure that records omitted from the bikedata package (version `0.2.3`),
-<!-- which records were these? didn't realise we added additional records to those made available in bikedata (were theses the pre-2012 records?), -->
- 71 million trips were recorded, from January 2012 until June 2019.
- <!-- Calculating trip frequencies by OD pair and displaying those left-to-right  (Figure \@ref(fig:rank-size)) reveals a fmiliar pareto-type distribution: a small number of cycle hire OD pairs account for a high proportion of the trips. -->
-<!-- Include table here with sample of trip and docking station data? -->
-<!-- As illustrated in Figure \@ref(fig:stations-powerlaw), -->
-<!-- The distribution of trips is well approximated by a power law. -->
-<!-- ref? -->
+The other key dataset used in this study was Origin-Destination (OD) trip data, published by [Transport for London](https://cycling.data.tfl.gov.uk) and accessed via the [bikedata](https://github.com/ropensci/bikedata) R package [@padgham_bikedata:_2017].
+Both datasets were linked via a docking station ID.
+In the _trips_ table, the origin and destination docking station and corresponding timestamps is recorded.
+The _docking station_ table contains IDs, names and geographic coordinates for each docking station.
+A script was developed to clean the raw data, to remove duplicate trips and ensure that records omitted from the bikedata package (version `0.2.3`) were included in the analysis.
+In total 73.4 million trips, with known start and end points, were recorded from January 2012 until the end for December 2020 (see Figure \@ref(fig:cycle-hire-chart-daily)).
 
-```{r rank-size, out.width="60%", fig.cap="Rank-size distribution of OD pairs for all cycled trips on London Cycle Hire Scheme", eval=FALSE}
-knitr::include_graphics("figures/rank_size.png")
+```{r, echo=FALSE, eval=FALSE}
+# trips_df = drake::readd(trips)
+nrow(trips_df)
 ```
 
-
-```{r stations-powerlaw, eval=TRUE, fig.cap="Cumulative distribution function plot, showing the rank of station popularity (x axis) in relation to the log of trip counts originating in different stations.", out.width="100%", fig.height=4}
-# stations = sf::read_sf("stations_imd_pop.geojson")
-# stations = stations %>% filter(!is.na(total_n_trips_start), total_n_trips_start > 1000)
-# stations$ln_n_trips = log10(stations$total_n_trips_start)
-# stations$rank = (rank(stations$total_n_trips_start))
-# p1 = ggplot(stations) + geom_point(aes(rank, ln_n_trips))
-# stations_resi = sf::read_sf("stations_residential.geojson")
-# stations$residential = stations$id %in% stations_resi$id
-# stations$ln_n_trips = log10(stations$total_n_trips_start)
-# stations$rank = (rank(stations$total_n_trips_start))
-# # ggplot(stations) + geom_point(aes(rank, ln_n_trips, colour = residential))
-# # plot(ln_rank, ln_n_trips)
-# library(poweRlaw)
-# m_bl = conpl$new(stations$total_n_trips_start)
-# est = estimate_xmin(m_bl)
-# m_bl$setXmin(est)
-# est = estimate_xmin(m_bl)
-# m_bl$setXmin(est)
-# plot(m_bl)
-# lines(m_bl, col=2, lwd = 2)
-# m_bl_ln = conlnorm$new(stations$total_n_trips_start)
-# est = estimate_xmin(m_bl_ln)
-# m_bl_ln$setXmin(est)
-# lines(m_bl_ln, col=3, lwd=2)
-# knitr::include_graphics("README_files/figure-gfm/stations-powerlaw-1.png")
-```
 
 ## Characterising residential users
 
