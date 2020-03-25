@@ -107,7 +107,9 @@ ref_df = as.data.frame(refs)
 # View(ref_df)
 RefManageR::WriteBib(refs, "references.bib")
 # citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "references.bib") # fails
-# citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "~/data/allrefs.bib", file = "references.bib") # works but slow
+system("cp ~/uaf/allrefs.bib /tmp/allrefs.bib")
+system("cat cycle-hire.bib >> /tmp/allrefs.bib")
+citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "/tmp/allrefs.bib", file = "cycle-hire.bib") # works but slow
 ```
 
 \newpage
@@ -420,9 +422,15 @@ The research questions are:
 
 # Data and methods
 
+The methods reflected the available datasets on the LCHS, which were large and messy.
+We used R [@R-base]
+
+
+
 ## London Cycle Hire trip data
 
-Data on docking stations was provided by the Consumer Data Research Centre, which provided a '.csv' file containing 1,130 rows with 19 variables including docking station ID, name, location coordinates and its opening date.
+Data on docking stations was provided by the Consumer Data Research Centre ([data.cdrc.ac.uk](https://data.cdrc.ac.uk/product/ffc94eb2-baf0-46f9-bf7d-5e8dd424b95d?accesslevel=open&q=&sort=title_string+asc)).
+This was provided in a '.csv' file containing 1,130 rows with 19 variables including docking station ID, name, location coordinates and its opening date.
 The other key dataset used in this study was Origin-Destination (OD) trip data, published by [Transport for London](https://cycling.data.tfl.gov.uk) and made easily accessible via the [bikedata](https://github.com/ropensci/bikedata) R package [@padgham_bikedata:_2017]. Both datasets can be linked via a docking station ID. In the _trips_ table, the origin and destination docking station and corresponding timestamps is recorded. The _docking station_ table contains IDs, names and geographic coordinates for each docking station. For each trip in the _trips_ table, the origin and destination docking station is linked to the _docking station_ table via the _docking station id_ variable.
 After cleaning the database to remove duplicate trips and ensure that records omitted from the bikedata package (version `0.2.3`),
 <!-- which records were these? didn't realise we added additional records to those made available in bikedata (were theses the pre-2012 records?), -->
