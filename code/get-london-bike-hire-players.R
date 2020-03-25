@@ -18,3 +18,4 @@ ggplot(bike_companies) +
 ggsave("figures/london-bike-hire-players.png")
 
 bike_companies$N_bikes[1] / sum(bike_companies$N_bikes)
+
