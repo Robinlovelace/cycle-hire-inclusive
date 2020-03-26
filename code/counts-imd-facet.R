@@ -40,24 +40,24 @@ daily_hires_imd_station <- daily_hires %>%
 # Recode and label imd variable for charting.
 daily_hires_imd <- daily_hires_imd %>% ungroup() %>%
   mutate(
-    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6", imd == 7 ~ "7", imd == 8 ~ "8", 
+    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6 - mid deprivation", imd == 7 ~ "7", imd == 8 ~ "8", 
                   imd == 9 ~ "9", TRUE ~ "10 - least deprivation"),
     imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid deprivation",
-                             "6", "7", "8", "9", "10 - least deprivation"))
+                             "6 - mid deprivation", "7", "8", "9", "10 - least deprivation"))
   )
 daily_hires_imd_station <- daily_hires_imd_station %>%
   mutate(
-    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6", imd == 7 ~ "7", imd == 8 ~ "8", 
+    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6 - mid deprivation", imd == 7 ~ "7", imd == 8 ~ "8", 
                   imd == 9 ~ "9", TRUE ~ "10 - least deprivation"),
     imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid deprivation",
-                             "6", "7", "8", "9", "10 - least deprivation")))
+                             "6 - mid deprivation", "7", "8", "9", "10 - least deprivation")))
 imd_count <- daily_hires_imd %>% group_by(imd) %>% summarise(count=sum(count))
 imd_count <- imd_count %>%
   mutate(
-    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6", imd == 7 ~ "7", imd == 8 ~ "8", 
+    imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6 - mid deprivation", imd == 7 ~ "7", imd == 8 ~ "8", 
                   imd == 9 ~ "9", TRUE ~ "10 - least deprivation"),
     imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid deprivation",
-                             "6", "7", "8", "9", "10 - least deprivation"))
+                             "6 - mid deprivation", "7", "8", "9", "10 - least deprivation"))
   )
 
 
