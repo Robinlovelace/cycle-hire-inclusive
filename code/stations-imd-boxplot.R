@@ -9,10 +9,10 @@ stations <- stations %>%
 stations <- stations %>%
   mutate(
   imd=Income.decile,
-  imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid deprivation", imd == 6 ~ "6", imd == 7 ~ "7", imd == 8 ~ "8", 
+  imd=case_when(imd == 1 ~ "1 - most deprivation", imd == 2 ~ "2", imd == 3 ~ "3", imd == 4 ~ "4", imd == 5 ~ "5 - mid", imd == 6 ~ "6 - mid", imd == 7 ~ "7", imd == 8 ~ "8", 
                 imd == 9 ~ "9", TRUE ~ "10 - least deprivation"),
-  imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid deprivation",
-                           "6", "7", "8", "9", "10 - least deprivation"))
+  imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid",
+                           "6 - mid", "7", "8", "9", "10 - least deprivation"))
   )
 
 theme_set(theme_minimal(base_family="Avenir Book"))
@@ -30,12 +30,14 @@ plot <- stations %>%
   geom_jitter(position=position_jitter(0.2), alpha=0.1)+
   facet_wrap(~trip_type, nrow=2, scales="free_y")+
   theme(
-    strip.text.x=element_text(size = 10),
+    strip.text.x=element_text(size = 11),
+    axis.text.x = element_text(size = 10),
+    axis.text.y = element_text(size = 10),
     axis.title.x = element_blank(),
     axis.title.y = element_blank()
   )
   
-ggsave("./figures/income-decile-am-pm-boxplot_minor.png", plot=plot, width = 10, height = 8, dpi=300)
+ggsave("./figures/income-decile-am-pm-boxplot_minor.png", plot=plot, width = 11, height = 8, dpi=300)
                 
 
 magick::image_read("figures/income-decile-am-pm-boxplot.pn
