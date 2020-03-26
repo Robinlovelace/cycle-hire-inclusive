@@ -117,15 +117,16 @@ citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "/tmp/allrefs.
 
 # Abstract {-}
 
-Policies aiming to enable cycling uptake in cities, and cycle hire schemes in particular, are often assumed to primarily benefit the privileged.
-This framing has played-out in academic research, with many papers exploring the relationship between pro-cycling interventions and existing inequalities.
-Indeed, a growing body of evidence suggests that --- like many types of public investment --- cycle hire schemes have tended to be constructed in wealthy areas and that growth in their usage tends to be fastest among young, high income groups, mirroring inequalities in other types of cycling uptake.
-However, little research has explored inequalities of cycle hire scheme usage over time, or *relative* to other types of cycling.
+Pro-cycling interventions, and cycle hire schemes in particular, are often assumed to primarily benefit the privileged.
+This framing has played-out in academic research, with many papers exploring the relationship between cycling and existing inequalities.
+A growing body of evidence suggests that cycle hire schemes tend serve wealthy areas and young, high income groups, mirroring inequalities in other types of cycling uptake.
+However, little research has explored whether such inequalities are growing over time.
 <!-- and, more broadly, compared with usage of motorised modes. -->
 <!-- This is an important omission given that the alternative to investment in cycle hire schemes may be investment in motorised transport systems, which could perform worse from an equity and environmental justice perspective. -->
-Reflecting on the research and policy context, this paper explores the uptake of the London Cycle Hire Scheme (LCHS), a flagship scheme that set out with the aim of 'normalising' cycling, geographically and between high and low income areas.
+Reflecting on the research and policy context, this paper explores the uptake of the London Cycle Hire Scheme (LCHS), a large, early and prominent scheme that had the explicy aim of 'normalising' cycling.
+The method involved analysis of 74 million cycle high records spanning 8 years from January 2012 to December 2020, using the geographic location of docking stations alongside official statistics to assess social and spatial inequalities in uptake.
 <!-- Although the study does not compare equality impacts with other types of transport investment, it does take a step in this direction. -->
-We found that, contrary to the trend for increasing segregation and geographic inequalities, the usage (and inferred benefits) of the LCHS have become increasingly geographically distributed across London over time.
+We found that, contrary to the trend for increasing segregation and geographic inequalities, the usage of the LCHS have become increasingly geographically distributed across London over time, with AM peak usage in comparatively low-income areas seeing high levels of growth.
 Our study shows that cycle hire schemes can be designed and expanded in ways that benefit a wide range of people, including those from low income areas, and that new cycle hire docking stations in poorer areas can succeed.
 
 
@@ -146,6 +147,7 @@ The 'Third generation' schemes, to which the LCHS belongs, allow users to access
 This free-floating operational 'dockless' bikeshare model, can also run as a hybrid model composed of docking stations and free-floating parking zones shown on a map.
 Globally, there has been an emergence of schemes funded primarily by private capital and with lower installation times, accounting for the majority of growth in bike share fleets worldwide since 2016 [@fishman_safety_2018].
 Continued growth and the private capital led operations makes assessment of bikeshare important, to monitor their performance compared with other types of sustainable transport intervention, understand how bikeshare is used, where and by whom and to ensure that future cycle hire policies support, rather than hinder, local policy objectives.
+While Fourth generation schemes have seen explosive growth in some areas, they have also suffered setback, including the high-profile collapse of dockless bike companies leading to questions about the sustainability of Fourth generation schemes [@nikitas_how_2019] and the docked bikes of the LCHS still dominate the local market, as shown in Section \@ref(the-london-cycle-hire-scheme).
 <!-- The focus of CHSs are varied. -->
 <!-- From a transport planning perspective, they are seen as a way to replace short journeys, otherwise made by congested taxi or metro systems, with active transport; from a health perspective they are a way to encourage a more active population; and from a political perspective, they often represent an opportunity to improve the image of the urban environment [@bauman_unrealised_2017]. -->
 
