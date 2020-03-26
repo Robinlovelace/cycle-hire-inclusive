@@ -2,6 +2,7 @@
 output:
     # github_document
    bookdown::pdf_document2:
+     keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -156,7 +157,7 @@ We discuss the findings in relation to pressing policy and research questions an
 # Background
 
 <!-- This section discusses trends in bicycle sharing schemes, determinants of their uptake, and their levels of inclusiveness. -->
-Bicycle sharing systems (BSS) have been created in many cities to support multiple policy objectives, especially improved health, air quality and livability [@fishman_bikeshare:_2016].
+Bicycle sharing systems (BSS) have been created in many cities to support multiple policy objectives, especially improved health, air quality and liveability [@fishman_bikeshare:_2016].
 Modern docked cycle hire schemes have been in operation since 1995, with the launch of a scheme in Copenhagen [@didonato_city-bike_2002].
 They have taken off since the early 2000s, with the greatest absolute period of growth occurring between around 2010 and 2015, after which the rate of new installations has dropped off (Figure \@ref(fig:global-growth)).
 
@@ -220,16 +221,16 @@ However, the lowest rates, such as the £90 for an annual ticket bought online, 
 Another benefit of accessing a bike through a BSS is that maintenance and storage are paid for by the operator. Bike theft represents another potential problem that can be mitigated by cycle hire schemes.
 All these may be of greater importance in low income areas, where the barriers to buying, storing, repairing, and bike theft will likely be greater.
 A study on barriers to bikeshare on traditionally under-served neighbourhoods in the US [@portland_state_university_breaking_2017 p.1] found that some of the most common barriers to bicycling cited by lower-income people of color were issues that bike share could address, such as: not having a bike or related gear (47%); not having a safe place to leave a bike where they need to go (36%); the expense of buying a bike or related gear (41%); and not having a safe place to store a bike at home (32%).
-Inequalities related to BSS are directly linked to use and access, and thhe consequent benefits of accessibility -- health.
+Inequalities related to BSS are directly linked to use and access, and the consequent benefits of accessibility -- health.
 <!-- Not sure where this direct quotation ends? -->
 
 As discussed in the preceding paragraphs, BSS tends to be associated with higher socio-economic groups and higher incomes.
 However, the use of schemes is also dependent on other aspects of social disadvantage.
 Transport for London [@tfl_santander_2016], for example, found that casual users generally have lower incomes than annual members, implying that users with higher incomes would make more use of economically beneficial long-term subscriptions.
-Similarly, @ogilvie_inequalities_2012 reported that registered users of the London scheme were more likely living in socioeconomically advantaged areas, indicating that they may also have higher disposable income.
+Similarly, @ogilvie_inequalities_2012 reported that registered users of the London scheme were more likely living in socio-economically advantaged areas, indicating that they may also have higher disposable income.
 Other studies indicated that users are most likely to be middle-class [@clark_bicycle_2016].
 Interestingly, the use of the scheme among registered users of the LCHS has been found to be more common for individuals living in more deprived areas: they made more trips than individuals in wealthier areas according to @ogilvie_inequalities_2012, suggesting different dynamics than those identified in studies of American BSS.
-A recent example in Glasgow also demonstrates that BSS can gain high uptake among dissadvantaged groups, provided sufficient support.
+A recent example in Glasgow also demonstrates that BSS can gain high uptake among disadvantaged groups, provided sufficient support.
 The '[Bikes for All](https://www.nextbike.co.uk/en/news/nextbike-provides-bikes-for-all-as-scheme-celebrates-community/)' BSS scheme was supported by a parallel package of engagement activities and measures to overcome barriers (particularly financial barriers) to shared mobility faced by diverse groups including along ethnic, housing tenure and employment lines.
 The results from follow-up research into the scheme's impact shows that providing additional support, in addition to simply putting shared bikes in low income areas, can ensure high uptake among a wide range of disadvantaged groups [@yates_bikes_2019].^[
 The scheme attracted a diversity of demographics, 49% identified as Black or Minority Ethnicity (BME), 26% were seeking asylum, 28% were unemployed, 42% were women and 9% were homeless.
@@ -244,7 +245,7 @@ The scheme attracted a diversity of demographics, 49% identified as Black or Min
 Accessibility to and awareness of BSS is also not equally spread across the population.
 Areas with no docking stations have been found to have lower levels of awareness of shared mobility as a transport option [@bernatchez_knowing_2015].
 BSSs tend to be more easily accessible to higher socio-economic groups [e.g. @ricci_bike_2015] and one reason offered for this is that stations may not be placed in less economically advantaged areas.
-@ogilvie_inequalities_2012 reported that registered users of the London scheme were more likely to live in socioeconomically advantaged areas and areas with high cycling levels.
+@ogilvie_inequalities_2012 reported that registered users of the London scheme were more likely to live in socio-economically advantaged areas and areas with high cycling levels.
 <!-- It is important to note that (other) bicycle infrastructure is often first placed in more affluent areas. -->
 <!-- Demand for bicycle sharing is higher in areas with more bicycle infrastructure [@el-assi_effects_2017]. -->
 <!-- Common sense suggests that proximity to docking stations increases usage, something that has been found in several studies [@fishman_factors_2015; @bernatchez_knowing_2015; @fuller_use_2011]. -->
@@ -254,7 +255,7 @@ Overall, there is little evidence of the <!--overall--> transport equity outcome
 One recent paper on the role of cycle hire schemes in transport equity, stated that "most BSS typically benefit the privileged" [@de_chardon_contradictions_2019, p.401].
 In the same direction, Noland [-@noland_bikesharing_2018, p.151] found in Philadelphia that "bikeshare docking stations in lower income areas are not generating as many trips as in other areas".
 @hosford_who_2018 noted the importance of confounding geographic factors: economically advantaged areas have better access in some cities, whereas in other cities disadvantaged areas are better served.
-<!-- And Mooney et al., (2019) suggest that modest inequities in access exist in Seattle by sociodemographic characteristics. -->
+<!-- And Mooney et al., (2019) suggest that modest inequities in access exist in Seattle by socio-demographic characteristics. -->
 
 <!-- ## Cycle hire and equity -->
 
@@ -485,7 +486,7 @@ See https://data.cdrc.ac.uk/dataset/4d3a8738-38af-401c-8070-6be5d85b2f5e
 <!-- @Robin at one point we allocated docking stations into residential/non-residential based on some data-driven characteristics (comparing observed trip frequencies against residential catchment size). Alternatively we could filter out hub stations (Waterloo, Stonecutter, Belgrove Street, King's Cross), or through calculating trip frequencies by docking station and exclude top n? Did we end up dropping this bit? I know that we filter on *origin* stations during the am peak, but I think some discussion of this, the data analysis challenge given the freely available dataset our analysis use case (and the fact that we do not have user IDs against which we can infer area of residence) -->
 
 Since users' home locations and trip purpose are not stored in the OD data, it is impossible to know which trips were made by local residents and which were not.
-However, it is possible to make speculative infererences around residential usage from trip patterns.
+However, it is possible to make speculative inferences around residential usage from trip patterns.
 The daily flow of cycle hire scheme usage shows a clear pattern, with the majority of 'home station trips' (in which bikes are rented near the user's home) happening in the morning peak (which we define as 06:00 to 10:00).
 The comparison between morning and afternoon usage patterns highlights the reasons for this emphasis: in the afternoon peak (16:00 to 20:00) many trips represent people renting cycles in the centre for the return leg of their journey and many more tourist and leisure trips are taken by non-residents during this time (see Figure \@ref(fig:map-am-pm-peaks)).
 
@@ -507,7 +508,7 @@ knitr::include_graphics("figures/map-am-pm-peaks.png")
 
 The evolving spatial distribution of the LCHS is illustrated in Figure \@ref(fig:facet-map) (top), which shows that its expansion into residential areas corresponded with a shift towards lower income communities.
 The map illustrates that the scheme has not expanded uniformly, with Phase 2 expanding into Tower Hamlets, to the East of the scheme and Phase 3 into areas south of the river such as Wandsworth and Clapham Junction in Southwest central London.
-It seems that particular areas such as the area to the east of Hackney in the far northeast of the plot, and the cluster of docking stations going to Brixton in the central south region of the map, were targeted deliberately.
+It seems that particular areas such as the area to the east of Hackney in the far north-east of the plot, and the cluster of docking stations going to Brixton in the central south region of the map, were targeted deliberately.
 It is interesting to note that these demographically diverse geographic outliers were selected instead of more geographically central areas such as Bermondsey (on the South bank of the River Thames to the East), leading to the 'why the gap' campaign for the scheme to be expanded into this part of the city.^[
 See [whythegap.london](http://whythegap.london) for the campaign for "Cycle Hire Scheme for Rotherhithe and Bermondsey", which contains quotes from many people on the importance of expanding the scheme, including London Mayor Sadiq Kahn who is quoted as saying:
 "There are lots of anomalies in that cycle hire scheme. We are going to explore them."
@@ -557,7 +558,7 @@ Changes in counts for all docking stations in that income decile is coloured red
 The addition of individual-level docking station data gives an indication of how representative the overall trend (in red) is across individual docking stations. In Figure \@ref(fig:change-time-boroughs) the same encoding is used, but docking stations are grouped by London borough and arranged according to their approximate spatial position. It should be noted that direct comparison of the overall and station-level trends (grey and red lines) should be treated with caution as the change in overall counts (red) is partly a function of scheme expansion  -- a corollary of more docking stations in certain boroughs or income deciles is, presumably, elevated trip counts in those areas.
 <!-- Is this term right roger? -->
 
-The patterns implied by these charts are instructive. Docking stations in central and "prime" London and where the scheme is typically at capacity -- Westminster and City of London and with many in income decile 10 -- show consistently high frequencies throughout the study period. There is strong pattern of increasing usage in parts of London associated with the western expansion (Hammersmith & Fulham, Wandsworth and parts of Lambeth) and to a lesser extent eastern expansion (Tower Hamlets and parts of Hackney). Particularly striking is the consistently increasing trip frequencies in Wandsworth and also further east in Lambeth and Southwark. These boroughs containing large working populations on the edge, or outside of, "prime" London, have recently benefited from new cycle infrastructure -- cycle superhighways often with segrated cycle lanes, completed between 2016 and 2018. That we see large relative increases in trip frequencies for docking stations in these boroughs perhaps suggests a more utilitarian and residential usage characteristic than the dominant stereotype for the LCHS of the rail commuter making regular peak-time journeys between hub stations or the tourist making occasional leisure journeys in London's parks.
+The patterns implied by these charts are instructive. Docking stations in central and "prime" London and where the scheme is typically at capacity -- Westminster and City of London and with many in income decile 10 -- show consistently high frequencies throughout the study period. There is strong pattern of increasing usage in parts of London associated with the western expansion (Hammersmith & Fulham, Wandsworth and parts of Lambeth) and to a lesser extent eastern expansion (Tower Hamlets and parts of Hackney). Particularly striking is the consistently increasing trip frequencies in Wandsworth and also further east in Lambeth and Southwark. These boroughs containing large working populations on the edge, or outside of, "prime" London, have recently benefited from new cycle infrastructure -- cycle superhighways often with segregated cycle lanes, completed between 2016 and 2018. That we see large relative increases in trip frequencies for docking stations in these boroughs perhaps suggests a more utilitarian and residential usage characteristic than the dominant stereotype for the LCHS of the rail commuter making regular peak-time journeys between hub stations or the tourist making occasional leisure journeys in London's parks.
 
 <!-- This shows a mixed pattern, with growth in the diverse Hackney and Camden boroughs and steady or falling levels in the wealthy central and Westminster boroughs.
 Tower Hamlets, a borough with many low income areas, saw steady levels of use over time. -->
@@ -675,15 +676,15 @@ The _relatively_ higher income deprivation boroughs of Lambeth and Southwark hav
 The conclusion that we take from the research (expanded on in the next section) is that shared mobility policies, and BSS in particular, can succeed in low income areas.
 
 There are some limitations to the study that should be considered before attempting to generalise the findings, however.
-The first limitation relatest to the level of analysis: although the geographic resolution of analysis was relatively high (each LSOA zone contains less than 2000 people), the study lacks demographic data at level of individual bikeshare users.
+The first limitation relates to the level of analysis: although the geographic resolution of analysis was relatively high (each LSOA zone contains less than 2000 people), the study lacks demographic data at level of individual bikeshare users.
 We know very little about the income (and other) characteristics of users *compared with the demographic profile of their local area*, raising the following question:
 Could the high rates of growth in low income areas reflect the behaviour of more affluent people (e.g. 'hipsters') living in low income areas?
 
 Answers to such questions are outside the scope of this paper.
 However, given the consistency of growth in a range of low income areas and considering the finances (£2 for 24 hour bikeshare access vs £4.80+ for a single tube ticket), our hypothesis is that future research will find that people on low incomes *are* using the LCHS and other BSS where provision is evenly distributed geographically, and fairly priced.
 Figure \@ref(fig:profile-users-lchs) shows that although the income profile of casual users is relatively flat, LCHS members tend to be relatively wealthy, with the majority falling into the £75k+ income category.
-Follow-on research could explore the extent to which growth in cycle usage in relativley low income areas is driven by wealthy new members or casual users on low incomes.
-Furthermore, although the analysis uses small areas as the basis of the analyis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
+Follow-on research could explore the extent to which growth in cycle usage in relatively low income areas is driven by wealthy new members or casual users on low incomes.
+Furthermore, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
 
 Methodological advances could also help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
