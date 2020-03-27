@@ -1,8 +1,9 @@
 ---
 output:
+  # bookdown::word_document2
     # github_document
    bookdown::pdf_document2:
-     keep_tex: true
+   #   keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -119,11 +120,10 @@ citr::tidy_bib_file(rmd_file = "README.Rmd", messy_bibliography = "/tmp/allrefs.
 
 Pro-cycling interventions, and cycle hire schemes in particular, are often assumed to primarily benefit the privileged.
 This framing has played-out in academic research, with many papers exploring the relationship between cycling and existing inequalities.
-A growing body of evidence suggests that cycle hire schemes tend serve wealthy areas and young, high income groups, mirroring inequalities in other types of cycling uptake.
-However, little research has explored whether such inequalities are growing over time.
+A growing body of evidence suggests that cycle hire schemes tend serve wealthy areas and young, high income groups, mirroring inequalities in other types of cycling uptake, yet there has been little research into the 'direction of travel' and whether such inequalities are growing or 'levelling up' over time.
 <!-- and, more broadly, compared with usage of motorised modes. -->
 <!-- This is an important omission given that the alternative to investment in cycle hire schemes may be investment in motorised transport systems, which could perform worse from an equity and environmental justice perspective. -->
-Reflecting on the research and policy context, this paper explores the uptake of the London Cycle Hire Scheme (LCHS), a large, early and prominent scheme that had the explicy aim of 'normalising' cycling.
+This paper explores the uptake of the London Cycle Hire Scheme (LCHS), a large, early and prominent scheme that had the explicit aim of 'normalising' cycling.
 The method involved analysis of 73.4 million cycle high records spanning 8 years from January 2012 to December 2020, using the geographic location of docking stations alongside official statistics to assess social and spatial inequalities in uptake.
 <!-- Although the study does not compare equality impacts with other types of transport investment, it does take a step in this direction. -->
 We found that, contrary to the trend for increasing segregation and geographic inequalities, the usage of the LCHS have become increasingly geographically distributed across London over time, with AM peak usage in comparatively low-income areas seeing high levels of growth.
@@ -147,14 +147,14 @@ The 'Third generation' schemes, to which the LCHS belongs, allow users to access
 This free-floating operational 'dockless' bikeshare model, can also run as a hybrid model composed of docking stations and free-floating parking zones shown on a map.
 Globally, there has been an emergence of schemes funded primarily by private capital and with lower installation times, accounting for the majority of growth in bike share fleets worldwide since 2016 [@fishman_safety_2018].
 Continued growth and the private capital led operations makes assessment of bikeshare important, to monitor their performance compared with other types of sustainable transport intervention, understand how bikeshare is used, where and by whom and to ensure that future cycle hire policies support, rather than hinder, local policy objectives.
-While Fourth generation schemes have seen explosive growth in some areas, they have also suffered setback, including the high-profile collapse of dockless bike companies leading to questions about the sustainability of Fourth generation schemes [@nikitas_how_2019] and the docked bikes of the LCHS still dominate the local market, as shown in Section \@ref(the-london-cycle-hire-scheme).
+While Fourth generation schemes have seen explosive growth in some areas, they have also suffered setback, including the high-profile collapse of dockless bike companies leading to questions about the sustainability of Fourth generation schemes [@nikitas_how_2019] and the docked bikes of the LCHS still dominate the local market.
 <!-- The focus of CHSs are varied. -->
 <!-- From a transport planning perspective, they are seen as a way to replace short journeys, otherwise made by congested taxi or metro systems, with active transport; from a health perspective they are a way to encourage a more active population; and from a political perspective, they often represent an opportunity to improve the image of the urban environment [@bauman_unrealised_2017]. -->
 
 In this context the aim of this paper is to better understand the extent to which cycle hire schemes have been adopted by users from areas of differing socio-economic outcomes.
 Using data from the London Cycle Hire Scheme (LCHS), first launched in 2010 and continuously expanded since, we explore usage patterns in high and low income areas.
-After a review of literature on the growth of cycle hire from a social equity perspective, in the next section, the paper describes the LCHS in detail, outlines methods for comparing usage levels over time across geographic areas, and presents the findings.
-We discuss the findings in relation to pressing policy and research questions and conclude with recommendations for transport policymakers and researchers.
+After a review of literature on the growth of cycle hire from a social equity perspective (Section 2), the paper describes the LCHS in detail (Section 3), outlines methods for comparing usage levels over time across geographic areas (Section 4), and presents the findings (Section 5).
+The final sections discuss the findings in relation to pressing policy and research questions and conclude with recommendations for transport policymakers and researchers.
 
 # Background
 
@@ -253,10 +253,11 @@ BSSs tend to be more easily accessible to higher socio-economic groups [e.g. @ri
 <!-- Common sense suggests that proximity to docking stations increases usage, something that has been found in several studies [@fishman_factors_2015; @bernatchez_knowing_2015; @fuller_use_2011]. -->
 <!-- However, a recent cohort study revealed that residential proximity does not significantly predict the likelihood of using a BSS, suggesting that placement of docking stations may not be a primary cause of inequalities in BSS usage [@heinen_public_2018]. -->
 
-Overall, there is little evidence of the <!--overall--> transport equity outcomes from cycle hire schemes.
+Overall, there is little evidence of the transport equity outcomes from cycle hire schemes.
 One recent paper on the role of cycle hire schemes in transport equity, stated that "most BSS typically benefit the privileged" [@de_chardon_contradictions_2019, p.401].
 In the same direction, Noland [-@noland_bikesharing_2018, p.151] found in Philadelphia that "bikeshare docking stations in lower income areas are not generating as many trips as in other areas".
 @hosford_who_2018 noted the importance of confounding geographic factors: economically advantaged areas have better access in some cities, whereas in other cities disadvantaged areas are better served.
+Nevertheless, these studies are cross-sectional and provide little insight into the direction of travel in terms of increasing or decreasing levels of inequality in cycle hire use over time. 
 <!-- And Mooney et al., (2019) suggest that modest inequities in access exist in Seattle by socio-demographic characteristics. -->
 
 <!-- ## Cycle hire and equity -->
@@ -405,7 +406,7 @@ The research questions are:
 > Since the LCHS scheme was expanded in 2014 -- 
 
 * Has the geographic distribution of docking stations and usage become more equal?
-* And has the uptake of use at docking stations in low income areas increased at a greater rate than for the scheme overall?
+* Has the uptake of use at docking stations in low income areas increased at a greater rate than for the scheme overall?
 
 
 <!-- * Network of docking stations is reasonably dense -- neighbouring docking stations located no more than 300m from one another. -->
@@ -431,7 +432,7 @@ The research questions are:
 <!-- 3. What else? -->
 
 
-# Data and methods
+# Methods and Data
 
 <!-- The methods reflected the available datasets on the LCHS, which were large and messy. -->
 We used the open source statistical environment R [@R-base] for data processing and analysis, making use of packages such as **sf** and **ggplot2** for geographic analysis and visualisation respectively [@pebesma_simple_2018; @ggplot2].
@@ -694,7 +695,7 @@ Furthermore, although the analysis uses small areas as the basis of the analysis
 Methodological advances could also help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
 Although income estimates are rarely available for small areas in cities internationally, new methods for estimating wealth and deprivation [@jean_combining_2016] could support further international comparative research into inequalities in cycle hire schemes.
 
-The use of a 'hard' cutoff distance between residential building and docking stations (150 m used in the analysis presented) represents a simplification of real world decision-making: in reality, people choose whether or not to use docking stations based on a range of factors.
+The use of a 'hard' cut-off distance between residential building and docking stations (150 m used in the analysis presented) represents a simplification of real world decision-making: in reality, people choose whether or not to use docking stations based on a range of factors.
 The probability of making non motorised trips has been found to vary as a non-linear including route distance and perceived levels of danger on the pedestrian network [@iacono_measuring_2010].
 Developing more sophisticated functions linking docking stations to residential areas, weighted by route attributes, is beyond the scope of the present study but represents a potential area for future research: future work could explore the extent to which docking stations located to minimise walking distances and exposure to busy roads succeed, compared with docking stations in less favourable locations on the transport network. 
 
