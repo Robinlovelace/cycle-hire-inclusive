@@ -43,11 +43,12 @@ tm_shape(lsoa_lnd_joined) + tm_fill("Income decile", palette = "viridis") +
 m4 = tm_shape(lsoa_lnd_joined, bbox = st_bbox(bikelocations_sf4)) +
   tm_fill("Income decile", palette = "Blues", alpha = 0.8, legend.is.portrait = FALSE) +
   tm_shape(bikelocations_sf4) +
-  tm_dots(size = 0.1, title.size = "Bikes") +
-  tm_facets(by = "year", free.coords = FALSE) +
+  tm_dots(size = 0.05, title.size = "Bikes") +
+  tm_facets(by = "year", free.coords = FALSE, nrow = 1) +
   # tm_layout(scale = 1, legend.show = F) # works
   # tm_layout(scale = 1, legend.outside.position = c("right"), legend.stack = "horizontal")
-  tm_layout(scale = 1, legend.outside.position = "bottom", legend.outside.size = 0.15)
+  tm_layout(scale = 0.5, legend.outside.position = "bottom", legend.outside.size = 0.2)
 m4
-tmap_save(m4, "figures/facet-imd.png", width = 6, height = 5)
-magick::image_read("figures/facet-imd.png")
+tmap_save(m4, "figures/facet-imd.png", width = 6, height = 2)
+# magick::image_read("figures/facet-imd.png")
+browseURL("figures/facet-imd.png")

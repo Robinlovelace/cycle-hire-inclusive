@@ -13,6 +13,25 @@ tmap_mode("view")
 knitr::opts_chunk$set(eval = TRUE)
 ```
 
+```{r, eval=FALSE}
+install.packages("showtext")
+library(showtext)
+font_add(family = "Avenir Book", regular = "~/hd/backups/Avenir Book/Avenir Book.ttf")
+
+font_add_google("Gochi Hand", "gochi")
+font_add_google("Schoolbell", "bell")
+
+showtext_auto()
+x11()
+
+hist(rnorm(1000), breaks = 30, col = "steelblue", border = "white",
+     main = "", xlab = "", ylab = "")
+title("Histogram of Normal Random Numbers", family = "bell", cex.main = 2)
+title(ylab = "Frequency", family = "gochi", cex.lab = 2)
+text(2, 70, "N = 1000", family = "bell", cex = 2.5)
+```
+
+
 
 # Input data
 
@@ -45,7 +64,7 @@ stations_yearly_lsoa %>%
   ggplot(aes(`Income decile`)) +
   geom_bar(fill = "blue") +
   facet_wrap(~year) +
-  ggthemes::theme_clean()
+  ggthemes::theme_clean(base_family = "gochi")
 
 # props
 # source("get-imd-data.R")
@@ -109,9 +128,14 @@ stations_yearly_4 %>% ggplot() +
   scale_y_continuous(labels = scales::percent_format()) +
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~year, nrow = 1) +
-  ylab("Proportion of docking stations in each income decile") 
-ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 5.5)
+  ylab("% stations in each income decile") +
+  theme_minimal()
+  
+# theme_set(ggthemes::theme_clean(base_family = "Avenir Book"))
+#     theme(axis.title=element_blank(), panel.border = element_blank(),
+#           strip.text.y = element_text(angle=0))
 
+ggsave("figures/stations-imd-facet-4-grey.png", width = 6, height = 3) 
 magick::image_read("figures/stations-imd-facet-4-grey.png")
 
 # calculate scores 
@@ -213,7 +237,7 @@ piggyback::pb_upload("stations_clean_am_pm.geojson")
 tmap_mode("plot")
 m = tm_shape(stations %>% select(operator_name, trips_per_year, trips_per_year_am, trips_per_year_pm, years_in_operation)) +
     tm_dots(size = c("trips_per_year_am", "trips_per_year_pm"),
-            col = "years_in_operation", palette = "viridis", contrast = c(0, 0.8), alpha = 0.5, scale = 1.5, title.size = "") +
+            col = "years_in_operation", palette = "Spectral", contrast = c(0, 0.8), alpha = 0.5, scale = 1.5, title.size = "") +
     tm_layout(panel.show = TRUE,
               panel.labels = c("AM (06:00 - 10:00)", "PM (16:00 - 20:00)"),
               legend.outside = T, title = "N. trips/year") +
