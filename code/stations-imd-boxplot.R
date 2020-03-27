@@ -1,10 +1,25 @@
 # Boxplots 
+
+# for 200m buffer
+# stations_200 = sf::read_sf("stations_imd_pop_200m.geojson")
+# stations = sf::read_sf("stations_imd_pop.geojson")
+
+stations$Population == stations_200$Population
+
 stations <- stations %>% 
   mutate(
     trips_per_person_yr=trips_per_year / Population / years_in_operation,
     trips_per_person_yr_am = trips_per_year_am / Population,
     trips_per_person_yr_pm = trips_per_year_pm / Population 
   )
+
+
+
+if("income_decile" %in% names(stations)) {
+  stations$Income.decile = as.numeric(stations$income_decile)
+}
+
+summary(as.factor(stations$Income.decile))
 
 stations <- stations %>%
   mutate(
@@ -14,6 +29,8 @@ stations <- stations %>%
   imd=factor(imd, levels=c("1 - most deprivation", "2", "3", "4", "5 - mid",
                            "6 - mid", "7", "8", "9", "10 - least deprivation"))
   )
+
+summary(stations$imd)
 
 theme_set(theme_minimal(base_family="Avenir Book"))
 plot <- stations %>%
@@ -36,8 +53,9 @@ plot <- stations %>%
     axis.title.x = element_blank(),
     axis.title.y = element_blank()
   )
+plot
   
-ggsave("./figures/income-decile-am-pm-boxplot_minor.png", plot=plot, width = 11, height = 8, dpi=300)
-                
-
-magick::image_read("figures/income-decile-am-pm-boxplot.pn
+# ggsave("./figures/income-decile-am-pm-boxplot_minor.png", plot=plot, width = 11, height = 8, dpi=300)
+ggsave("./figures/income-decile-am-pm-boxplot_minor_200m.png", plot=plot, width = 11, height = 8, dpi=300)
+browseURL("./figures/income-decile-am-pm-boxplot_minor.png")
+browseURL("./figures/income-decile-am-pm-boxplot_minor_200m.png")

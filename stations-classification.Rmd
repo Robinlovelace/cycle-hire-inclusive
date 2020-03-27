@@ -129,7 +129,14 @@ stations_yearly_4 %>% ggplot() +
   scale_x_continuous(breaks = 1:10) +
   facet_wrap(~year, nrow = 1) +
   ylab("% stations in each income decile") +
-  theme_minimal()
+  theme_minimal() +
+  theme(
+    axis.text.y = element_text(hjust = 2, margin = margin(l = -30)),
+    axis.title.y = element_blank()
+    ) +
+  scale_y_continuous(breaks = seq(0, 0.25, by = 0.05),
+                     labels = c("", "", "10%", "15%", "20%", "25%"))
+  # annotate("text", label = "25%", x = 1, y = .25)
   
 # theme_set(ggthemes::theme_clean(base_family = "Avenir Book"))
 #     theme(axis.title=element_blank(), panel.border = element_blank(),

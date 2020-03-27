@@ -322,12 +322,12 @@ plot(oaps)
 
 stations = sf::read_sf("stations_clean_am_pm.geojson")
 plot(stations["Income.decile"])
-stations_150m_buffer = stations %>% 
+stations_200m_buffer = stations %>% 
   st_transform(27700) %>% 
-  st_buffer(150) %>% 
+  st_buffer(200) %>% 
   st_transform(4326)
 
-mapview::mapview(stations_150m_buffer)
+mapview::mapview(stations_200m_buffer)
 
 # aim: get to trips per person within 200m per docking station
 # geofrabric method fails - see https://github.com/ITSLeeds/geofabric/issues/16
@@ -353,10 +353,11 @@ lnd_osm_centroids$n = lnd_osm_centroids_with_count$n
 mapview::mapview(lnd_osm_centroids %>% filter(n == max(n)))
 lnd_osm_centroids = lnd_osm_centroids %>% mutate(pop_per_building = Populaton2011 / n)
 
-lnd_osm_near_stations = lnd_osm_centroids[stations_150m_buffer, ]
-mapview::mapview(stations_150m_buffer) + mapview::mapview(lnd_osm_near_stations)
+lnd_osm_near_stations = lnd_osm_centroids[stations_200m_buffer, ]
+# mapview::mapview(stations_200m_buffer) + mapview::mapview(lnd_osm_near_stations)
+plot(sf::st_geometry(lnd_osm_near_stations))
 
-stations_pop = aggregate(lnd_osm_near_stations["pop_per_building"], stations_150m_buffer, sum)
+stations_pop = aggregate(lnd_osm_near_stations["pop_per_building"], stations_200m_buffer, sum)
 
 stations_pop = stations_pop %>% rename(Population = pop_per_building)
 
@@ -366,7 +367,7 @@ sum(stations_pop$Population, na.rm = TRUE)
 sum(lnd_osm_centroids$pop_per_building, na.rm = TRUE)
 plot(stations_pop)
 # mapview::mapview(stations_pop) + mapview::mapview(lnd_osm_centroids)
-saveRDS(stations, "stations_pop.Rds")
+saveRDS(stations, "stations_pop_200m.Rds")
 piggyback::pb_upload("stations_pop.Rds")
 # write_sf(stations, "stations_pop.geojson", delete_dsn = TRUE)
 
@@ -383,8 +384,9 @@ tmap_save(m, "figures/bikeshare-resi-buildings.png")
 
 
 ```{r}
-stations = readRDS("stations_pop.Rds")
+stations = readRDS("stations_pop_200m.Rds")
 names(stations)
+head(stations$)
 stations = stations %>% rename(income_decile = Income.decile)
 summary(stations$income_decile)
 stations$trips_per_person_yr = stations$trips_per_year / stations$Population / stations$years_in_operation
@@ -406,7 +408,7 @@ g3
 library(patchwork)
 p = g2 + g3 + plot_layout(ncol = 1)
 p
-ggsave("figures/income-decile-am-pm-boxplot.png", p, width = 9, height = 7)
+ggsave("figures/income-decile-am-pm-boxplot-200m.png", p, width = 9, height = 7)
 magick::image_read("figures/income-decile-am-pm-boxplot.png")
 # ggplot(stations %>% filter(!is.na(income_decile))) + geom_boxplot(aes(group = income_decile, y = trips_per_person_yr)) + scale_x_discrete(labels = 1:10)
 summary(stations$income_decile)
@@ -419,7 +421,7 @@ quantile(x = stations$trips_per_person_yr, probs = c(0.1, 0.5, 0.7, 0.9), na.rm 
 
 # check deciles - are there really that many deprived oas in London?
 # file.remove("stations_imd_pop.geojson")
-write_sf(stations, "stations_imd_pop.geojson", delete_dsn = TRUE)
+write_sf(stations, "stations_imd_pop_200m.geojson", delete_dsn = TRUE)
 piggyback::pb_upload("stations_imd_pop.geojson")
 # hist(stations$imd)
 
