@@ -124,7 +124,7 @@ However, little research has explored whether such inequalities are growing over
 <!-- and, more broadly, compared with usage of motorised modes. -->
 <!-- This is an important omission given that the alternative to investment in cycle hire schemes may be investment in motorised transport systems, which could perform worse from an equity and environmental justice perspective. -->
 Reflecting on the research and policy context, this paper explores the uptake of the London Cycle Hire Scheme (LCHS), a large, early and prominent scheme that had the explicy aim of 'normalising' cycling.
-The method involved analysis of 74 million cycle high records spanning 8 years from January 2012 to December 2020, using the geographic location of docking stations alongside official statistics to assess social and spatial inequalities in uptake.
+The method involved analysis of 73.4 million cycle high records spanning 8 years from January 2012 to December 2020, using the geographic location of docking stations alongside official statistics to assess social and spatial inequalities in uptake.
 <!-- Although the study does not compare equality impacts with other types of transport investment, it does take a step in this direction. -->
 We found that, contrary to the trend for increasing segregation and geographic inequalities, the usage of the LCHS have become increasingly geographically distributed across London over time, with AM peak usage in comparatively low-income areas seeing high levels of growth.
 Our study shows that cycle hire schemes can be designed and expanded in ways that benefit a wide range of people, including those from low income areas, and that new cycle hire docking stations in poorer areas can succeed.
@@ -462,7 +462,9 @@ nrow(trips_df)
 To characterise the shifting spatial inequalities in the provision of bikeshare infrastructure in London, we joined residential zone data (at the LSOA level) to each docking station.
 First we defined the study area as a polygon resulting from a 500 m buffer around the 'concave hull' of the docking stations.
 <!-- --- the assumption here that 500m represents a reasonable maximum walking distance threshold from any residential area to a nearest docking station. -->
-To estimate 'residential populations' who live in close proximity to docking stations, we developed a three-stage methodology involving: 1) estimating the average number of inhabitants per building, based on the smallest 'Output Area' population estimates and building footprint data from OpenStreetMap; 2) identifying residential buildings within a threshold distance (150 m was used) of docking stations; and 3) assigning the total estimated population in these buildings to their associated docking station (see Figure \@ref(fig:bikeshare-resi-buildings)).
+To estimate 'residential populations' who live in close proximity to docking stations, we developed a three-stage methodology involving: 1) estimating the average number of inhabitants per building, based on the smallest 'Output Area' population estimates and building footprint data from OpenStreetMap; 2) identifying residential buildings within a threshold distance (150, 200 and 300 m buffer distances were tested) of docking stations; and 3) assigning the total estimated population in these buildings to their associated docking station (see Figure \@ref(fig:bikeshare-resi-buildings)).
+Considering the density of docking stations and access to alternative transport options such as bus stops, we opted for the smallest of the buffer distances tested for the results presented.
+The use of different buffer distances did not change the direction of the results or conclusions drawn from them (see Discussion).
  <!-- as this represents a maximum walking distance of around 300 m on the road network) -->
 
 ```{r bikeshare-resi-buildings, fig.cap="Method for estimating the residential population with access to docking stations within 150m. Blue shade represents the population in each Output Area, buildings are in green and buildings near docking stations are in red.", out.width="70%", eval=TRUE}
@@ -691,6 +693,11 @@ Furthermore, although the analysis uses small areas as the basis of the analysis
 
 Methodological advances could also help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
 Although income estimates are rarely available for small areas in cities internationally, new methods for estimating wealth and deprivation [@jean_combining_2016] could support further international comparative research into inequalities in cycle hire schemes.
+
+The use of a 'hard' cutoff distance between residential building and docking stations (150 m used in the analysis presented) represents a simplification of real world decision-making: in reality, people choose whether or not to use docking stations based on a range of factors.
+The probability of making non motorised trips has been found to vary as a non-linear including route distance and perceived levels of danger on the pedestrian network [@iacono_measuring_2010].
+Developing more sophisticated functions linking docking stations to residential areas, weighted by route attributes, is beyond the scope of the present study but represents a potential area for future research: future work could explore the extent to which docking stations located to minimise walking distances and exposure to busy roads succeed, compared with docking stations in less favourable locations on the transport network. 
+
 Finally, there is great potential for further technical and software development work, to make cycle hire research more accessible and reproducible.
 Building on the the **bikedata** R package, future work could develop tools that automate tedious parts of the analysis, allowing future research to focus on the policy issues rather than the time-consuming yet vital data cleaning and analysis stages in cycle hire research.
 
