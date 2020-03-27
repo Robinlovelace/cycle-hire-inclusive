@@ -432,7 +432,7 @@ The research questions are:
 <!-- 3. What else? -->
 
 
-# Methods and Data
+# Data and methods
 
 <!-- The methods reflected the available datasets on the LCHS, which were large and messy. -->
 We used the open source statistical environment R [@R-base] for data processing and analysis, making use of packages such as **sf** and **ggplot2** for geographic analysis and visualisation respectively [@pebesma_simple_2018; @ggplot2].
@@ -441,7 +441,7 @@ A detailed account of the input datasets and methods used to characterise shifti
 
 [Note: this repository will be made available on publication.]
 
-## Trip and docking station datasets
+## Trip and station datasets
 
 Data on docking stations was provided by the Consumer Data Research Centre ([data.cdrc.ac.uk](https://data.cdrc.ac.uk/product/ffc94eb2-baf0-46f9-bf7d-5e8dd424b95d?accesslevel=open&q=&sort=title_string+asc)).
 This was made available in a '.csv' file containing 1,130 rows with 19 variables including docking station ID, name, location coordinates and its opening date.
@@ -457,8 +457,7 @@ In total 73.4 million trips, with known start and end points, were recorded from
 nrow(trips_df)
 ```
 
-
-## Characterising residential users
+## Socio-demographic data
 
 To characterise the shifting spatial inequalities in the provision of bikeshare infrastructure in London, we joined residential zone data (at the LSOA level) to each docking station.
 First we defined the study area as a polygon resulting from a 500 m buffer around the 'concave hull' of the docking stations.
@@ -485,15 +484,18 @@ See https://data.cdrc.ac.uk/dataset/4d3a8738-38af-401c-8070-6be5d85b2f5e
 <!-- ] -->
 
 
-## Identifying residential trips
+## Inferring residential trips
 
 <!-- * Data analysis challenge: that we want to make claims about bikeshare trips made by London residents, but the dominant usage scenario is of commuters from outside London using the bikeshare scheme to complete the `last mile problem' or of tourists using the scheme to make circular/leisure trips around the Southbank, Hyde Park, Regent's Park [reference for this] -->
 <!-- @Robin at one point we allocated docking stations into residential/non-residential based on some data-driven characteristics (comparing observed trip frequencies against residential catchment size). Alternatively we could filter out hub stations (Waterloo, Stonecutter, Belgrove Street, King's Cross), or through calculating trip frequencies by docking station and exclude top n? Did we end up dropping this bit? I know that we filter on *origin* stations during the am peak, but I think some discussion of this, the data analysis challenge given the freely available dataset our analysis use case (and the fact that we do not have user IDs against which we can infer area of residence) -->
 
 Since users' home locations and trip purpose are not stored in the OD data, it is impossible to know which trips were made by local residents and which were not.
-However, it is possible to make speculative inferences around residential usage from trip patterns.
+However, it is possible to infer residential usage from trip patterns.
 The daily flow of cycle hire scheme usage shows a clear pattern, with the majority of 'home station trips' (in which bikes are rented near the user's home) happening in the morning peak (which we define as 06:00 to 10:00).
 The comparison between morning and afternoon usage patterns highlights the reasons for this emphasis: in the afternoon peak (16:00 to 20:00) many trips represent people renting cycles in the centre for the return leg of their journey and many more tourist and leisure trips are taken by non-residents during this time (see Figure \@ref(fig:map-am-pm-peaks)).
+
+By taking AM and PM peak subsets from the full dataset, and calculating the number of trips per year per docking station and associated IMD scores (income component) we could generate results estimating both the overall levels of usage per resident per year by income levels of the areas in which docking stations are located, and the relative levels of growth in relatively high and low income areas.
+These results are presented in the next section.
 
 <!-- todo: how the data were analysed (from Eva) -->
 
@@ -670,12 +672,14 @@ ids_trips %>% filter(!id %in% stations_lon$id) %>% View()
 
 <!-- ## Principal findings -->
 
-We found evidence of continued growth in bikeshare usage, including in docking stations located in residential and low income areas, suggesting that the popularity of the LCHS is due to its utility:
+We found evidence of growth in bikeshare usage following expansion of the LCHS, including in docking stations located in residential and low income areas.
+This suggests that the popularity cycle hire in London is due to its utility:
 the 'novelty effect' [@mattson_bike_2017] will have worn off after the first few years (although there could be a residual novelty effect for new docking stations).
-The expansion of the LCHS into new areas made the provision of shared mobility more representative of the socio-economic distribution of London as a whole than when the scheme started in wealthier central area, providing an opportunity to test the hypothesis that cycle hire use would be lower in the relatively low income areas, as reported by @noland_bikesharing_2018, for example.
-Contrary to research from the USA, we found that usage of bikeshare in London was relatively balanced across areas, independent of levels of income deprivation.
+The expansion of the LCHS into new areas made the provision of shared mobility more representative of the socio-economic distribution of London as a whole than when the scheme started in wealthier central areas.
+Increased availability of cycle hire opportunities to a more diverse range of areas provides an opportunity to test the hypothesis that most cycle hire usage and growth would be in relatively wealthy areas, as reported by @noland_bikesharing_2018, for example.
+Contrary to this hypothesis, derived from research in the USA, we found that usage of bikeshare in London was relatively balanced across areas, independent of levels of income deprivation.
 
-Time series plots disaggregated by income decile and geographic location reveal that much of the growth in the usage of the scheme since the expansion into more residential areas has come from relatively low income areas.
+Time series plots disaggregated by income decile and geographic location revealed that much of the growth in the usage of the scheme since the expansion into more residential areas has come from relatively low income areas.
 The _relatively_ higher income deprivation boroughs of Lambeth and Southwark have, for example, experienced high rates of growth compared with areas in Westminster and Kensington, especially during the morning rush hour when users are most likely to be local residents.
 <!-- ## Research limitations -->
 The conclusion that we take from the research (expanded on in the next section) is that shared mobility policies, and BSS in particular, can succeed in low income areas.
@@ -689,10 +693,12 @@ Answers to such questions are outside the scope of this paper.
 However, given the consistency of growth in a range of low income areas and considering the finances (£2 for 24 hour bikeshare access vs £4.80+ for a single tube ticket), our hypothesis is that future research will find that people on low incomes *are* using the LCHS and other BSS where provision is evenly distributed geographically, and fairly priced.
 Figure \@ref(fig:profile-users-lchs) shows that although the income profile of casual users is relatively flat, LCHS members tend to be relatively wealthy, with the majority falling into the £75k+ income category.
 Follow-on research could explore the extent to which growth in cycle usage in relatively low income areas is driven by wealthy new members or casual users on low incomes.
-Furthermore, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
+Second, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
+Third, although our analysis spanned a wider timeframe than other studies, the 8 years of data are insufficient to draw strong conclusions about the long-term direction of travel, especially as many stations in relatively low income areas are comparatively new.
+The true levels of inclusiveness of cycling interventions, including bicycle sharing, schemes will take years to become clear. 
 
-Methodological advances could also help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
+Methodological advances could help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
 Although income estimates are rarely available for small areas in cities internationally, new methods for estimating wealth and deprivation [@jean_combining_2016] could support further international comparative research into inequalities in cycle hire schemes.
 
 The use of a 'hard' cut-off distance between residential building and docking stations (150 m used in the analysis presented) represents a simplification of real world decision-making: in reality, people choose whether or not to use docking stations based on a range of factors.
