@@ -90,20 +90,22 @@ phone apps, removing the need to communicate with a station or terminal,
 enabling journeys to start or end away from traditional docking
 stations. This free-floating operational ‘dockless’ bikeshare model, can
 also run as a hybrid model composed of docking stations and
-free-floating parking zones shown on a map. Globally, there has been an
-emergence of schemes funded primarily by private capital and with lower
-installation times, accounting for the majority of growth in bike share
-fleets worldwide since 2016 (Fishman and Schepers 2018). Continued
-growth and the private capital led operations makes assessment of
-bikeshare important, to monitor their performance compared with other
-types of sustainable transport intervention, understand how bikeshare is
-used, where and by whom and to ensure that future cycle hire policies
-support, rather than hinder, local policy objectives. While Fourth
-generation schemes have seen explosive growth in some areas, they have
-also suffered setback, including the high-profile collapse of dockless
-bike companies leading to questions about the sustainability of Fourth
-generation schemes (Nikitas 2019) and the docked bikes of the LCHS still
-dominate the local market. <!-- The focus of CHSs are varied. -->
+free-floating parking zones shown on a map (Li et al. 2019).
+
+Globally, there has been an emergence of schemes funded primarily by
+private capital and with lower installation times, accounting for the
+majority of growth in bike share fleets worldwide since 2016 (Fishman
+and Schepers 2018). Continued growth and the private capital led
+operations makes assessment of bikeshare important, to monitor their
+performance compared with other types of sustainable transport
+intervention, understand how bikeshare is used, where and by whom and to
+ensure that future cycle hire policies support, rather than hinder,
+local policy objectives. While Fourth generation schemes have seen
+explosive growth in some areas, they have also suffered setback,
+including the high-profile collapse of dockless bike companies leading
+to questions about the sustainability of Fourth generation schemes
+(Nikitas 2019) and the docked bikes of the LCHS still dominate the local
+market. <!-- The focus of CHSs are varied. -->
 <!-- From a transport planning perspective, they are seen as a way to replace short journeys, otherwise made by congested taxi or metro systems, with active transport; from a health perspective they are a way to encourage a more active population; and from a political perspective, they often represent an opportunity to improve the image of the urban environment [@bauman_unrealised_2017]. -->
 
 In this context the aim of this paper is to better understand the extent
@@ -404,11 +406,17 @@ a new form of transport targeting commuters, another important aim was
 to relieve peak capacity constraints on the tube and bus network\[6\].
 It should be noted that in recent years new bikeshare operators have
 established themselves in London, many of which offering more flexible
-dockless usage. Whilst these schemes offer exciting opportunities for
-analysis – many contain in-built GPS recording users’ full journey
-trajectories – the Santander scheme remains by far the largest and most
-widely used
-@ref(fig:cycle-hire-players).
+dockless usage. Analysis by Li et al. (2019) suggests that new
+opperators have reduced usage of the LCHS, especially for short trips
+and during times of peak demand. These schemes offer exciting
+opportunities for analysis — many contain in-built GPS recording users’
+full journey trajectories — the Santander scheme remains by far the
+largest and most widely used scheme in London, as shown in Figure
+@ref(fig:cycle-hire-players). In the absence of data on dockless hire
+cycle usage, and considering that that the aim of the present paper is
+to assess *relative* changes between docking stations (not overall
+demand) we keep the focus on open LCHS
+data.
 
 <div class="figure" style="text-align: center">
 
@@ -486,12 +494,17 @@ underground, implying huge potential for bikeshare in low income areas.
 
 The Santander Cycles customer survey (TNS 2017), the sixth wave
 conducted since 2012, reveals that in 2017 the LCHS was primarily used
-by those who were male, young, white, and full-time workers. Regarding
-income, there were significant differences between casual users (which
-in 2017 represented 41% of all users) and member users. While casual
-users were from all income levels in similar proportions (except for a
-small greater proportion of those between £20k-£40k), members
-over-indexed amongst the high income ranges (see figure
+by those who were male, young, white, and full-time workers. Analysis by
+Morton (2018) highlighted the importance of understanding the
+socio-demographic make-up of users, using a market segmentation approach
+to support decision-making. It was found that satisfaction with the
+scheme varied by market segment, with the ‘Low Frequenters’ segment
+particularly sensitive to prices. Regarding income, there were
+significant differences between casual users (which in 2017 represented
+41% of all users) and member users. While casual users were from all
+income levels in similar proportions (except for a small greater
+proportion of those between £20k-£40k), members over-indexed amongst the
+high income ranges (see figure
 4).
 
 <div class="figure" style="text-align: center">
@@ -973,7 +986,9 @@ bikeshare users. We know very little about the income (and other)
 characteristics of users *compared with the demographic profile of their
 local area*, raising the following question: Could the high rates of
 growth in low income areas reflect the behaviour of more affluent people
-(e.g. ‘hipsters’) living in low income areas?
+(e.g. ‘hipsters’) living in low income areas? And how does the emergence
+of dockless schemes (Li et al. 2019) affect inequalities in access to
+and use of shared mobility services?
 
 Answers to such questions are outside the scope of this paper. However,
 given the consistency of growth in a range of low income areas and
@@ -991,7 +1006,7 @@ uses small areas as the basis of the analysis, it is possible that
 ‘micro-segregation’ (Keddie and Tonkiss 2010), where high income and
 low income households live streets apart, could in part explain the
 results, further strengthening the need for follow-up studies based on
-individual-level surveys.
+individual-level surveys building on TNS (2017) and Morton (2018).
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
 Third, although our analysis spanned a wider timeframe than other
 studies, the 8 years of data are insufficient to draw strong conclusions
@@ -1486,6 +1501,15 @@ League of American Bicyclists, and Sierra Club. 2015. “The New Majority
 
 </div>
 
+<div id="ref-li_effects_2019">
+
+Li, Haojie, Yingheng Zhang, Hongliang Ding, and Gang Ren. 2019. “Effects
+of Dockless Bike-Sharing Systems on the Usage of the London Cycle Hire.”
+*Transportation Research Part A: Policy and Practice* 130 (December):
+398–411. <https://doi.org/10.1016/j.tra.2019.09.050>.
+
+</div>
+
 <div id="ref-lois_cycle_2015">
 
 Lois, David, Juan Antonio Moriano, and Gianni Rondinella. 2015. “Cycle
@@ -1511,6 +1535,15 @@ Alon Bassok, and Jana A. Hirsch. 2019. “Freedom from the Station:
 Spatial Equity in Access to Dockless Bike Share.” *Journal of Transport
 Geography* 74 (January): 91–96.
 <https://doi.org/10.1016/j.jtrangeo.2018.11.009>.
+
+</div>
+
+<div id="ref-morton_appraising_2018">
+
+Morton, Craig. 2018. “Appraising the Market for Bicycle Sharing Schemes:
+Perceived Service Quality, Satisfaction, and Behavioural Intention in
+London.” *Case Studies on Transport Policy* 6 (1): 102–11.
+<https://doi.org/10.1016/j.cstp.2017.11.003>.
 
 </div>
 

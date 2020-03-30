@@ -1,7 +1,7 @@
 ---
-output:
-  # bookdown::word_document2
-    github_document
+# output: bookdown::word_document2
+output: github_document
+# output:
    # bookdown::pdf_document2:
    #   keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
@@ -144,7 +144,8 @@ Cycle hire is a rapidly evolving phenomenon.
 The first schemes allowed the use of bicycles for free ('First generation'), or through a coin deposit ('Second generation'), which often resulted in problems of financing and theft.
 The 'Third generation' schemes, to which the LCHS belongs, allow users to access and return bikes to dedicated docking stations, typically with only a bank card or other type of payment device, which makes the service more viable.
 'Fourth generation' smart bikes with integrated locking technology can communicate with user smart phone apps, removing the need to communicate with a station or terminal, enabling journeys to start or end away from traditional docking stations.
-This free-floating operational 'dockless' bikeshare model, can also run as a hybrid model composed of docking stations and free-floating parking zones shown on a map.
+This free-floating operational 'dockless' bikeshare model, can also run as a hybrid model composed of docking stations and free-floating parking zones shown on a map [@li_effects_2019].
+
 Globally, there has been an emergence of schemes funded primarily by private capital and with lower installation times, accounting for the majority of growth in bike share fleets worldwide since 2016 [@fishman_safety_2018].
 Continued growth and the private capital led operations makes assessment of bikeshare important, to monitor their performance compared with other types of sustainable transport intervention, understand how bikeshare is used, where and by whom and to ensure that future cycle hire policies support, rather than hinder, local policy objectives.
 While Fourth generation schemes have seen explosive growth in some areas, they have also suffered setback, including the high-profile collapse of dockless bike companies leading to questions about the sustainability of Fourth generation schemes [@nikitas_how_2019] and the docked bikes of the LCHS still dominate the local market.
@@ -313,7 +314,10 @@ The stated aim was to provide "a major new form of public transport in London, d
 Although the scheme currently delivers only around 0.1% of trips in Greater London overall, it serves a much higher percentage of trips in the congested central areas during the vital rush hours.
 By providing a new form of transport targeting commuters, another important aim was to relieve peak capacity constraints on the tube and bus network^[
 ‘We want thousands of commuters to switch to bikes for the last stage of their journeys to work, significantly relieving pressure on the Tube and bus networks in central London.’ https://www.london.gov.uk/sites/default/files/cycling_vision_gla_template_final.pdf
-]. It should be noted that in recent years new bikeshare operators have established themselves in London, many of which offering more flexible dockless usage. Whilst these schemes offer exciting opportunities for analysis -- many contain in-built GPS recording users' full journey trajectories -- the Santander scheme remains by far the largest and most widely used  \@ref(fig:cycle-hire-players).
+]. It should be noted that in recent years new bikeshare operators have established themselves in London, many of which offering more flexible dockless usage.
+Analysis by @li_effects_2019 suggests that new opperators have reduced usage of the LCHS, especially for short trips and during times of peak demand. 
+These schemes offer exciting opportunities for analysis --- many contain in-built GPS recording users' full journey trajectories --- the Santander scheme remains by far the largest and most widely used scheme in London, as shown in Figure  \@ref(fig:cycle-hire-players).
+In the absence of data on dockless hire cycle usage, and considering that that the aim of the present paper is to assess *relative* changes between docking stations (not overall demand) we keep the focus on open LCHS data. 
 
 ```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="A summary of bishare schemes operating in London. Bar height proportional to number of bikes and coloured according to the year in which the scheme was introduced.", fig.show='hold'}
 knitr::include_graphics("figures/london-bike-hire-players.png")
@@ -363,7 +367,7 @@ Despite cycle hire schemes being perceived as disproportionately benefiting  pri
 @goodman_role_2014 found that the scheme has a higher proportion of women than those cycling in London overall (32% vs. 23%), and mentions data from the London Travel Demand Survey (LTDS) showing that low income groups tend make more journeys by foot and bus than underground, implying huge potential for bikeshare in low income areas.
 
 The Santander Cycles customer survey [@tns_santander_2017], the sixth wave conducted since 2012, reveals that in 2017 the LCHS was primarily used by those who were male, young, white, and full-time workers.
-Analysis of this survey by @morton_appraising_2018 highlighted the importance of understanding the socio-demographic make-up of users, using a market segmentation approach to support decision-making.
+Analysis by @morton_appraising_2018 highlighted the importance of understanding the socio-demographic make-up of users, using a market segmentation approach to support decision-making.
 It was found that satisfaction with the scheme varied by market segment, with the 'Low Frequenters' segment particularly sensitive to prices.
 Regarding income, there were significant differences between casual users (which in 2017 represented 41% of all users) and member users. While casual users were from all income levels in similar proportions (except for a small greater proportion of those between £20k-£40k), members over-indexed amongst the high income ranges (see figure 4).
 
@@ -689,12 +693,13 @@ There are some limitations to the study that should be considered before attempt
 The first limitation relates to the level of analysis: although the geographic resolution of analysis was relatively high (each LSOA zone contains less than 2000 people), the study lacks demographic data at level of individual bikeshare users.
 We know very little about the income (and other) characteristics of users *compared with the demographic profile of their local area*, raising the following question:
 Could the high rates of growth in low income areas reflect the behaviour of more affluent people (e.g. 'hipsters') living in low income areas?
+And how does the emergence of dockless schemes [@li_effects_2019] affect inequalities in access to and use of shared mobility services?
 
 Answers to such questions are outside the scope of this paper.
 However, given the consistency of growth in a range of low income areas and considering the finances (£2 for 24 hour bikeshare access vs £4.80+ for a single tube ticket), our hypothesis is that future research will find that people on low incomes *are* using the LCHS and other BSS where provision is evenly distributed geographically, and fairly priced.
 Figure \@ref(fig:profile-users-lchs) shows that although the income profile of casual users is relatively flat, LCHS members tend to be relatively wealthy, with the majority falling into the £75k+ income category.
 Follow-on research could explore the extent to which growth in cycle usage in relatively low income areas is driven by wealthy new members or casual users on low incomes.
-Second, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
+Second, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys building on @tns_santander_2017 and @morton_appraising_2018.
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
 Third, although our analysis spanned a wider timeframe than other studies, the 8 years of data are insufficient to draw strong conclusions about the long-term direction of travel, especially as many stations in relatively low income areas are comparatively new.
 The true levels of inclusiveness of cycling interventions, including bicycle sharing, schemes will take years to become clear.
