@@ -1,8 +1,8 @@
 ---
 output:
   # bookdown::word_document2
-    # github_document
-   bookdown::pdf_document2:
+    github_document
+   # bookdown::pdf_document2:
    #   keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
@@ -315,7 +315,7 @@ By providing a new form of transport targeting commuters, another important aim 
 ‘We want thousands of commuters to switch to bikes for the last stage of their journeys to work, significantly relieving pressure on the Tube and bus networks in central London.’ https://www.london.gov.uk/sites/default/files/cycling_vision_gla_template_final.pdf
 ]. It should be noted that in recent years new bikeshare operators have established themselves in London, many of which offering more flexible dockless usage. Whilst these schemes offer exciting opportunities for analysis -- many contain in-built GPS recording users' full journey trajectories -- the Santander scheme remains by far the largest and most widely used  \@ref(fig:cycle-hire-players).
 
-```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="A summary of bishare schemes operating in London. Bars are sized by number of bikes and colouted according to the year in which the scheme was introduced.", fig.show='hold'}
+```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="A summary of bishare schemes operating in London. Bar height proportional to number of bikes and coloured according to the year in which the scheme was introduced.", fig.show='hold'}
 knitr::include_graphics("figures/london-bike-hire-players.png")
 ```
 
@@ -362,7 +362,10 @@ and 'mini Holland' residential interventions.
 Despite cycle hire schemes being perceived as disproportionately benefiting  privileged groups, there is some evidence to suggest that the LCHS has indeed helped to normalise cycling.
 @goodman_role_2014 found that the scheme has a higher proportion of women than those cycling in London overall (32% vs. 23%), and mentions data from the London Travel Demand Survey (LTDS) showing that low income groups tend make more journeys by foot and bus than underground, implying huge potential for bikeshare in low income areas.
 
-The Santander Cycles customer survey [@tns_santander_2017], the sixth wave conducted since 2012, reveals that in 2017 the LCHS was primarily used by those who were male, young, white, and full-time workers. Regarding income, there were significant differences between casual users (which in 2017 represented 41% of all users) and member users. While casual users were from all income levels in similar proportions (except for a small greater proportion of those between £20k-£40k), members over-indexed amongst the high income ranges (see figure 4).
+The Santander Cycles customer survey [@tns_santander_2017], the sixth wave conducted since 2012, reveals that in 2017 the LCHS was primarily used by those who were male, young, white, and full-time workers.
+Analysis of this survey by @morton_appraising_2018 highlighted the importance of understanding the socio-demographic make-up of users, using a market segmentation approach to support decision-making.
+It was found that satisfaction with the scheme varied by market segment, with the 'Low Frequenters' segment particularly sensitive to prices.
+Regarding income, there were significant differences between casual users (which in 2017 represented 41% of all users) and member users. While casual users were from all income levels in similar proportions (except for a small greater proportion of those between £20k-£40k), members over-indexed amongst the high income ranges (see figure 4).
 
 
 ```{r profile-users-lchs, eval=TRUE, out.width="70%", fig.cap="Profile of the casual users and members of the LCHS", fig.show='hold'}
@@ -401,9 +404,7 @@ knitr::include_graphics(c("figures/profile_users_lchs.png"))
 A question that has not yet been addressed, however, is has the LCHS *become more equal* over time?
 Of course, this is a broad and to some extent subjective question because there are many ways to define 'equal'.
 For the purposes of this study, we will focus on spatial inequalities and focus on income inequalities, using relative levels of use between small areas (Output Areas, with around 100 households each) with high and low income levels as a proxy for equity (limitations of this methodology are discussed in the penultimate section).
-The research questions are:
-
-> Since the LCHS scheme was expanded in 2014 -- 
+The research questions are, since the LCHS scheme was expanded in 2014:
 
 * Has the geographic distribution of docking stations and usage become more equal?
 * Has the uptake of use at docking stations in low income areas increased at a greater rate than for the scheme overall?
@@ -696,17 +697,21 @@ Follow-on research could explore the extent to which growth in cycle usage in re
 Second, although the analysis uses small areas as the basis of the analysis, it is possible that 'micro-segregation' [@keddie_market_2010], where high income and low income households live streets apart, could in part explain the results, further strengthening the need for follow-up studies based on individual-level surveys.
 <!-- In a city like London, the areas that delimit socioeconomic differences are usually smaller (than in America or Australia), and often crossing a street you can go from one extreme to the other. -->
 Third, although our analysis spanned a wider timeframe than other studies, the 8 years of data are insufficient to draw strong conclusions about the long-term direction of travel, especially as many stations in relatively low income areas are comparatively new.
-The true levels of inclusiveness of cycling interventions, including bicycle sharing, schemes will take years to become clear. 
+The true levels of inclusiveness of cycling interventions, including bicycle sharing, schemes will take years to become clear.
 
 Methodological advances could help address the limitations outlined above, suggesting further work to support the generalisation of methods to estimate levels of provision and growth in cycle hire in relatively high and low income areas across different cities.
 Although income estimates are rarely available for small areas in cities internationally, new methods for estimating wealth and deprivation [@jean_combining_2016] could support further international comparative research into inequalities in cycle hire schemes.
 
 The use of a 'hard' cut-off distance between residential building and docking stations (150 m used in the analysis presented) represents a simplification of real world decision-making: in reality, people choose whether or not to use docking stations based on a range of factors.
 The probability of making non motorised trips has been found to vary as a non-linear including route distance and perceived levels of danger on the pedestrian network [@iacono_measuring_2010].
-Developing more sophisticated functions linking docking stations to residential areas, weighted by route attributes, is beyond the scope of the present study but represents a potential area for future research: future work could explore the extent to which docking stations located to minimise walking distances and exposure to busy roads succeed, compared with docking stations in less favourable locations on the transport network. 
+Developing more sophisticated functions linking docking stations to residential areas, weighted by route attributes, is beyond the scope of the present study but represents a potential area for future research: future work could explore the extent to which docking stations located to minimise walking distances and exposure to busy roads succeed, compared with docking stations in less favourable locations on the transport network.
+
+Although such methodological advances should be able to help explain the results of this paper, and the extent to which they can be applied to other cities, it is important to also recognise the limitations of quantitative methods in understanding the reasons why cycling grows in some places and not others.
+A clear example of the importance of 'wider boundary' factors that are not conducive to quantitative analysis is the observation that cycling levels have increased in recent years in the relatively hilly yet wealthy and cosmopolitan city of Bristol, while falling in the comparatively deprived city of Hull, where 'hard' quantitative factors would suggest cycling should grow [@aldred_why_2014].
+While such cultural factors and social stigma may be harder to measure, they are not impossible to research using methods such as focus groups, participatory research and individual level surveys including appropriate questions revealing attitudes and identities relating to cycling [@bill_representing_2015; @lois_cycle_2015], suggesting further lines of enquiry.
 
 Finally, there is great potential for further technical and software development work, to make cycle hire research more accessible and reproducible.
-Building on the the **bikedata** R package, future work could develop tools that automate tedious parts of the analysis, allowing future research to focus on the policy issues rather than the time-consuming yet vital data cleaning and analysis stages in cycle hire research.
+Building on the experiences of packages such as **bikedata**, which make transport data more accessible for 'citizen science' [@padgham_bikedata:_2017], future work could develop tools that automate tedious parts of the analysis, allowing future research to focus on the policy issues rather than the time-consuming yet vital data cleaning and analysis stages in cycle hire research.
 
 # Conclusion
 
