@@ -44,6 +44,9 @@ bikeshare_table$Continent[is.na(bikeshare_table$Continent)] = "Asia"
 bikeshare_table %>% 
   slice(1:10)
 
+# Update on Wikipedia: http://www.lincolntoday.co/?p=1035
+bikeshare_table$Bicycles[bikeshare_table$City == "Lincoln, Nebraska"] = 100
+bikeshare_table$Stations[bikeshare_table$City == "Lincoln, Nebraska"] = 19
 # sample bikeshare schemes
 set.seed(1)
 bikeshare_labels = bind_rows(
