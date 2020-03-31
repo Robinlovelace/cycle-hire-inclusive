@@ -1,9 +1,9 @@
 ---
 # output: bookdown::word_document2
-output: github_document
-# output:
-   # bookdown::pdf_document2:
-   #   keep_tex: true
+# output: github_document
+output:
+  bookdown::pdf_document2:
+    keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -164,7 +164,9 @@ Bicycle sharing systems (BSS) have been created in many cities to support multip
 Modern docked cycle hire schemes have been in operation since 1995, with the launch of a scheme in Copenhagen [@didonato_city-bike_2002].
 They have taken off since the early 2000s, with the greatest absolute period of growth occurring between around 2010 and 2015, after which the rate of new installations has dropped off (Figure \@ref(fig:global-growth)).
 
-```{r global-growth, fig.cap="Growth in docked cycle hire schemes worldwide in terms of docking stations by continent. Source: [Wikipedia](https://en.wikipedia.org/wiki/List_of_bicycle-sharing_systems) data, March 2020.", out.width="80%", fig.pos="h", eval=TRUE}
+(ref:globalg) Growth in docked cycle hire schemes worldwide in terms of docking stations by continent. Source: [Wikipedia](https://en.wikipedia.org/wiki/List_of_bicycle-sharing_systems) data, March 2020. 
+
+```{r global-growth, fig.cap="(ref:globalg)", out.width="80%", fig.pos="h", eval=TRUE}
 # file.edit("code/get-global-stations.R") # to reproduce this plot
 knitr::include_graphics("figures/bikehshare-global-stations-growth.png")
 ```
@@ -174,7 +176,9 @@ Asia saw very rapid uptake of sharing schemes from 2010. Seven of the top ten la
 North and South America have seen substantial interest in docked cycle hire schemes, although on a smaller scale than those in Europe and Asia, and a handful of cycle hire schemes have been launched in Australia.
 Within this global overview, the London BSS is an important player, ranking eighth in the top schemes by number of docking stations and launching relatively early in 2010.
 
-```{r global-stations-cycles, fig.cap="Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles. Source: [Wikipedia](https://en.wikipedia.org/wiki/List_of_bicycle-sharing_systems) data, March 2020.", out.width="80%", fig.pos="h", eval=TRUE}
+(ref:globals) Cycle hire schemes worldwide by continent, comparing number of docking stations with number of cycles. Source: [Wikipedia](https://en.wikipedia.org/wiki/List_of_bicycle-sharing_systems) data, March 2020.
+
+```{r global-stations-cycles, fig.cap="(ref:globals)", out.width="80%", fig.pos="h", eval=TRUE}
 # see code/get-global-stations.R
 knitr::include_graphics("figures/bikehshare-global-stations-bicycles.png")
 ```
@@ -320,7 +324,9 @@ However, the Santander scheme remains by far the largest and most widely used sc
 These schemes offer exciting opportunities for analysis, with many dockless cycles containing in-built GPS devices recording full journey trajectories, although representative aggregated OD data and route usage data derived from dockless bikes are not publicly available (to the best of the authors' knowledge as of March 2020).
 In the absence of data on dockless hire cycle usage, and considering that that the aim of the present paper is to assess *relative* changes between docking stations (not overall demand) we keep the focus on open LCHS data. 
 
-```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="A summary of docked and dockless bikeshare schemes operating in London. Bar height proportional to number of bikes and coloured according to the year in which the scheme was introduced. Source: [Oliver O'Brien](https://oobrien.com/2019/07/then-there-were-eight/).", fig.show='hold'}
+(ref:cyclehp) A summary of docked and dockless bikeshare schemes operating in London. Bar height proportional to number of bikes and coloured according to the year in which the scheme was introduced. Source: [Oliver O'Brien](https://oobrien.com/2019/07/then-there-were-eight/).
+
+```{r cycle-hire-players, eval=TRUE, out.width="70%", fig.cap="(ref:cyclehp)", fig.show='hold'}
 knitr::include_graphics("figures/london-bike-hire-players.png")
 ```
 
