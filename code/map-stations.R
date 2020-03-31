@@ -1,3 +1,5 @@
+library(drake)
+library(tmap)
 stations_yearly = readd(stations_yearly)
 bb = stplanr::geo_projected(stations_yearly, sf::st_buffer, dist = 1000)
 basemap = ceramic::cc_casey(bb)

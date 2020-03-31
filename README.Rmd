@@ -1,9 +1,9 @@
 ---
-# output: bookdown::word_document2
+output: bookdown::word_document2
 # output: github_document
-output:
-  bookdown::pdf_document2:
-    keep_tex: true
+# output:
+#   bookdown::pdf_document2:
+#     keep_tex: true
 title: "Is the London Cycle Hire Scheme becoming more inclusive? An evaluation of the shifting spatial distribution of uptake based on 70 million trips"
 bibliography:
   # - references.bib
@@ -12,17 +12,15 @@ bibliography:
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
+<!-- Highlights: -->
+
+<!-- - New analysis of 8 years of data from the London Cycle Hire Scheme (LCHS) -->
+<!-- - 73.4 million trips analysed, showing spatial pattern of growth -->
+<!-- - Expansion of the scheme into lower income areas explored -->
+<!-- - Results show high growth rates in comparatively low income areas -->
+<!-- - Our finding support further expansion of the LCHS into diverse areas -->
+
 ```{r, include=FALSE}
-# Packages we'll attach for the analysis
-# library(leaflet)
-# library(sf)
-# library(stplanr)
-# library(tidyverse)
-# library(tmap)
-
-# knitr::write_bib('base', 'references.bib')
-# knitr::write_bib('MASS', 'references-Eugeni')
-
 knitr::opts_chunk$set(
   eval = FALSE,
   echo = FALSE,
