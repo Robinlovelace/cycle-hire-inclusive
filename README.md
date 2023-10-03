@@ -2,6 +2,15 @@ Is the London Cycle Hire Scheme becoming more inclusive? An evaluation
 of the shifting spatial distribution of uptake based on 70 million trips
 ================
 
+Note: this paper has now been published, as: 
+
+Lovelace, Robin, Roger Beecham, Eva Heinen, Eugeni Vidal Tortosa, Yuanxuan Yang, Chris Slade, and Antonia Roberts. ‘Is the London Cycle Hire Scheme Becoming More Inclusive? An Evaluation of the Shifting Spatial Distribution of Uptake Based on 70 Million Trips’. Transportation Research Part A: Policy and Practice 140 (1 October 2020): 1–15. https://doi.org/10.1016/j.tra.2020.07.017.
+
+
+See https://www.robinlovelace.net/publication/lovelace-london-2020/cycle-hire-preprint-final.pdf for the PDF version, https://www.robinlovelace.net/publication/lovelace-london-2020 for details and https://doi.org/10.1016/j.tra.2020.07.017 for the DOI.
+
+
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 <!-- ## Reproducing the results -->
